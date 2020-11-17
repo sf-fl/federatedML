@@ -16,4 +16,4 @@
 
 from fate_arch.federation.rabbitmq._federation import Federation, MQ, RabbitManager
 
-__all__ = ['Federation', 'MQ', 'RabbitManager']
+__all__ = ['federation', 'MQ', 'RabbitManager']

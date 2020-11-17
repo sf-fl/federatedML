@@ -247,7 +247,7 @@ class HeteroFastDecisionTreeHost(HeteroDecisionTreeHost):
         return assign_result
 
     """
-    Federation Functions
+    federation Functions
     """
 
     def sync_sample_leaf_pos(self, sample_leaf_pos):

@@ -99,7 +99,7 @@ class HeteroDecisionTreeHost(DecisionTree):
         return TypeError("decode type %s is not support!" % (str(dtype)))
 
     """
-    Federation Functions
+    federation Functions
     """
 
     def sync_encrypted_grad_and_hess(self):

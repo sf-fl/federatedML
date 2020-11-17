@@ -279,7 +279,7 @@ class HeteroFastDecisionTreeGuest(HeteroDecisionTreeGuest):
         return predict_result
 
     """
-    Federation Functions
+    federation Functions
     """
 
     def sync_sample_leaf_pos(self, idx):

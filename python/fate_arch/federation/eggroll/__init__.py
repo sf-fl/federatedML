@@ -16,4 +16,4 @@
 
 from fate_arch.federation.eggroll._federation import Federation
 
-__all__ = ['Federation']
+__all__ = ['federation']

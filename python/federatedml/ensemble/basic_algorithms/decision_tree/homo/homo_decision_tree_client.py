@@ -84,7 +84,7 @@ class HomoDecisionTreeClient(DecisionTree):
         self.transfer_inst.set_flowid(flowid)
 
     """
-    Federation functions
+    federation functions
     """
 
     def sync_local_node_histogram(self, acc_histogram: List[HistogramBag], suffix):

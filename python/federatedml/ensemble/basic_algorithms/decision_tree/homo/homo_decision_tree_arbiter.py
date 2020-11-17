@@ -47,7 +47,7 @@ class HomoDecisionTreeArbiter(DecisionTree):
         self.transfer_inst.set_flowid(flowid)
 
     """
-    Federation Functions
+    federation Functions
     """
 
     def sync_node_sample_numbers(self, suffix):

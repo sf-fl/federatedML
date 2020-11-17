@@ -248,7 +248,7 @@ class HeteroDecisionTreeGuest(DecisionTree):
         return cur_best_split
 
     """
-    Federation Functions
+    federation Functions
     """
 
     def sync_encrypted_grad_and_hess(self, idx=-1):
