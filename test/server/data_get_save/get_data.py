@@ -5,4 +5,4 @@ key='phone_num'
 def get_data_key():
     data = pd.read_csv('./data_storage/data.csv')
     key_word = data[key]
-    return data,key_word
+    return key_word
