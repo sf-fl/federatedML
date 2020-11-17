@@ -3,6 +3,8 @@
 .idea
 *.iml
 *.pyc
+*.png
+*.csv
 __pycache__
 *.jar
 *.class
@@ -173,3 +175,4 @@ python/federatedml/statistic/intersect/images/sample.png
 python/federatedml/transfer_learning/hetero_ftl/images/architecture.png
 python/federatedml/transfer_learning/hetero_ftl/images/samples.png
 python/federatedml/unsupervised_learning/image/heterokmeans.png
+cluster-deploy/images/arch_en.png
