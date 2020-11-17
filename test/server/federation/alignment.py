@@ -1,12 +1,14 @@
-from data_get_save import get_data
-from proxy import client_proxy
+from server.data_get_save import get_data
 
-def align():
-    # 生成所需公钥、密钥
-    key = 0
-    # 发送公钥
-    client_proxy.align_1(key)
+from server.eAd import paillier
 
-    sample = get_data.get_data_key()
-    sample_encrypted = sample
-    client_proxy.align_2(sample_encrypted)
+def align1(public_key):
+    # 通过公钥进行加密
+
+
+
+    sample_key = get_data.get_data_key()
+    sample_encrypted = paillier.encrypt_all(public_key,sample_key)
+    sample_encrypted_rand = paillier.add_rand(sample_encrypted)
+
+    return sample_encrypted_rand

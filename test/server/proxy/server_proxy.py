@@ -5,8 +5,11 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from flask import jsonify
+from server.federation import alignment
 
-
+import os
+os.chdir(os.path.pardir)
+print(os.getcwd())
 app = Flask(__name__)
 
 
@@ -32,8 +35,12 @@ def test():
 @app.route('/align1' , methods=['POST'])
 def align1():
     try:
-        return '连接成功！'
+        a = request.get_data()
+        dict1 = json.loads(a)
+        result = alignment.align1(dict1).to_dict()
+        return json.dumps(result)
     except Exception as e:
+        print(e)
         return '连接失败！错误情况：%s' % e
 
 

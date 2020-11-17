@@ -1,6 +1,6 @@
-from data_get_save import get_data
-from proxy import client_proxy
-from eAd import paillier
+from client.data_get_save import get_data
+from client.proxy import client_proxy
+from client.eAd import paillier
 
 
 def align():

@@ -13,7 +13,7 @@ def test():
 def align_1(globel_key):
     sample_json = json.dumps(globel_key)
     r = requests.post('http://127.0.0.1:8081/align1',sample_json)
-    return r.text
+    return json.loads(r.text)
 
 
 def align_2(sample):

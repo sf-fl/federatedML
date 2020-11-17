@@ -1,8 +1,8 @@
-from proxy import client_proxy
-from data_get_save import model_save
-from federation import alignment
-from federation import feature_engineering
-from federation import train
+from client.proxy import client_proxy
+from client.data_get_save import model_save
+from client.federation import alignment
+from client.federation import feature_engineering
+from client.federation import train
 
 def start():
     # 连接测试
