@@ -29,6 +29,7 @@ def test():
     try:
         return '连接成功！'
     except Exception as e:
+        print(e)
         return '连接失败！错误情况：%s' % e
 
 
@@ -41,7 +42,7 @@ def align1():
         return json.dumps(result)
     except Exception as e:
         print(e)
-        return '连接失败！错误情况：%s' % e
+        return '出现错误！错误情况：%s' % e
 
 
 @app.route('/align2' , methods=['POST'])

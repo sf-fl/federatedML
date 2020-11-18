@@ -2,7 +2,8 @@
 import gmpy2
 import random
 import time
-import libnum
+import binascii
+
 def get_prime(rs):
     p = gmpy2.mpz_urandomb(rs, 1024)
     while not gmpy2.is_prime(p):
@@ -28,7 +29,7 @@ def encipher(plaintext, pk):
     if(isinstance(plaintext,int)):
         m=plaintext
     else:
-        m = libnum.s2n(plaintext)
+        m = int(binascii.hexlify(plaintext.encode('utf-8')),16)
     print(m)
     n, g = pk
     r = random.randint(1, n ** 2)
@@ -53,7 +54,7 @@ def decipher(c, pk, sk):
     u = gmpy2.invert(L(gmpy2.powmod(g, lmd, n ** 2), n), n) % n
     m = L(gmpy2.powmod(c, lmd, n ** 2), n) * u % n
     print(m)
-    plaintext = libnum.n2s(int(m))
+    plaintext = m
     return plaintext
 if __name__ == '__main__':
     pk, sk = keygen()

@@ -10,14 +10,17 @@ def test():
     return r.text
 
 
-def align_1(globel_key):
-    sample_json = json.dumps(globel_key)
+def align_1(public_key):
+    sample_json = json.dumps(public_key)
     r = requests.post('http://127.0.0.1:8081/align1',sample_json)
     return json.loads(r.text)
 
 
-def align_2(sample):
-    sample_json = json.dumps(sample.to_dict())
+def align_2(a_key,b_key):
+    key = {}
+    key['a'] = a_key.to_dict()
+    key['b'] = b_key.to_dict()
+    sample_json = json.dumps(key)
     r = requests.post('http://127.0.0.1:8081/align2',sample_json)
     return r.text
 
