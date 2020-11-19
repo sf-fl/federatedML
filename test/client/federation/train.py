@@ -1,6 +1,7 @@
-from ml import lr
+from client.ml import lr
 
 
 def tarin(x,y):
-    lr.lr1()
+
+    cost_record, theta, iters = lr.logistic_regression(x, y)
     return 0
