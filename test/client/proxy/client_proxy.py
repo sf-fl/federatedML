@@ -16,13 +16,10 @@ def align_1(public_key):
     return json.loads(r.text)
 
 
-def align_2(a_key,b_key):
-    key = {}
-    key['a'] = a_key.to_dict()
-    key['b'] = b_key.to_dict()
-    sample_json = json.dumps(key)
+def align_2(b_key):
+    sample_json = json.dumps(b_key.to_list())
     r = requests.post('http://127.0.0.1:8081/align2',sample_json)
-    return r.text
+    return json.loads(r.text)
 
 
 data={ "opr": "add", "data": { "userName": "98997", "disc": "hudihiudhu", "expDate":"2", "ip": [ "10.10.11.1", "10.10.11.2", "10.10.11.3" ] } }

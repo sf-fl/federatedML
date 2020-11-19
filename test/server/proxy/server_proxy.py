@@ -48,7 +48,10 @@ def align1():
 @app.route('/align2' , methods=['POST'])
 def align2():
     try:
-        return '连接成功！'
+        a = request.get_data()
+        dict1 = json.loads(a)
+        result = alignment.align2(dict1).to_list()
+        return json.dumps(result)
     except Exception as e:
         return '连接失败！错误情况：%s' % e
 
