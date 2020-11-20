@@ -22,5 +22,18 @@ def align_2(b_key):
     return json.loads(r.text)
 
 
+def learn_1(mid_u):
+    mid_u_json = json.dumps(mid_u)
+    r = requests.post('http://127.0.0.1:8081/learn_1',mid_u_json)
+    return json.loads(r.text)
+
+def learn_2():
+    pass
+
+
+def learn_3():
+    pass
+
+
 data={ "opr": "add", "data": { "userName": "98997", "disc": "hudihiudhu", "expDate":"2", "ip": [ "10.10.11.1", "10.10.11.2", "10.10.11.3" ] } }
 data = json.dumps(data)
