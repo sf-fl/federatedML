@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Author:0verWatch
 import time
-
 import gmpy2
 import math
 import random
