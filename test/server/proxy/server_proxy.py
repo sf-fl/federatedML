@@ -6,6 +6,7 @@ from flask import request
 from flask import redirect
 from flask import jsonify
 from server.federation import alignment
+from server.federation import train
 
 import os
 os.chdir(os.path.pardir)
@@ -51,6 +52,17 @@ def align2():
         a = request.get_data()
         dict1 = json.loads(a)
         result = alignment.align2(dict1).to_list()
+        return json.dumps(result)
+    except Exception as e:
+        return '连接失败！错误情况：%s' % e
+
+
+@app.route('/learn1' , methods=['POST'])
+def learn1():
+    try:
+        a = request.get_data()
+        dict1 = json.loads(a)
+        result = train.tarin1(dict1).to_list()
         return json.dumps(result)
     except Exception as e:
         return '连接失败！错误情况：%s' % e

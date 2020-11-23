@@ -2,20 +2,28 @@
 import time
 import numpy as np
 from client.eAd import paillier
+from client.proxy import client_proxy
 
 
-def cal_u2(theta,x,y)
+def cal_ub(theta,x,y):
     return np.dot(theta.T, x) - 2 * pow(10,6) * y
 
-def update_grad(theta_a,x_a,*y_a):
-    u_list = []
-    for t,x,y in zip(theta_a,x_a,y_a):
-        u = cal_u2(t,x,y)
+def update_grad(theta_b,x_b,*y_b):
+    # 生成 key_b 和 ub 并发出
+    pk_b, sk_b = paillier.gen_key()
+    ub_list = []
+    for xb,yb in zip(x_b,y_b):
+        ub = cal_ub(theta_b,xb,yb)
+        ub_code = paillier.encipher(ub,pk_b)
+        ub_list.append(ub_code)
+    client_proxy.learn_1(ub_list,pk_b)
+
 
 
 
 def update_theta(grad, theta, alpha):
-    pass
+    theta = theta - alpha * 4 * pow(10,-9) * grad
+    return theta
 
 
 def logistic_regression(X, y):

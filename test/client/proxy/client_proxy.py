@@ -22,9 +22,9 @@ def align_2(b_key):
     return json.loads(r.text)
 
 
-def learn_1(mid_u):
-    mid_u_json = json.dumps(mid_u)
-    r = requests.post('http://127.0.0.1:8081/learn_1',mid_u_json)
+def learn_1(ub,key_b):
+    mid_u_json = json.dumps([key_b,ub])
+    r = requests.post('http://127.0.0.1:8081/learn1',mid_u_json)
     return json.loads(r.text)
 
 def learn_2():

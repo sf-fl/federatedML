@@ -1,6 +1,8 @@
-from ml import lr
+from server.ml import lr
 
 
-def tarin(x,y):
+def tarin1(keyAndu):
+
+
     lr.lr1()
     return 0
