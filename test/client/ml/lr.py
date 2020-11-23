@@ -6,6 +6,8 @@ import rsa
 from client.eAd import paillier
 from client.proxy import client_proxy
 
+lamb = 1
+
 
 def cal_ub(theta,x,y):
     temp1 = np.dot(theta.T, x)
@@ -72,10 +74,16 @@ def update_grad(theta_b,x_b,y_b):
         yb = y_b.iloc[i]
         ub = cal_ub(theta_b,xb,yb)
         ub_code = int(paillier.encipher(ub,ppk_b))
-        ub_code = int2bytes(ub_code, rsa_len//8-11)
-        ub_code = str(rsa.encrypt(ub_code, rpk_b))
+        # ub_code = int2bytes(ub_code, rsa_len//8-11)
+        # ub_code = str(rsa.encrypt(ub_code, rpk_b))
         ub_list.append(ub_code)
-    client_proxy.learn_1(ub_list,ppk_b)
+    rpk_a, u_list = client_proxy.learn_1(ub_list,ppk_b)
+    for i in range(x_b.shape[0]):
+        xb = x_b.iloc[i]
+        u = u_list[i]
+        uxb = paillier.multiply(u,xb[0],ppk_b)
+
+
 
 
 def update_theta(grad, theta, alpha):

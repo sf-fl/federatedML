@@ -63,6 +63,9 @@ def plus(c1, c2, pk):
 
 def multiply(c, cons, pk):
     n, g = pk
+    if isinstance(c, int):
+        print("常数非整")
+        cons = int(cons//1)
     if cons > 1:
         ct = c
         for i in range(1, cons):

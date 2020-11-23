@@ -62,7 +62,7 @@ def learn1():
     try:
         a = request.get_data()
         dict1 = json.loads(a)
-        result = train.tarin1(dict1).to_list()
+        result = train.tarin1(dict1)
         return json.dumps(result)
     except Exception as e:
         return '连接失败！错误情况：%s' % e

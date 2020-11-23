@@ -5,7 +5,7 @@ import binascii
 
 
 def get_prime(rs):
-    p = gmpy2.mpz_urandomb(rs, 1024)
+    p = gmpy2.mpz_urandomb(rs,256)
     while not gmpy2.is_prime(p):
         p = p + 1
     return p
@@ -17,8 +17,8 @@ def L(x, n):
 
 def gen_key():
     rs = gmpy2.random_state(1)
-    p = get_prime(rs)
-    q = get_prime(rs)
+    p = int(get_prime(rs))
+    q = int(get_prime(rs))
     n = p * q
     lmd = (p - 1) * (q - 1)
     g = n + 1
@@ -34,7 +34,10 @@ def encipher(plaintext, pub_key):
     if isinstance(plaintext, int):
         m = plaintext
     else:
-        m = int(binascii.hexlify(plaintext.encode('utf-8')), 16)
+        if isinstance(plaintext, float):
+            m = int(plaintext)
+        else:
+            m = int(binascii.hexlify(plaintext.encode('utf-8')), 16)
     print(m)
     n, g = pub_key
     r = random.randint(1, n ** 2)
@@ -67,5 +70,4 @@ def multiply(c, cons, pk):
         return ct
     else:
         return c
-
 
