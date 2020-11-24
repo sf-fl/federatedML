@@ -3,6 +3,7 @@ import time
 import numpy as np
 import pandas as pd
 import rsa
+import rsa.core
 from client.eAd import paillier
 from client.proxy import client_proxy
 
@@ -63,7 +64,7 @@ def int2bytes(number: int, fill_size: int = 0) -> bytes:
 
 
 def update_grad(theta_b,x_b,y_b):
-    rsa_len = 1112
+    rsa_len = 4096
 
     # 生成 key_b 和 ub 并发出
     ppk_b, psk_b = paillier.gen_key()
@@ -123,3 +124,26 @@ def logistic_regression(X, y):
     end = time.time()
     print("cost time: %f s" % (end - start))
     return theta, iters
+
+
+if __name__ == '__main__':
+    a = 100
+    rsa_len = 4096
+    time_start = time.time()
+    # 生成 key_b 和 ub 并发出
+    ppk_b, psk_b = paillier.gen_key()
+    rpk_b, rsk_b = rsa.newkeys(rsa_len)
+    print(rpk_b.n)
+    print(rpk_b.e)
+    print(rsk_b.d)
+    ar = rsa.core.encrypt_int(a,rpk_b.e,rpk_b.n)
+    ar3 = pow(ar,100,rpk_b.n)
+    ar_r = rsa.core.decrypt_int(ar3,rsk_b.d,rsk_b.n)
+
+    ap = int(paillier.encipher(a,ppk_b))
+    apr = rsa.core.encrypt_int(ap,rpk_b.e,rpk_b.n)
+    aprm = pow(apr,100,rpk_b.n)
+    aprm_r = rsa.core.decrypt_int(aprm,rsk_b.d,rsk_b.n) % (psk_b[0] ** 2)
+    aprm_rp = paillier.decipher(aprm_r,ppk_b,psk_b)
+    cost_time = time.time()-time_start
+    print(cost_time)

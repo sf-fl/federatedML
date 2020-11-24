@@ -5,7 +5,7 @@ import binascii
 
 
 def get_prime(rs):
-    p = gmpy2.mpz_urandomb(rs,256)
+    p = gmpy2.mpz_urandomb(rs,8)
     while not gmpy2.is_prime(p):
         p = p + 1
     return p
@@ -47,7 +47,7 @@ def encipher(plaintext, pub_key):
 
 def decipher(ciphertext, pk, sk):
     [n, g] = pk
-    lmd = sk
+    lmd = sk[1]
     u = gmpy2.invert(L(gmpy2.powmod(g, lmd, n ** 2), n), n) % n
     m = L(gmpy2.powmod(ciphertext, lmd, n ** 2), n) * u % n
     print(m)

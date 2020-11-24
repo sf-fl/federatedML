@@ -47,7 +47,7 @@ def encipher(plaintext, pub_key):
 
 def decipher(ciphertext, pk, sk):
     [n, g] = pk
-    lmd = sk
+    lmd = sk[1]
     u = gmpy2.invert(L(gmpy2.powmod(g, lmd, n ** 2), n), n) % n
     m = L(gmpy2.powmod(ciphertext, lmd, n ** 2), n) * u % n
     print(m)

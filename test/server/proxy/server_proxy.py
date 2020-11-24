@@ -62,7 +62,29 @@ def learn1():
     try:
         a = request.get_data()
         dict1 = json.loads(a)
-        result = train.tarin1(dict1)
+        result = train.train1(dict1)
+        return json.dumps(result)
+    except Exception as e:
+        return '连接失败！错误情况：%s' % e
+
+
+@app.route('/learn2' , methods=['POST'])
+def learn2():
+    try:
+        a = request.get_data()
+        dict1 = json.loads(a)
+        result = train.train2(dict1)
+        return json.dumps(result)
+    except Exception as e:
+        return '连接失败！错误情况：%s' % e
+
+
+@app.route('/learn3' , methods=['POST'])
+def learn3():
+    try:
+        a = request.get_data()
+        dict1 = json.loads(a)
+        result = train.train3(dict1)
         return json.dumps(result)
     except Exception as e:
         return '连接失败！错误情况：%s' % e
