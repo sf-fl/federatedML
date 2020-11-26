@@ -2,11 +2,10 @@ from server.data_get_save import get_data
 import pandas as pd
 from server.eAd import hash
 from server.eAd import paillier
+from server.federation import feature_engineering
 
 global x
 x = pd.DataFrame([])
-global y
-y = pd.DataFrame([])
 
 def align1(public_key):
     # 通过公钥进行加密
@@ -35,8 +34,7 @@ def align2(b_key):
     result_sample = sample.iloc[index]
     result_sample = result_sample.reset_index(drop=True)
     global x
-    x = result_sample.iloc[:, [1, -2]]
-    global y
-    y = result_sample.iloc[:, [-1, ]]
+    x = result_sample.iloc[:, [1,-1]]
+    x = feature_engineering.feating(x)
 
     return result['num_b']
