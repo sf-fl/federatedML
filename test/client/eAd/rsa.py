@@ -1,168 +1,129 @@
 # -*- coding: utf-8 -*-
-# Author:0verWatch
-import time
 
+# 求两个数字的最大公约数（欧几里得算法）
 import gmpy2
-import math
 import random
 
 
-# 也可以用自带的gmpy2库专门处理大数解密，相当于别人封装好了，但是对于理解这个算法各个部分还是得深入一下
-def gmpy_enc(plain_mess, num_e, num_n):
-    e = gmpy2.mpz(num_e)  # 初始化大数
-    plain_mess = gmpy2.mpz(plain_mess)
-    return pow(plain_mess, e, num_n)
-
-
-def gmpy_dec(cipher_mess, d, n):
-    d= gmpy2.mpz(d)  # 初始化大数
-    return pow(cipher_mess, d, n)
-
-
-def mess2long(message):
-    return int(message,16)
-
-
-def long2mess(long_num):
-    long_mess = hex(long_num)[2:].replace("L","")#16进制两两一组转为字符串
-    if len(long_mess) % 2 != 0: long_mess = '0' + long_mess
-    return int(long_mess,16)
-
-
-# 辗转相除法求最大公因数
 def gcd(a, b):
-    if a > b: a, b = b, a
-    while b != 0:
-        a, b = b, a%b
-    return a
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
 
-
-def isPrime(n):
-    """
-    判断一个数是否为素数
-    厄拉托塞师除法
-    """
-    if n <= 1:
-        return False
-    for i in range(2, int(math.sqrt(n)) + 1):
-        if n % i== 0:
-            return False
-    return True
-
-
-def generate_key(key_len): # key_len要比消息长度大
-    """
-    生成n, e, d
-    """
-    p = random_prime(key_len // 2)
-    q = random_prime(key_len // 2)
-    n  = p * q
-    ph_n = (p -1) * (q -1)
-    print("ph_n:"+str(ph_n))
-    e = 65537 #e取固定值
-    d = generate_d(ph_n, e)
-    return (n ,e, d)
-
-
-# 开始选择p q
-def random_prime(half_len):
-    while True:
-        n = random.randint(0, 1 << half_len)# 求2^half_len之间的大数
-        if n % 2 != 0:
-            found = True
-            # 随机性测试
-            for i in range(0, 5):   # 5的时候错误率已经小于千分之一
-                if prime_test(n) == False:
-                    found = False
-                    break
-            if found == True:
-                return n
-
-
-# Miller-Rabin
-def prime_test(n):
-        """
-        测试n是否为素数
-        """
-        q = n - 1
-        k = 0
-        # 寻找k,q 是否满足2^k*q =n - 1
-        while q % 2 == 0:
-            k += 1
-            q = q // 2
-        a = random.randint(2, n - 2)
-        # 如果 a^q mod n= 1, n 可能是一个素数
-        if fast_mod(a, q, n) == 1:
-            return True
-        # 如果存在j满足 a ^ ((2 ^ j) * q) mod n == n-1, n 可能是一个素数
-        for j in range(0, k):
-            if fast_mod(a, (2 ** j) * q, n) == n - 1:
-                return True
-        # n 不是素数
-        return False
-
-
-"""
-运用了扩展欧几里的算法，求a*x + b*y = 1
-递归条件:当m==0时，gcd(n,m)=n，此时x=1,y=0
-"""
-
-
+'''
+扩展欧几里的算法
+计算 ax + by = 1中的x与y的整数解（a与b互质）
+'''
 def ext_gcd(a, b):
     if b == 0:
-        return 1, 0, a
+        x1 = 1
+        y1 = 0
+        x = x1
+        y = y1
+        r = a
+        return r, x, y
     else:
-        x, y, q = ext_gcd(b, a % b)
-        x, y = y, (x - (a // b) * y)
-        return x, y, q
+        r, x1, y1 = ext_gcd(b, a % b)
+        x = y1
+        y = x1 - a // b * y1
+        return r, x, y
 
 
-def fast_mod(b, n, m):
-    """
-    快速幂
-    """
-    ret = 1
-    tmp = b
-    while n:
-        if n & 0x1:
-            ret = ret * tmp % m
-        tmp = tmp * tmp % m
-        n >>= 1
-    return ret
+'''
+超大整数超大次幂然后对超大的整数取模
+(base ^ exponent) mod n
+'''
+import time
 
 
-# 产生秘钥d
-def generate_d(ph_n, e):
-    (x, y, r) = ext_gcd(ph_n, e)
-    # y maybe < 0, so convert it
-    if y < 0:
-        #return y % ph
-        return y + ph_n  # 直接用加法效率高一丢丢
-    return y
+def exp_mode(base, exponent, n):
+    bin_array = bin(exponent)[2:][::-1]
+    r = len(bin_array)
+    base_array = []
+
+    pre_base = base
+    base_array.append(pre_base)
+
+    for _ in range(r - 1):
+        next_base = (pre_base * pre_base) % n
+        base_array.append(next_base)
+        pre_base = next_base
+
+    a_w_b = __multi(base_array, bin_array, n)
+    return a_w_b % n
 
 
-if __name__ == '__main__':
-    """
-    手动测试自己写的流程
-    """
-    tt = time.time()
-    for i in range(1000):
-        message = str(i)
-        mess_num = mess2long(message)
-        mess_num_length = len(str(mess_num))
-        (n, e, d) = generate_key(512)
-        print (n, e, d)
-        cipher = fast_mod(mess_num,e, n)
-        print("cipher:"+str(cipher))
-        print("d:"+str(d))
-        plain_num = fast_mod(cipher, d, n)
-        print(long2mess(plain_num))
-        """
-        大数gmpy实现
-        """
-        print("-----------------------------------------------------------------")
-        cipher = gmpy_enc(mess_num, e, n)
-        print("cipher:"+str(cipher))
-        plain_num = gmpy_dec(cipher,d, n)
-        print(long2mess(plain_num))
-    print('time=',time.time()-tt)
+def __multi(array, bin_array, n):
+    result = 1
+    for index in range(len(array)):
+        a = array[index]
+        if not int(bin_array[index]):
+            continue
+        result *= a
+        result = result % n  # 加快连乘的速度
+    return result
+
+
+# 生成公钥私钥，p、q为两个超大质数
+def gen_key(p, q):
+    n = p * q
+    fy = (p - 1) * (q - 1)  # 计算与n互质的整数个数 欧拉函数
+    e = 65537  # 选取e   一般选取65537
+    # generate d
+    a = e
+    b = fy
+    r, x, y = ext_gcd(a, b)
+    # 计算出的x不能是负数，如果是负数，说明p、q、e选取失败，不过可以把x加上fy，使x为正数，才能计算。
+    if x < 0:
+        x = x + fy
+    d = x
+    # 返回：   公钥     私钥
+    return (n, e), (n, d)
+
+
+# 加密 m是被加密的信息 加密成为c
+def encrypt(m, pubkey):
+    n = pubkey[0]
+    e = pubkey[1]
+
+    c = exp_mode(m, e, n)
+    return c
+
+
+# 解密 c是密文，解密为明文m
+def decrypt(c, selfkey):
+    n = selfkey[0]
+    d = selfkey[1]
+
+    m = exp_mode(c, d, n)
+    return m
+
+def get_prime(rs):
+    p = int(gmpy2.mpz_urandomb(rs,4096))
+    if p % 2 != 1:
+        p = p + 1
+    while not gmpy2.is_prime(p):
+        p = p + 2
+    return p
+
+if __name__ == "__main__":
+    '''公钥私钥中用到的两个大质数p,q，都是1024位'''
+    time_st = time.time()
+    rs = gmpy2.random_state(1)
+    p = int(get_prime(rs))
+    q = int(get_prime(rs))
+    print(p)
+    print(q)
+    '''生成公钥私钥'''
+    pubkey, selfkey = gen_key(p, q)
+    '''需要被加密的信息转化成数字，长度小于秘钥n的长度，如果信息长度大于n的长度，那么分段进行加密，分段解密即可。'''
+    m = 123
+    print("待加密信息-->%s" % m)
+    '''信息加密，m被加密的信息，c是加密后的信息'''
+    c = encrypt(m, pubkey)
+    print("被加密后的密文-->%s" % c)
+    '''信息解密'''
+    d = decrypt(c, selfkey)
+    print("被解密后的明文-->%s" % d)
+    print(time.time()-time_st)

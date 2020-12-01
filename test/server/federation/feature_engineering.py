@@ -1,4 +1,6 @@
+import pandas as pd
 
+def feating(x_raw):
+    x_oh = pd.get_dummies(x_raw)
 
-def feating(x_raw,y_raw):
-    return [],[]
+    return x_oh
