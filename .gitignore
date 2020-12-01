@@ -176,3 +176,4 @@ python/federatedml/transfer_learning/hetero_ftl/images/samples.png
 python/federatedml/unsupervised_learning/image/heterokmeans.png
 cluster-deploy/images/arch_en.png
 .idea/federatedML.iml
+test/client/data_storage/data.csv
