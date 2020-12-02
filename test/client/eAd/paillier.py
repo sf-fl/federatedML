@@ -5,7 +5,7 @@ import binascii
 
 
 def get_prime(rs):
-    p = gmpy2.mpz_urandomb(rs,128)
+    p = gmpy2.mpz_urandomb(rs,256)
     while not gmpy2.is_prime(p):
         p = p + 1
     return p
@@ -51,27 +51,27 @@ def decipher(ciphertext, pk, sk):
     u = gmpy2.invert(L(gmpy2.powmod(g, lmd, n ** 2), n), n) % n
     m = L(gmpy2.powmod(ciphertext, lmd, n ** 2), n) * u % n
     print(m)
-    plaintext = m
+    plaintext = int(m)
     return plaintext
 
 
 def plus(c1, c2, pk):
     n, g = pk
     c12 = (c1 * c2) % (n ** 2)
-    return c12
+    return int(c12)
 
 
 def multiply(c, cons, pk):
     n, g = pk
-    if isinstance(c, int):
+    if not isinstance(cons, int):
         print("常数非整")
         cons = int(cons//1)
     if cons > 1:
         ct = c
         for i in range(1, cons):
             ct = (ct * c) % (n ** 2)
-        return ct
+        return int(ct)
     else:
-        return c
+        return int(c)
 
 
