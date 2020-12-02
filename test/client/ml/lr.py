@@ -8,11 +8,11 @@ from client.eAd import paillier
 from client.proxy import client_proxy
 
 lamb = 1
-
+scal = 100
 
 def cal_ub(theta,x,y):
     temp1 = np.dot(theta.T, x)
-    temp2 = 2 * pow(10,6) * y.iloc[0]
+    temp2 = 2 * y.iloc[0]
     return temp1 - temp2
 
 
@@ -63,13 +63,14 @@ def int2bytes(number: int, fill_size: int = 0) -> bytes:
 
 
 def generate_random(n):
-    return np.random.random_integers(0,10000000000,n) # todo
+    return np.random.random_integers((scal**3),(scal**3)*10,size=n)  # todo
 
 
 def update_grad(theta_b,x_b,y_b):
-    # 生成 key_b 和 ub 并发出
+    # 生成 key_b 和 ubb 并发出
     ppk_b, psk_b = paillier.gen_key()
     ub_list = []
+    time_start = time.time()
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i]
         yb = y_b.iloc[i]
@@ -81,29 +82,41 @@ def update_grad(theta_b,x_b,y_b):
         # ub_code = str(rsa.encrypt(ub_code, rpk_b))
         ub_list.append(ub_code)
     print('100%')
+    print('ubb计算耗时：',time.time()-time_start)
     gradA_pb, ua_list, ppk_a = client_proxy.learn_1(ub_list,ppk_b)
 
-    gradB_pa = theta_b.apply(lambda x: int(paillier.encipher(lamb * 2 * pow(10, 6) * x, ppk_a)))
+    # 计算gbra
+    time_start = time.time()
+    gradB_pa = theta_b.apply(lambda x: int(paillier.encipher(lamb * 2 * (scal ** 3) * x, ppk_a)))
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i]
         yb = y_b.iloc[i]
-        ub = cal_ub(theta_b, xb, yb)
-        # 计算Gra
+        ub = cal_ub(theta_b, xb, yb) * (scal ** 2)
+
         ua = ua_list[i]
         u_pa = paillier.plus(ua, ub, ppk_a)
-        u_pa_i = [paillier.multiply(u_pa, x, ppk_a) for x in xb]
+        u_pa_i = [paillier.multiply(u_pa, int(x * scal // 1), ppk_a) for x in xb]
         for num, ux in enumerate(u_pa_i):
             gradB_pa[num] = paillier.plus(ux, gradB_pa[num], ppk_a)
+        if i % 100 == 0:
+            print('%.f%%' % (i / x_b.shape[0] * 100))
     rb = generate_random(x_b.shape[1])
-    for num, r in enumerate(rb):
+    rb_pb = [int(paillier.encipher(int(r), ppk_a)) for r in rb]
+    for num, r in enumerate(rb_pb):
         gradB_pa[num] = paillier.plus(r, gradB_pa[num], ppk_a)
+    gradB_pa = list(gradB_pa)
+    print('gbra计算耗时：',time.time()-time_start)
 
     # 给A解密
+    time_start = time.time()
     gradA_r = []
     for grad in gradA_pb:
         gradA_r.append(paillier.decipher(grad,ppk_b,psk_b))
+    print('Gar解密耗时：',time.time()-time_start)
 
     gradB_r = client_proxy.learn_2(gradB_pa,gradA_r)
+
+    gradB = gradB_r - rb
 
 
 

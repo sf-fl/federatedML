@@ -4,13 +4,17 @@ from server.federation import alignment
 from server.eAd import paillier
 import pandas as pd
 import numpy as np
+import time
 import rsa
 
 
-global theta
+global theta,ra
 theta = pd.Series(np.zeros(0))  # 设置权重参数的初始值
+
+
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
+scal = 100
 
 
 def cal_ua(x,theta):
@@ -65,7 +69,7 @@ def int2bytes(number: int, fill_size: int = 0) -> bytes:
 
 
 def generate_random(n):
-    return np.random.random_integers(0,1000000000,size=n)# todo
+    return np.random.random_integers((scal**3),(scal**3)*10,size=n)# todo
 
 
 def lr1(ub_list,ppk_b):
@@ -76,29 +80,44 @@ def lr1(ub_list,ppk_b):
     theta = pd.Series(np.zeros(n))
 
     ua_list = []
-    gradA_pb = theta.apply(lambda x : int(paillier.encipher(lamb * 2 * pow(10,6) * x,ppk_b)))
+    gradA_pb = theta.apply(lambda x : int(paillier.encipher(lamb * 2 * (scal ** 3) * x,ppk_b)))
     print(x_a.shape[0])
+    time_start = time.time()
     for i in range(x_a.shape[0]):
         # 计算Uaa
         xa = x_a.iloc[i]
-        ua = cal_ua(xa,theta)
+        ua = cal_ua(xa,theta)*(scal**2)
         ua = int(paillier.encipher(ua,ppk_a))
         ua_list.append(ua)
 
-        # 计算Grb
+        # 计算Garb
         ub = ub_list[i]
         u_pb = paillier.plus(ua,ub,ppk_b)
-        u_pb_i = [paillier.multiply(u_pb,int((x[1]*1000)//1),ppk_b) for x in xa.items()]
+        u_pb_i = [paillier.multiply(u_pb,int(x*scal//1),ppk_b) for x in xa]
         for num,ux in enumerate(u_pb_i):
             gradA_pb[num] = paillier.plus(ux,gradA_pb[num],ppk_b)
         if i % 100 == 0:
             print('%.f%%' % (i/x_a.shape[0]*100))
+    global ra
     ra = generate_random(n)
     ra_pb = [int(paillier.encipher(int(r),ppk_b)) for r in ra]
     for num,r in enumerate(ra_pb):
         gradA_pb[num] = paillier.plus(r, gradA_pb[num], ppk_b)
     gradA_pb = list(gradA_pb)
+    print('uaa和garb的计算耗时：',time.time()-time_start)
     return [gradA_pb, ua_list,ppk_a]
 
 def lr2(gradB_pa, gradA_r):
-    pass
+    # 给B解密
+    time_start = time.time()
+    gradB_r = []
+    for grad in gradB_pa:
+        gradB_r.append(paillier.decipher(grad, ppk_a, psk_a))
+    print('Gar解密耗时：', time.time() - time_start)
+
+    # gar消除随机数
+    gradA = gradA_r - ra
+
+
+
+    return gradB_r

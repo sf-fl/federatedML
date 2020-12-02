@@ -16,7 +16,10 @@ def train2(grad):
     return spk_u_list
 
 
-def train3(a):
-    return []
+def train3(grad):
+    gradB_pa = grad[0]
+    gradA_r = grad[1]
+    gradB_r = lr.lr3(gradB_pa,gradA_r)
+    return gradB_r
 
 
