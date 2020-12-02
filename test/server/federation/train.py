@@ -9,8 +9,11 @@ def train1(keyAndu):
     return spk_u_list
 
 
-def train2(a):
-    return []
+def train2(grad):
+    gradB_pa = grad[0]
+    gradA_r = grad[1]
+    spk_u_list = lr.lr2(gradB_pa, gradA_r)
+    return spk_u_list
 
 
 def train3(a):

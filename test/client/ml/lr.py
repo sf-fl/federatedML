@@ -62,28 +62,48 @@ def int2bytes(number: int, fill_size: int = 0) -> bytes:
     return number.to_bytes(bytes_required, 'big')
 
 
+def generate_random(n):
+    return np.random.random_integers(0,10000000000,n) # todo
+
 
 def update_grad(theta_b,x_b,y_b):
-    rsa_len = 4096
-
     # 生成 key_b 和 ub 并发出
     ppk_b, psk_b = paillier.gen_key()
-    rpk_b, rsk_b = rsa.newkeys(rsa_len)
     ub_list = []
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i]
         yb = y_b.iloc[i]
         ub = cal_ub(theta_b,xb,yb)
         ub_code = int(paillier.encipher(ub,ppk_b))
+        if i % 100 == 0:
+            print('%.f%%' % (i/x_b.shape[0]*100))
         # ub_code = int2bytes(ub_code, rsa_len//8-11)
         # ub_code = str(rsa.encrypt(ub_code, rpk_b))
         ub_list.append(ub_code)
-    rpk_a, u_list = client_proxy.learn_1(ub_list,ppk_b)
+    print('100%')
+    gradA_pb, ua_list, ppk_a = client_proxy.learn_1(ub_list,ppk_b)
+
+    gradB_pa = theta_b.apply(lambda x: int(paillier.encipher(lamb * 2 * pow(10, 6) * x, ppk_a)))
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i]
-        u = u_list[i]
-        uxb = paillier.multiply(u,xb[0],ppk_b)
+        yb = y_b.iloc[i]
+        ub = cal_ub(theta_b, xb, yb)
+        # 计算Gra
+        ua = ua_list[i]
+        u_pa = paillier.plus(ua, ub, ppk_a)
+        u_pa_i = [paillier.multiply(u_pa, x, ppk_a) for x in xb]
+        for num, ux in enumerate(u_pa_i):
+            gradB_pa[num] = paillier.plus(ux, gradB_pa[num], ppk_a)
+    rb = generate_random(x_b.shape[1])
+    for num, r in enumerate(rb):
+        gradB_pa[num] = paillier.plus(r, gradB_pa[num], ppk_a)
 
+    # 给A解密
+    gradA_r = []
+    for grad in gradA_pb:
+        gradA_r.append(paillier.decipher(grad,ppk_b,psk_b))
+
+    gradB_r = client_proxy.learn_2(gradB_pa,gradA_r)
 
 
 

@@ -27,8 +27,11 @@ def learn_1(ub,key_b):
     r = requests.post('http://127.0.0.1:8081/learn1',mid_u_string)
     return json.loads(r.text)
 
-def learn_2():
-    pass
+def learn_2(gradB_pa,gradA_r):
+    # mid_u_json = json.dumps([key_b,ub])
+    mid_u_string = json.dumps([gradB_pa,gradA_r])
+    r = requests.post('http://127.0.0.1:8081/learn2',mid_u_string)
+    return json.loads(r.text)
 
 
 def learn_3():
