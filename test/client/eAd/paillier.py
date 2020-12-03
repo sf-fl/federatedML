@@ -38,8 +38,10 @@ def encipher(plaintext, pub_key):
             m = int(plaintext)
         else:
             m = int(binascii.hexlify(plaintext.encode('utf-8')), 16)
-    # print(m)
     n, g = pub_key
+    if m < 0:
+        m += n
+    # print(m)
     r = random.randint(1, n ** 2)
     ciphertext = gmpy2.powmod(g, m, n ** 2) * gmpy2.powmod(r, n, n ** 2) % (n ** 2)
     return ciphertext
@@ -52,6 +54,8 @@ def decipher(ciphertext, pk, sk):
     m = L(gmpy2.powmod(ciphertext, lmd, n ** 2), n) * u % n
     print(m)
     plaintext = int(m)
+    if plaintext > n/2:
+        plaintext = plaintext - n
     return plaintext
 
 

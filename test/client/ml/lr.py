@@ -13,7 +13,7 @@ scal = 100
 def cal_ub(theta,x,y):
     temp1 = np.dot(theta.T, x)
     temp2 = 2 * y.iloc[0]
-    return temp1 - temp2
+    return int(temp1 - temp2)
 
 
 def bytes2int(raw_bytes: bytes) -> int:
@@ -71,6 +71,7 @@ def update_grad(theta_b,x_b,y_b):
     theta = theta_b.apply(lambda x: int(x*scal))
     ppk_b, psk_b = paillier.gen_key()
     ub_list = []
+
     time_start = time.time()
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i].apply(lambda x: int(x*scal))

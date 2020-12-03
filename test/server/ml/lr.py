@@ -10,7 +10,7 @@ import rsa
 
 global theta_a,ra
 # 设置权重参数的初始值
-
+theta_a = 0
 
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
@@ -19,7 +19,7 @@ scal = 100
 
 def cal_ua(x,theta):
     temp1 = np.dot(theta.T, x)
-    return temp1
+    return int(temp1)
 
 
 def bytes2int(raw_bytes: bytes) -> int:
@@ -77,7 +77,7 @@ def lr1(ub_list,ppk_b):
     x_a = alignment.x
     n = alignment.x.shape[1]  # 特征个数
     global theta_a
-    if theta_a is None:
+    if theta_a == 0:
         theta_a = pd.Series(np.zeros(n))
     theta = theta_a.apply(lambda x: int(x * scal))
     ua_list = []
