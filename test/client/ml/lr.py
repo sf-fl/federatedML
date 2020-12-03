@@ -68,13 +68,14 @@ def generate_random(n):
 
 def update_grad(theta_b,x_b,y_b):
     # 生成 key_b 和 ubb 并发出
+    theta = theta_b.apply(lambda x: int(x*scal))
     ppk_b, psk_b = paillier.gen_key()
     ub_list = []
     time_start = time.time()
     for i in range(x_b.shape[0]):
-        xb = x_b.iloc[i]
-        yb = y_b.iloc[i]
-        ub = cal_ub(theta_b,xb,yb)
+        xb = x_b.iloc[i].apply(lambda x: int(x*scal))
+        yb = y_b.iloc[i].apply(lambda x: int(x*scal))
+        ub = cal_ub(theta,xb,yb)
         ub_code = int(paillier.encipher(ub,ppk_b))
         if i % 100 == 0:
             print('%.f%%' % (i/x_b.shape[0]*100))
@@ -87,15 +88,15 @@ def update_grad(theta_b,x_b,y_b):
 
     # 计算gbra
     time_start = time.time()
-    gradB_pa = theta_b.apply(lambda x: int(paillier.encipher(lamb * 2 * (scal ** 3) * x, ppk_a)))
+    gradB_pa = theta.apply(lambda x: int(paillier.encipher(lamb * 2 * (scal ** 3) * x, ppk_a)))
     for i in range(x_b.shape[0]):
-        xb = x_b.iloc[i]
-        yb = y_b.iloc[i]
-        ub = cal_ub(theta_b, xb, yb) * (scal ** 2)
+        xb = x_b.iloc[i].apply(lambda x: int(x*scal))
+        yb = y_b.iloc[i].apply(lambda x: int(x*scal*scal))
+        ub = cal_ub(theta, xb, yb)
 
         ua = ua_list[i]
         u_pa = paillier.plus(ua, ub, ppk_a)
-        u_pa_i = [paillier.multiply(u_pa, int(x * scal // 1), ppk_a) for x in xb]
+        u_pa_i = [paillier.multiply(u_pa, x, ppk_a) for x in xb]
         for num, ux in enumerate(u_pa_i):
             gradB_pa[num] = paillier.plus(ux, gradB_pa[num], ppk_a)
         if i % 100 == 0:
@@ -118,10 +119,11 @@ def update_grad(theta_b,x_b,y_b):
 
     gradB = gradB_r - rb
 
+    return gradB / 4 * pow(10, -9)
 
 
 def update_theta(grad, theta, alpha):
-    theta = theta - alpha * 4 * pow(10,-9) * grad
+    theta = theta - alpha * grad
     return theta
 
 

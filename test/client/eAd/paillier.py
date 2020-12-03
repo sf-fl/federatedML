@@ -55,13 +55,13 @@ def decipher(ciphertext, pk, sk):
     return plaintext
 
 
-def plus(c1, c2, pk):
+def plus(c1, c2, pk): # todo int强转
     n, g = pk
     c12 = (c1 * c2) % (n ** 2)
     return int(c12)
 
 
-def multiply(c, cons, pk):
+def multiply(c, cons, pk): # todo int强转
     n, g = pk
     if not isinstance(cons, int):
         print("常数非整")

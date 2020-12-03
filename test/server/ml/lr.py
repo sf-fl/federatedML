@@ -8,8 +8,8 @@ import time
 import rsa
 
 
-global theta,ra
-theta = pd.Series(np.zeros(0))  # 设置权重参数的初始值
+global theta_a,ra
+# 设置权重参数的初始值
 
 
 rsa_len = 1112
@@ -76,24 +76,25 @@ def lr1(ub_list,ppk_b):
     lamb = 1
     x_a = alignment.x
     n = alignment.x.shape[1]  # 特征个数
-    global theta
-    theta = pd.Series(np.zeros(n))
-
+    global theta_a
+    if theta_a is None:
+        theta_a = pd.Series(np.zeros(n))
+    theta = theta_a.apply(lambda x: int(x * scal))
     ua_list = []
     gradA_pb = theta.apply(lambda x : int(paillier.encipher(lamb * 2 * (scal ** 3) * x,ppk_b)))
     print(x_a.shape[0])
     time_start = time.time()
     for i in range(x_a.shape[0]):
         # 计算Uaa
-        xa = x_a.iloc[i]
-        ua = cal_ua(xa,theta)*(scal**2)
+        xa = x_a.iloc[i].apply(lambda x: int(x*scal))
+        ua = cal_ua(xa,theta)
         ua = int(paillier.encipher(ua,ppk_a))
         ua_list.append(ua)
 
         # 计算Garb
         ub = ub_list[i]
         u_pb = paillier.plus(ua,ub,ppk_b)
-        u_pb_i = [paillier.multiply(u_pb,int(x*scal//1),ppk_b) for x in xa]
+        u_pb_i = [paillier.multiply(u_pb,x,ppk_b) for x in xa]
         for num,ux in enumerate(u_pb_i):
             gradA_pb[num] = paillier.plus(ux,gradA_pb[num],ppk_b)
         if i % 100 == 0:
