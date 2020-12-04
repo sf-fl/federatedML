@@ -74,11 +74,11 @@ def update_grad(theta_b,x_b,y_b):
 
     time_start = time.time()
     for i in range(x_b.shape[0]):
-        xb = x_b.iloc[i].apply(lambda x: int(x*scal))
-        yb = y_b.iloc[i].apply(lambda x: int(x*scal))
-        ub = cal_ub(theta,xb,yb)
+        xb = x_b.iloc[i]
+        yb = y_b.iloc[i]
+        ub = cal_ub(theta,xb,yb)*scal*scal
         ub_code = int(paillier.encipher(ub,ppk_b))
-        if i % 100 == 0:
+        if i % 1000 == 0:
             print('%.f%%' % (i/x_b.shape[0]*100))
         # ub_code = int2bytes(ub_code, rsa_len//8-11)
         # ub_code = str(rsa.encrypt(ub_code, rpk_b))
@@ -89,18 +89,19 @@ def update_grad(theta_b,x_b,y_b):
 
     # 计算gbra
     time_start = time.time()
-    gradB_pa = theta.apply(lambda x: int(paillier.encipher(lamb * 2 * (scal ** 3) * x, ppk_a)))
+    gradB_pa = theta.apply(lambda x: int(paillier.encipher(lamb * 2 * (scal ** 2) * x, ppk_a)))
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i].apply(lambda x: int(x*scal))
         yb = y_b.iloc[i].apply(lambda x: int(x*scal*scal))
         ub = cal_ub(theta, xb, yb)
+        uba = int(paillier.encipher(ub, ppk_a))
 
         ua = ua_list[i]
-        u_pa = paillier.plus(ua, ub, ppk_a)
+        u_pa = paillier.plus(ua, uba, ppk_a)
         u_pa_i = [paillier.multiply(u_pa, x, ppk_a) for x in xb]
         for num, ux in enumerate(u_pa_i):
             gradB_pa[num] = paillier.plus(ux, gradB_pa[num], ppk_a)
-        if i % 100 == 0:
+        if i % 1000 == 0:
             print('%.f%%' % (i / x_b.shape[0] * 100))
     rb = generate_random(x_b.shape[1])
     rb_pb = [int(paillier.encipher(int(r), ppk_a)) for r in rb]
@@ -153,6 +154,7 @@ def logistic_regression(X, y):
         # 权重参数更新
         new_theta = update_theta(grad, theta, alpha)
         theta = new_theta
+        print('theta_B = ',theta)
         # cost_update = cosst_function(new_theta, X, y)
         # cost_val = cost_update
         # cost_record.append(cost_val)

@@ -52,10 +52,11 @@ def decipher(ciphertext, pk, sk):
     lmd = sk[1]
     u = gmpy2.invert(L(gmpy2.powmod(g, lmd, n ** 2), n), n) % n
     m = L(gmpy2.powmod(ciphertext, lmd, n ** 2), n) * u % n
-    print(m)
+    # print(m)
     plaintext = int(m)
     if plaintext > n/2:
         plaintext = plaintext - n
+    print(plaintext)
     return plaintext
 
 

@@ -15,7 +15,7 @@ theta_a = 0
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
 scal = 100
-
+alpha = 0.1
 
 def cal_ua(x,theta):
     temp1 = np.dot(theta.T, x)
@@ -72,7 +72,7 @@ def generate_random(n):
     return np.random.random_integers((scal**3),(scal**3)*10,size=n)# todo
 
 
-def lr1(ub_list,ppk_b):
+def lr1(ubb_list,ppk_b):
     lamb = 1
     x_a = alignment.x
     n = alignment.x.shape[1]  # 特征个数
@@ -80,24 +80,27 @@ def lr1(ub_list,ppk_b):
     if theta_a == 0:
         theta_a = pd.Series(np.zeros(n))
     theta = theta_a.apply(lambda x: int(x * scal))
-    ua_list = []
-    gradA_pb = theta.apply(lambda x : int(paillier.encipher(lamb * 2 * (scal ** 3) * x,ppk_b)))
+    uaa_list = []
+    gradA_pb = theta.apply(lambda x : int(paillier.encipher((lamb * 2 * (scal ** 2) * x),ppk_b)))
     print(x_a.shape[0])
     time_start = time.time()
     for i in range(x_a.shape[0]):
         # 计算Uaa
         xa = x_a.iloc[i].apply(lambda x: int(x*scal))
         ua = cal_ua(xa,theta)
-        ua = int(paillier.encipher(ua,ppk_a))
-        ua_list.append(ua)
+        uaa = int(paillier.encipher(ua,ppk_a))
+        uaa_list.append(uaa)
+
+        # 计算Uab
+        uab = int(paillier.encipher(ua, ppk_b))
 
         # 计算Garb
-        ub = ub_list[i]
-        u_pb = paillier.plus(ua,ub,ppk_b)
+        ubb = ubb_list[i]
+        u_pb = paillier.plus(uab,ubb,ppk_b)
         u_pb_i = [paillier.multiply(u_pb,x,ppk_b) for x in xa]
         for num,ux in enumerate(u_pb_i):
             gradA_pb[num] = paillier.plus(ux,gradA_pb[num],ppk_b)
-        if i % 100 == 0:
+        if i % 1000 == 0:
             print('%.f%%' % (i/x_a.shape[0]*100))
     global ra
     ra = generate_random(n)
@@ -106,7 +109,7 @@ def lr1(ub_list,ppk_b):
         gradA_pb[num] = paillier.plus(r, gradA_pb[num], ppk_b)
     gradA_pb = list(gradA_pb)
     print('uaa和garb的计算耗时：',time.time()-time_start)
-    return [gradA_pb, ua_list,ppk_a]
+    return [gradA_pb, uaa_list,ppk_a]
 
 def lr2(gradB_pa, gradA_r):
     # 给B解密
@@ -118,7 +121,8 @@ def lr2(gradB_pa, gradA_r):
 
     # gar消除随机数
     gradA = gradA_r - ra
-
-
-
+    grad = gradA / 4 * pow(10, -9)
+    global theta_a
+    theta_a = theta_a - alpha * grad
+    print('theta_a',theta_a)
     return gradB_r
