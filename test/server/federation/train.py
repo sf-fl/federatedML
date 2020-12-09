@@ -16,6 +16,12 @@ def train2(grad):
     return spk_u_list
 
 
+def predict(ub_list):
+    result = lr.pre(ub_list)
+    return result
+
+
+
 def train3(grad):
     gradB_pa = grad[0]
     gradA_r = grad[1]

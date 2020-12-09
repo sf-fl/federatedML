@@ -15,7 +15,7 @@ theta_a = None
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
 scal = 100
-alpha = 0.1
+alpha = 0.0003
 
 def cal_ua(x,theta):
     temp1 = np.dot(theta.T, x)
@@ -73,7 +73,7 @@ def generate_random(n):
 
 
 def lr1(ubb_list,ppk_b):
-    lamb = 1
+    lamb = 0.1
     x_a = alignment.x
     n = alignment.x.shape[1]  # 特征个数
     global theta_a
@@ -81,7 +81,8 @@ def lr1(ubb_list,ppk_b):
         theta_a = pd.Series(np.ones(n)*10)
     theta = theta_a.apply(lambda x: int(x * scal))
     uaa_list = []
-    gradA_pb = theta.apply(lambda x : int(paillier.encipher((lamb * 2 * (scal ** 2) * x),ppk_b)))
+    # gradA_pb = theta.apply(lambda x : int(paillier.encipher((-lamb * 2 * (scal ** 2) * x),ppk_b)))
+    gradA_pb =  pd.Series(np.zeros(n)).apply(lambda x: int(paillier.encipher((-lamb * 2 * (scal ** 2) * x), ppk_b)))
     print(x_a.shape[0])
     time_start = time.time()
     for i in range(x_a.shape[0]):
@@ -122,7 +123,25 @@ def lr2(gradB_pa, gradA_r):
     # gar消除随机数
     gradA = gradA_r - ra
     grad = gradA / 4 / (scal ** 3)
+    print('当前梯度为',grad)
     global theta_a
     theta_a = theta_a - alpha * grad
     print('theta_a',theta_a)
     return gradB_r
+
+def sigmoid(x):
+    # TODO: Implement sigmoid function
+    return 1/(1 + np.exp(-x))
+
+def pre(ub_list):
+    x_a = alignment.x
+    global theta_a
+    ua_list = []
+    for i in range(x_a.shape[0]):
+        # 计算Uaa
+        xa = x_a.iloc[i]
+        ua = np.dot(theta_a.T, xa)
+        ua_list.append(ua)
+    u_list = np.array(ua_list) + np.array(ub_list)
+    pred = pd.Series(u_list).apply(lambda x: sigmoid(x))
+    return pred.tolist()
