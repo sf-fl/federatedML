@@ -5,7 +5,7 @@ import binascii
 
 
 def get_prime(rs):
-    p = gmpy2.mpz_urandomb(rs,256)
+    p = gmpy2.mpz_urandomb(rs,128)
     while not gmpy2.is_prime(p):
         p = p + 1
     return p
@@ -71,11 +71,11 @@ def multiply(c, cons, pk):  # todo int强转
     if not isinstance(cons, int):
         print("常数非整")
         cons = int(cons//1)
-    if cons > 1:
+    if cons > 0:
         ct = c
         for i in range(1, cons):
             ct = (ct * c) % (n ** 2)
         return int(ct)
     else:
-        return int(c)
+        return 1
 
