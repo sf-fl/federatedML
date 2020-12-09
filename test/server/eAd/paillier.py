@@ -56,7 +56,7 @@ def decipher(ciphertext, pk, sk):
     plaintext = int(m)
     if plaintext > n/2:
         plaintext = plaintext - n
-    print(plaintext)
+    # print(plaintext)
     return plaintext
 
 

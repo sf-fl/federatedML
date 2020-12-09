@@ -8,14 +8,14 @@ import time
 import rsa
 
 
-global theta_a,ra
+global theta_a,ra,alpha
 # 设置权重参数的初始值
 theta_a = None
 
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
 scal = 100
-alpha = 0.0003
+alpha = 0.01
 
 def cal_ua(x,theta):
     temp1 = np.dot(theta.T, x)
@@ -124,8 +124,10 @@ def lr2(gradB_pa, gradA_r):
     gradA = gradA_r - ra
     grad = gradA / 4 / (scal ** 3)
     print('当前梯度为',grad)
-    global theta_a
+    global theta_a,alpha
     theta_a = theta_a - alpha * grad
+    alpha *= 0.95
+    print('学习率：', alpha)
     print('theta_a',theta_a)
     return gradB_r
 

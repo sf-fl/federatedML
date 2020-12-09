@@ -1,10 +1,9 @@
 from client.ml import lr
-
+import pandas as pd
 
 def predict(theta,x,y):
     if theta is None:
         pass
     result = lr.predict(theta,x,y)
-    with open('temp','a+') as f1:
-        f1.write(result)
+    result.to_csv('result.csv')
     return result
