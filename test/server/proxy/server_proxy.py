@@ -90,5 +90,16 @@ def learn3():
         return '连接失败！错误情况：%s' % e
 
 
+@app.route('/predict' , methods=['POST'])
+def predict():
+    try:
+        a = request.get_data()
+        dict1 = json.loads(a)
+        result = train.predict(dict1)
+        return json.dumps(result)
+    except Exception as e:
+        return '连接失败！错误情况：%s' % e
+
+
 if __name__ =='__main__':
     app.run(port='8081',debug=True)

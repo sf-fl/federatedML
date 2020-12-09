@@ -3,6 +3,7 @@ from client.data_get_save import model_save
 from client.federation import alignment
 from client.federation import feature_engineering
 from client.federation import train
+from client.federation import predict
 
 def start():
     # 连接测试
@@ -19,6 +20,10 @@ def start():
 
     # 保存
     model_save.save_model(result)
+    
+    # 预测
+    pred = predict.predict(result[0],x,y)
+
 
 
 if __name__ == '__main__':
