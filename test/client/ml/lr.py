@@ -185,7 +185,7 @@ def predict(theta,x_b,y):
     pred = client_proxy.predict(ub_list)
     for i, p in enumerate(pred):
         print('序号：%d，预测为1概率：%f，实际值：%d' % (i,p,y.iloc[i]))
-    return pd.DataFrame([pred, list(y)],index=['p','y']).T
+    return pd.DataFrame([pred, y['marriage'].tolist()],index=['p','y']).T
 
 
 
