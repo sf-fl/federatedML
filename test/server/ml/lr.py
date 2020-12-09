@@ -10,7 +10,7 @@ import rsa
 
 global theta_a,ra
 # 设置权重参数的初始值
-theta_a = 0
+theta_a = None
 
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
@@ -77,8 +77,8 @@ def lr1(ubb_list,ppk_b):
     x_a = alignment.x
     n = alignment.x.shape[1]  # 特征个数
     global theta_a
-    if theta_a == 0:
-        theta_a = pd.Series(np.zeros(n))
+    if theta_a is None:
+        theta_a = pd.Series(np.ones(n)*10)
     theta = theta_a.apply(lambda x: int(x * scal))
     uaa_list = []
     gradA_pb = theta.apply(lambda x : int(paillier.encipher((lamb * 2 * (scal ** 2) * x),ppk_b)))
@@ -121,7 +121,7 @@ def lr2(gradB_pa, gradA_r):
 
     # gar消除随机数
     gradA = gradA_r - ra
-    grad = gradA / 4 * pow(10, -9)
+    grad = gradA / 4 / (scal ** 3)
     global theta_a
     theta_a = theta_a - alpha * grad
     print('theta_a',theta_a)
