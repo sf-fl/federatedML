@@ -126,7 +126,7 @@ def update_grad(theta_b,x_b,y_b):
 
     gradB = gradB_r - rb
 
-    return gradB / 4 / (scal ** 3)
+    return gradB / 4 / (scal ** 3)/x_b.shape[0]
 
 
 def update_theta(grad, theta, alpha):
@@ -147,8 +147,8 @@ def logistic_regression(X, y):
     y = y.replace(0,-1)
     # y = y.reshape(m, 1)
     # cost_record = []  # 记录代价函数的值
-    alpha = 0.01  # 学习率
-    maxiters = 100  # 最大迭代次数
+    alpha = 0.1  # 学习率
+    maxiters = 200 # 最大迭代次数
     theta = pd.Series(np.ones(n)*10)  # 设置权重参数的初始值
     # cost_val = cosst_function(theta, X, y)
     # cost_record.append(cost_val)
@@ -167,7 +167,7 @@ def logistic_regression(X, y):
         # cost_val = cost_update
         # cost_record.append(cost_val)
         iters += 1
-        alpha *= 0.95
+        alpha *= 0.98
         print('学习率：',alpha)
     end = time.time()
     print("cost time: %f s" % (end - start))

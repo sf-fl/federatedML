@@ -15,7 +15,7 @@ theta_a = None
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
 scal = 100
-alpha = 0.01
+alpha = 0.1
 
 def cal_ua(x,theta):
     temp1 = np.dot(theta.T, x)
@@ -120,13 +120,14 @@ def lr2(gradB_pa, gradA_r):
         gradB_r.append(paillier.decipher(grad, ppk_a, psk_a))
     print('Gar解密耗时：', time.time() - time_start)
 
+    x_a = alignment.x
     # gar消除随机数
     gradA = gradA_r - ra
-    grad = gradA / 4 / (scal ** 3)
+    grad = gradA / 4 / (scal ** 3)/x_a.shape[0]
     print('当前梯度为',grad)
     global theta_a,alpha
     theta_a = theta_a - alpha * grad
-    alpha *= 0.95
+    alpha *= 0.98
     print('学习率：', alpha)
     print('theta_a',theta_a)
     return gradB_r
