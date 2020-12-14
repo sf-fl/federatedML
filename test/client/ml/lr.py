@@ -8,7 +8,7 @@ from client.eAd import paillier
 from client.proxy import client_proxy
 
 lamb = 0.1
-scal = 100
+scal = 1000
 
 
 def cal_ub(theta, x, y):
@@ -66,7 +66,7 @@ def int2bytes(number: int, fill_size: int = 0) -> bytes:
 
 
 def generate_random(n):
-    return np.random.random_integers((scal**3),(scal**3)*10,size=n)  # todo
+    return np.trunc(np.random.rand(n)*(scal**3)*10+(scal**3))# todo
 
 
 def update_grad(theta_b,x_b,y_b):
@@ -147,7 +147,7 @@ def logistic_regression(X, y):
     y = y.replace(0,-1)
     # y = y.reshape(m, 1)
     # cost_record = []  # 记录代价函数的值
-    alpha = 0.1  # 学习率
+    alpha = 0.5  # 学习率
     maxiters = 200 # 最大迭代次数
     theta = pd.Series(np.ones(n)*10)  # 设置权重参数的初始值
     # cost_val = cosst_function(theta, X, y)
@@ -167,7 +167,7 @@ def logistic_regression(X, y):
         # cost_val = cost_update
         # cost_record.append(cost_val)
         iters += 1
-        alpha *= 0.98
+        alpha *= 0.97
         print('学习率：',alpha)
     end = time.time()
     print("cost time: %f s" % (end - start))

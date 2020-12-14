@@ -14,8 +14,8 @@ theta_a = None
 
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
-scal = 100
-alpha = 0.1
+scal = 1000
+alpha = 0.5
 
 def cal_ua(x,theta):
     temp1 = np.dot(theta.T, x)
@@ -69,7 +69,7 @@ def int2bytes(number: int, fill_size: int = 0) -> bytes:
 
 
 def generate_random(n):
-    return np.random.random_integers((scal**3),(scal**3)*10,size=n)# todo
+    return np.trunc(np.random.rand(n)*(scal**3)*10+(scal**3))# todo
 
 
 def lr1(ubb_list,ppk_b):
@@ -127,7 +127,7 @@ def lr2(gradB_pa, gradA_r):
     print('当前梯度为',grad)
     global theta_a,alpha
     theta_a = theta_a - alpha * grad
-    alpha *= 0.98
+    alpha *= 0.97
     print('学习率：', alpha)
     print('theta_a',theta_a)
     return gradB_r
