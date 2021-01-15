@@ -18,23 +18,12 @@
         </n3-input>
       </n3-form-item>
       <n3-form-item
-        label="任务代码"
+        label="数据集"
         need
         :label-col="3"
       >
-        <n3-input
-          v-model="model.password"
-          width="320px"
-          :rules="[{type:'required'}]"
-          :custom-validate="passwordValidate"
-          class="fl"
-        >
-        </n3-input>
-        <div class="i-tips">
-          <n3-tooltip content="随机生成" placement="top" trigger="hover">
-            <n3-icon @click.native="randomPasswd" class="refresh" type="refresh"></n3-icon>
-          </n3-tooltip>
-        </div>
+        <input type="file" @change="inputFileChange">
+        <n3-button @click.native="clicks" type="primary" size="mini" >上传</n3-button>
       </n3-form-item>
       <n3-form-item
         label="目标IP"
@@ -43,34 +32,9 @@
       >
         <n3-input
           :rules="[{type:'required'}]"
-          :custom-validate="phoneValidate"
-          v-model="model.phone"
-          width="77.5px"
-          type="number"
-        >
-        </n3-input>
-        <n3-input
-          :rules="[{type:'required'}]"
-          :custom-validate="phoneValidate"
-          v-model="model.phone"
-          width="77.5px"
-          type="number"
-        >
-        </n3-input>
-        <n3-input
-          :rules="[{type:'required'}]"
-          :custom-validate="phoneValidate"
-          v-model="model.phone"
-          width="77.5px"
-          type="number"
-        >
-        </n3-input>
-        <n3-input
-          :rules="[{type:'required'}]"
-          :custom-validate="phoneValidate"
-          v-model="model.phone"
-          width="77.5px"
-          type="number"
+          :custom-validate="ipValidate"
+          v-model="model.ip"
+          width="320px"
         >
         </n3-input>
       </n3-form-item>
@@ -104,29 +68,19 @@
         </div>
       </n3-form-item>
       <n3-form-item
-        label="次数限制"
+        label="学习类型"
         need
         :label-col="3"
       >
         <n3-select
-          v-model="model.limitType"
+          v-model="model.learningAlgorithm"
+          width="160px"
         >
-          <n3-option value="1">套餐A</n3-option>
-          <n3-option value="2">套餐B</n3-option>
+          <n3-option value="VLR">纵向逻辑回归</n3-option>
+          <n3-option value="VSB">纵向SecureBoost</n3-option>
+          <n3-option value="0">--敬请期待--</n3-option>
+
         </n3-select>
-      </n3-form-item>
-      <n3-form-item
-        label="过期时间"
-        need
-        :label-col="3"
-      >
-        <n3-datepicker
-          :rules="[{type:'required'}]"
-          v-model="model.expireDate"
-          format="yyyy-MM-dd"
-          class="fl"
-        >
-        </n3-datepicker>
       </n3-form-item>
       <n3-form-item
         :label-col="3"
@@ -149,6 +103,7 @@
   import qs from 'qs'
   import { mapState } from 'vuex'
   import { randomPassword, dateFormat } from '../../utils'
+  // import submitfile from "xxxxxx"
 
   export default {
     computed: {
@@ -160,13 +115,16 @@
           username: '',
           password: '',
           phone: '',
+          ip: '',
           port: '',
           priority: 1,
+          learningAlgorithm: '1',
           limitType: '1',
           cacheExpireTime: '24',
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         },
-        loading: false
+        loading: false,
+        files: ''
       }
     },
     methods: {
@@ -175,19 +133,38 @@
         this.model = {
           username: '',
           password: '',
+          ip: '',
+          port: '',
           phone: '',
           priority: 1,
+          learningAlgorithm: 'VLR',
           limitType: '1',
           cacheExpireTime: '24',
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         }
         this.loading = false
       },
+      inputFileChange (e) {
+        this.files = e.target.files[0]  // 当input中选择文件时触发一个事件并让data当中的files拿到所选择的文件
+      },
+      clicks () {
+        if (!this.files) {
+          console.print('请选择文件')
+        } else {
+        //   return
+        //   let fd = new FormData ()
+        //   fd.append('file',
+        //   this.files
+        // )
+        //   submitfile(fd).then(res => {
+        //   })
+        }
+      },
       // Random Pass
       randomPasswd () {
         this.model.password = randomPassword(18)
       },
-      addUser () {
+      addTask () {
         let cond = Object.assign({}, this.model)
         // cond.expireDate = new Date(cond.expireDate).valueOf()
         this.loading = true
@@ -199,10 +176,11 @@
               type: 'success',
               placement: 'top-right',
               duration: 2000,
-              width:'240px' // 内容不确定，建议设置width
+              width: '240px' // 内容不确定，建议设置width
             })
             this.$router.push('/table/')
           })
+          // eslint-disable-next-line handle-callback-err
           .catch(error => {
             this.loading = false
             this.n3Alert({
@@ -210,7 +188,7 @@
               type: 'danger',
               placement: 'top-right',
               duration: 2000,
-              width:'240px' // 内容不确定，建议设置width
+              width: '240px' // 内容不确定，建议设置width
             })
           })
       },
@@ -219,7 +197,7 @@
           if (!result.isvalid) {
             return
           }
-          return this.addUser()
+          return this.addTask()
         })
       },
       passwordValidate (val) {
@@ -234,36 +212,20 @@
           }
         }
       },
-      phoneValidate (val) {
-        if (/^\d{11}$/.test(val)) {
+      ipValidate (val) {
+        if (/^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$/.test(val)) {
           return {
             validStatus: 'success'
           }
         } else {
           return {
             validStatus: 'error',
-            tips: '请输入11位手机号'
+            tips: '请输入正确的IP地址'
           }
         }
       },
       portValidate (val) {
-        if (/^\d{5}$/.test(val)) {
-          return {
-            validStatus: 'success'
-          }
-        } else if (/^\d{4}$/.test(val)) {
-          return {
-            validStatus: 'success'
-          }
-        } else if (/^\d{3}$/.test(val)) {
-          return {
-            validStatus: 'success'
-          }
-        } else if (/^\d{2}$/.test(val)) {
-          return {
-            validStatus: 'success'
-          }
-        } else if (/^\d{1}$/.test(val)) {
+        if (/^\d{1,5}$/.test(val)) {
           return {
             validStatus: 'success'
           }
