@@ -14,13 +14,13 @@ from sklearn import metrics
 # 关联原始数据表格
 education=pd.read_csv('D:\lbxx\data_education.csv')
 marriage=pd.read_csv('D:\lbxx\data_marriage.csv')
-associate=sqldf('''select t2.*,t1.income,t1.education from education t1 inner join marriage t2 
-                on t1.phone_num=t2.phone_num''')
+asocciate=marriage
+# associate=sqldf('''select t2.*,t1.income,t1.education from education t1 inner join marriage t2 on t1.phone_num=t2.phone_num''')
 # 进行onehot
-values=np.array(associate['education'])
-integer_encoded=LabelEncoder().fit_transform(values)
-integer_encoded=integer_encoded.reshape(len(integer_encoded),1)
-onehot_encoded=OneHotEncoder(sparse=(False)).fit_transform(integer_encoded)
+# values=np.array(associate['education'])
+# integer_encoded=LabelEncoder().fit_transform(values)
+# integer_encoded=integer_encoded.reshape(len(integer_encoded),1)
+# onehot_encoded=OneHotEncoder(sparse=(False)).fit_transform(integer_encoded)
 # inverted=LabelEncoder().inverse_transform([np.argmax(onehot_encoded[0,:])])
 # 将原数据与其education的onehot编码关联起来
 test=pd.get_dummies(associate)
