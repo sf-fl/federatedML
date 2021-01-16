@@ -1,7 +1,7 @@
 <template>
   <section class="login-wrap">
     <n3-form ref='form' class="login-form">
-      <h3>系统登录</h3>
+      <h3>上汽财务星联平台</h3>
       <div class="fields">
         <n3-input class="field" v-model="account" placeholder="账号" width="320px">
         </n3-input>
@@ -33,7 +33,7 @@
     STORAGE_KEY
   } from '../utils/const'
   import storage from '../utils/storage'
-  
+
   function render() {
     var canvas = document.querySelector('#J_loginBackground');
     if (!canvas) {
@@ -63,25 +63,25 @@
     function colorValue(min) {
       return Math.floor(Math.random() * 255 + min);
     }
-    
+
     function createColorStyle(r,g,b) {
       return 'rgba(' + r + ',' + g + ',' + b + ', 0.8)';
     }
-    
+
     function mixComponents(comp1, weight1, comp2, weight2) {
       return (comp1 * weight1 + comp2 * weight2) / (weight1 + weight2);
     }
-    
+
     function averageColorStyles(dot1, dot2) {
       var color1 = dot1.color,
           color2 = dot2.color;
-      
+
       var r = mixComponents(color1.r, dot1.radius, color2.r, dot2.radius),
           g = mixComponents(color1.g, dot1.radius, color2.g, dot2.radius),
           b = mixComponents(color1.b, dot1.radius, color2.b, dot2.radius);
       return createColorStyle(Math.floor(r), Math.floor(g), Math.floor(b));
     }
-    
+
     function Color(min) {
       min = min || 0;
       this.r = colorValue(min);
@@ -168,7 +168,7 @@
       connectDots();
       drawDots();
 
-      requestAnimationFrame(animateDots);	
+      requestAnimationFrame(animateDots);
     }
 
     canvas.onmousemove = function(e) {
@@ -182,7 +182,7 @@
     };
 
     createDots();
-    requestAnimationFrame(animateDots);	
+    requestAnimationFrame(animateDots);
   }
 
   export default {
