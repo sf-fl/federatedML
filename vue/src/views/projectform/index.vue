@@ -80,7 +80,6 @@
           <n3-option value="VLR">纵向逻辑回归</n3-option>
           <n3-option value="VSB">纵向SecureBoost</n3-option>
           <n3-option value="0">--敬请期待--</n3-option>
-
         </n3-select>
       </n3-form-item>
       <n3-form-item

@@ -3,8 +3,11 @@ import CommonLayout from '../layout'
 
 import NormalForm from '../views/form'
 import TrainForm from '../views/trainform'
-import NormalTable from '../views/table'
+import TrainInfo from '../views/try'
 import ProjectForm from '../views/projectform'
+import NormalTable from '../views/table'
+import TaskTable from '../views/tasktable'
+import ApplyTable from '../views/applytable'
 
 const routes = [
   // Login View
@@ -32,37 +35,37 @@ const routes = [
   },
   // Table View
   {
-    path: '/table',
+    path: '/overall',
     icon: 'table',
     name: 'table',
     component: CommonLayout,
-    redirect: '/table/',
+    redirect: '/overall/',
     meta: {
       label: '总览'
     },
     children: [
       {
-        path: '/table/',
+        path: '/overall/',
         component: NormalTable,
         name: 'normalTable',
         meta: {
-          label: '项目管理'
+          label: '项目列表'
         }
       },
       {
-        path: '/table/',
-        component: NormalTable,
-        name: 'normalTable',
+        path: '/overall/task',
+        component: TaskTable,
+        name: 'taskTable',
         meta: {
-          label: '任务管理'
+          label: '任务列表'
         }
       },
       {
-        path: '/table/',
-        component: NormalTable,
-        name: 'normalTable',
+        path: '/overall/apply',
+        component: ApplyTable,
+        name: 'applyTable',
         meta: {
-          label: '申请管理'
+          label: '申请列表'
         }
       }
     ]
@@ -108,8 +111,8 @@ const routes = [
       },
       {
         path: '/train/info',
-        component: TrainForm,
-        name: 'trainForm',
+        component: TrainInfo,
+        name: 'trainInfo',
         meta: {
           label: '训练详情'
         }
