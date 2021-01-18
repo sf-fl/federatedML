@@ -22,8 +22,9 @@
         need
         :label-col="3"
       >
-        <input type="file" @change="inputFileChange">
-        <n3-button @click.native="clicks" type="primary" size="mini" >上传</n3-button>
+<!--        <input type="file" @change="inputFileChange">-->
+        <input class="file" name="file" type="file"  accept="text/csv" @change="update"/>
+<!--        <n3-button @click.native="clicks" type="primary" size="mini" >上传</n3-button>-->
       </n3-form-item>
       <n3-form-item
         label="目标IP"
@@ -102,6 +103,7 @@
   import API from '../../api'
   import qs from 'qs'
   import { mapState } from 'vuex'
+  import axios from 'axios'
   import { randomPassword, dateFormat } from '../../utils'
   // import submitfile from "xxxxxx"
 
@@ -146,6 +148,19 @@
       },
       inputFileChange (e) {
         this.files = e.target.files[0]  // 当input中选择文件时触发一个事件并让data当中的files拿到所选择的文件
+      },
+      update (e) {
+        this.file = e.target.files[0]
+        this.param = new window.FormData() // 创建form对象
+        this.param.append('file', this.file) // 通过append向form对象添加数据
+        console.log(this.param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+        axios.post('http://127.0.0.1:5000/upload', this.param,{headers:{'Content-Type':'application/x-www-form-urlencoded'}}) // 请求头要为表单
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
       },
       clicks () {
         if (!this.files) {

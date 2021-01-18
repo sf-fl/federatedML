@@ -1,7 +1,7 @@
 import Login from '../views/login'
 import CommonLayout from '../layout'
 
-import NormalForm from '../views/test2'
+import NormalForm from '../views/form'
 import TrainForm from '../views/trainform'
 import NormalTable from '../views/table'
 
