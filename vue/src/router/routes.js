@@ -4,6 +4,7 @@ import CommonLayout from '../layout'
 import NormalForm from '../views/form'
 import TrainForm from '../views/trainform'
 import NormalTable from '../views/table'
+import ProjectForm from '../views/projectform'
 
 const routes = [
   // Login View
@@ -68,6 +69,26 @@ const routes = [
   },
   // Form View
   {
+    path: '/projectform',
+    name: 'form',
+    icon: 'bars',
+    component: CommonLayout,
+    redirect: '/project/',
+    meta: {
+      label: '项目管理'
+    },
+    children: [
+      {
+        path: '/project/info',
+        component: ProjectForm,
+        name: 'projectForm',
+        meta: {
+          label: '项目详情'
+        }
+      }
+    ]
+  },
+  {
     path: '/trainform',
     name: 'form',
     icon: 'bars',
@@ -78,11 +99,19 @@ const routes = [
     },
     children: [
       {
-        path: '/train/',
+        path: '/train/start',
         component: TrainForm,
         name: 'trainForm',
         meta: {
           label: '发起训练'
+        }
+      },
+      {
+        path: '/train/info',
+        component: TrainForm,
+        name: 'trainForm',
+        meta: {
+          label: '训练详情'
         }
       }
     ]
@@ -92,13 +121,21 @@ const routes = [
     name: 'form',
     icon: 'bars',
     component: CommonLayout,
-    redirect: '/user/',
+    redirect: '/predict/',
     meta: {
       label: '预测管理'
     },
     children: [
       {
-        path: '/user/',
+        path: '/predict/start',
+        component: NormalForm,
+        name: 'normalForm',
+        meta: {
+          label: '预测详情'
+        }
+      },
+      {
+        path: '/predict/info',
         component: NormalForm,
         name: 'normalForm',
         meta: {

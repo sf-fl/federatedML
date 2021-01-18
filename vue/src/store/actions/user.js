@@ -16,8 +16,10 @@ export const login = ({ commit }, form) => {
   //   }
   //   reject()
   // })
-  return Vue.http.post('http://127.0.0.1:5000/login', qs.stringify(form))
+  return Vue.http.post(API.USER_LOGIN, qs.stringify(form))
+  // 'http://127.0.0.1:5000/login'
     .then(data => {
+      console.log(data)
       commit(SET_TOKEN, data.session)
       return data
     })
