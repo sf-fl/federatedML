@@ -13,20 +13,7 @@
           :rules="[{type:'required'}]"
           v-model="model.username"
           width="320px"
-          :custom-validate="tasknameValidate"
-        >
-        </n3-input>
-      </n3-form-item>
-      <n3-form-item
-        label="模型名"
-        need
-        :label-col="3"
-      >
-        <n3-input
-          :rules="[{type:'required'}]"
-          v-model="model.modelname"
-          width="320px"
-          :custom-validate="modelnameValidate"
+          :custom-validate="usernameValidate"
         >
         </n3-input>
       </n3-form-item>
@@ -36,41 +23,49 @@
         :label-col="3"
       >
 <!--        <input type="file" @change="inputFileChange">-->
-        <input class="file" name="file" type="file"  accept=".csv" @change="update"/>
-        <div class="i-tips">
-          文件目前只接受csv
-        </div>
+        <input class="file" name="file" type="file"  accept="text/csv" @change="update"/>
 <!--        <n3-button @click.native="clicks" type="primary" size="mini" >上传</n3-button>-->
       </n3-form-item>
       <n3-form-item
-        label="对齐字段"
-        need
-        :label-col="3"
-      >
-        <n3-select
-          v-model="model.alian_feature"
-          width="160px"
-        >
-          <n3-option value="VLR">纵向逻辑回归</n3-option>
-          <n3-option value="VSB">纵向SecureBoost</n3-option>
-          <n3-option value="0">--敬请期待--</n3-option>
-        </n3-select>
-      </n3-form-item>
-      <n3-form-item
-        label="训练集比例"
+        label="目标IP"
         need
         :label-col="3"
       >
         <n3-input
           :rules="[{type:'required'}]"
-          :custom-validate="tvValidate"
-          v-model="model.trainratio"
+          :custom-validate="ipValidate"
+          v-model="model.ip"
+          width="320px"
+        >
+        </n3-input>
+      </n3-form-item>
+      <n3-form-item
+        label="目标端口"
+        need
+        :label-col="3"
+      >
+        <n3-input
+          :rules="[{type:'required'}]"
+          :custom-validate="portValidate"
+          v-model="model.port"
+          width="320px"
+        >
+        </n3-input>
+      </n3-form-item>
+      <n3-form-item
+        label="优先级"
+        need
+        :label-col="3"
+      >
+        <n3-input
+          :rules="[{type:'required'}]"
+          v-model="model.priority"
           width="320px"
           class="fl"
         >
         </n3-input>
         <div class="i-tips">
-          训练集占比，形如：0.75
+          默认 1
         </div>
       </n3-form-item>
       <n3-form-item
@@ -86,57 +81,6 @@
           <n3-option value="VSB">纵向SecureBoost</n3-option>
           <n3-option value="0">--敬请期待--</n3-option>
         </n3-select>
-      </n3-form-item>
-      <n3-form-item
-        label="目标IP"
-        need
-        :label-col="3"
-      >
-        <n3-input
-          :rules="[{type:'required'}]"
-          :custom-validate="ipValidate"
-          v-model="model.ip"
-          width="320px"
-          class="fl"
-        >
-        </n3-input>
-        <div class="i-tips">
-          形如：0.0.0.0
-        </div>
-      </n3-form-item>
-      <n3-form-item
-        label="目标端口"
-        need
-        :label-col="3"
-      >
-        <n3-input
-          :rules="[{type:'required'}]"
-          :custom-validate="portValidate"
-          v-model="model.port"
-          width="320px"
-          class="fl"
-        >
-        </n3-input>
-        <div class="i-tips">
-          形如：8080
-        </div>
-      </n3-form-item>
-      <n3-form-item
-        label="参与方名称"
-        need
-        :label-col="3"
-      >
-        <n3-input
-          :rules="[{type:'required'}]"
-          :custom-validate="partnernameValidate"
-          v-model="model.partnername"
-          width="320px"
-          class="fl"
-        >
-        </n3-input>
-        <div class="i-tips">
-          形如：XXX公司
-        </div>
       </n3-form-item>
       <n3-form-item
         :label-col="3"
@@ -170,16 +114,12 @@
       return {
         model: {
           username: '',
-          modelname: '',
-          alian_feature: '',
-          trainratio: '',
           password: '',
           phone: '',
           ip: '',
           port: '',
-          partnername: '',
           priority: 1,
-          learningAlgorithm: '',
+          learningAlgorithm: '1',
           limitType: '1',
           cacheExpireTime: '24',
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
@@ -194,7 +134,6 @@
         this.model = {
           username: '',
           password: '',
-          alian_feature: '0',
           ip: '',
           port: '',
           phone: '',
@@ -287,18 +226,6 @@
           }
         }
       },
-      tvValidate (val) {
-        if (/^0.\d{1,3}$/.test(val)) {
-          return {
-            validStatus: 'success'
-          }
-        } else {
-          return {
-            validStatus: 'error',
-            tips: '请输入正确的训练集占比'
-          }
-        }
-      },
       ipValidate (val) {
         if (/^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$/.test(val)) {
           return {
@@ -320,42 +247,6 @@
           return {
             validStatus: 'error',
             tips: '请输入正确端口'
-          }
-        }
-      },
-      partnernameValidate (val) {
-        if (val && val.length > 3 && val.length < 19) {
-          return {
-            validStatus: 'success'
-          }
-        } else {
-          return {
-            validStatus: 'error',
-            tips: '参与方名称长度为4-18位'
-          }
-        }
-      },
-      modelnameValidate (val) {
-        if (val && val.length > 3 && val.length < 19) {
-          return {
-            validStatus: 'success'
-          }
-        } else {
-          return {
-            validStatus: 'error',
-            tips: '模型名长度为4-18位'
-          }
-        }
-      },
-      tasknameValidate (val) {
-        if (val && val.length > 3 && val.length < 19) {
-          return {
-            validStatus: 'success'
-          }
-        } else {
-          return {
-            validStatus: 'error',
-            tips: '任务名长度为4-18位'
           }
         }
       },

@@ -12,6 +12,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {
+    "element-ui": "^2.14.1",
     "N3-components": "^2.2.3",
     "es6-shim": "^0.35.3",
     "moment": "^2.18.1",

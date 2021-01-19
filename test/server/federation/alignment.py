@@ -1,4 +1,4 @@
-from server.data_get_save import get_data
+from server.io import get_data
 import pandas as pd
 from server.eAd import hash
 from server.eAd import paillier
