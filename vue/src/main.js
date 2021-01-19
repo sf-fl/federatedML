@@ -7,12 +7,10 @@ import N3 from 'N3-components'
 import 'N3-components/dist/index.min.css'
 import axios from './utils/axios'
 import extend from './extend'
-// import ElementUI from 'element-ui'
 
 Vue.use(axios)
 Vue.use(extend)
 Vue.use(N3)
-// Vue.use(ElementUI)
 
 import App from './App'
 import router from './router'
