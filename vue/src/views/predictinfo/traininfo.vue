@@ -97,8 +97,8 @@
         </el-col>
         <el-col :span="24">
           <el-form-item size="large">
-            <el-button type="primary" @click="submitForm">提交</el-button>
-            <el-button @click="resetForm">重置</el-button>
+            <el-button placeholder="formData.feature" type="primary" @click="submitForm">{{formData.feature}}</el-button>
+            <el-button @click="resetForm">返回</el-button>
           </el-form-item>
         </el-col>
       </el-form>
@@ -109,24 +109,24 @@
 export default {
   components: {},
   props: [],
-  data() {
+  data () {
     return {
       formData: {
-        taskID: "",
-        taskname: "",
-        projectname: "",
-        modelname: "",
-        MLA: "",
-        alianfeature: "",
-        createtime: "",
-        lastmodify: "",
-        userIPPort: "",
-        partnerIPPort: "",
-        datainfo: "",
-        trainratio: "",
-        fileloc: "",
-        dbloc: "",
-        feature: "",
+        taskID: '',
+        taskname: '',
+        projectname: '',
+        modelname: '',
+        MLA: '',
+        alianfeature: '',
+        createtime: '',
+        lastmodify: '',
+        userIPPort: '',
+        partnerIPPort: '',
+        datainfo: '',
+        trainratio: '',
+        fileloc: '',
+        dbloc: '',
+        feature: ''
       },
       rules: {
         taskID: [{
@@ -203,32 +203,32 @@ export default {
           required: true,
           message: '请选择下拉选择',
           trigger: 'change'
-        }],
+        }]
       },
       featureOptions: [{
-        "label": "选项一",
-        "value": 1
+        'label': '选项一',
+        'value': 1
       }, {
-        "label": "选项二",
-        "value": 2
+        'label': '选项二',
+        'value': 2
       }, {
-        "label": "",
-        "value": ""
+        'label': '',
+        'value': ''
       }],
     }
   },
   computed: {},
   watch: {},
-  created() {},
-  mounted() {},
+  created () {},
+  mounted () {},
   methods: {
-    submitForm() {
+    submitForm () {
       this.$refs['elForm'].validate(valid => {
         if (!valid) return
         // TODO 提交表单
       })
     },
-    resetForm() {
+    resetForm () {
       this.$refs['elForm'].resetFields()
     },
   }

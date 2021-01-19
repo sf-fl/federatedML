@@ -8,6 +8,7 @@ import ProjectForm from '../views/projectform'
 import NormalTable from '../views/table'
 import TaskTable from '../views/tasktable'
 import ApplyTable from '../views/applytable'
+import PredictInfo from '../views/predictinfo/traininfo'
 
 const routes = [
   // Login View
@@ -49,7 +50,7 @@ const routes = [
         component: NormalTable,
         name: 'normalTable',
         meta: {
-          label: '项目列表'
+          label: '项目列表(禁用）'
         }
       },
       {
@@ -73,7 +74,7 @@ const routes = [
   // Form View
   {
     path: '/projectform',
-    name: 'form',
+    name: 'projectform',
     icon: 'bars',
     component: CommonLayout,
     redirect: '/project/',
@@ -82,18 +83,18 @@ const routes = [
     },
     children: [
       {
-        path: '/project/info',
+        path: '/project/start',
         component: ProjectForm,
-        name: 'projectForm',
+        name: 'startproject',
         meta: {
-          label: '项目详情'
+          label: '发起项目（禁用）'
         }
       }
     ]
   },
   {
     path: '/trainform',
-    name: 'form',
+    name: 'trainform',
     icon: 'bars',
     component: CommonLayout,
     redirect: '/train/',
@@ -104,7 +105,7 @@ const routes = [
       {
         path: '/train/start',
         component: TrainForm,
-        name: 'trainForm',
+        name: 'starttrain',
         meta: {
           label: '发起训练'
         }
@@ -121,7 +122,7 @@ const routes = [
   },
   {
     path: '/form',
-    name: 'form',
+    name: 'predictform',
     icon: 'bars',
     component: CommonLayout,
     redirect: '/predict/',
@@ -132,17 +133,17 @@ const routes = [
       {
         path: '/predict/start',
         component: NormalForm,
-        name: 'normalForm',
+        name: 'startpredict',
         meta: {
-          label: '预测详情'
+          label: '发起预测'
         }
       },
       {
         path: '/predict/info',
-        component: NormalForm,
-        name: 'normalForm',
+        component: PredictInfo,
+        name: 'predictinfo',
         meta: {
-          label: '发起预测'
+          label: '预测详情'
         }
       }
     ]

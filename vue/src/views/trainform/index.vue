@@ -243,7 +243,7 @@
         let cond = Object.assign({}, this.model)
         // cond.expireDate = new Date(cond.expireDate).valueOf()
         this.loading = true
-        this.$http.post(API.USER_ADD, qs.stringify(cond))
+        this.$http.post('http://127.0.0.1:5000/add_traintask', qs.stringify(cond))
           .then(data => {
             this.loading = false
             this.n3Alert({

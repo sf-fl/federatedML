@@ -31,6 +31,26 @@ def upload():
     return file_path
 
 
+@app.route('/add_traintask',methods=["POST"])
+def add_user():
+    request_info = request.values.to_dict()
+    try:
+        flag = 'fail'
+        if request_info['account'] == 'admin' and request_info['password'] == 'password':
+            flag = 'success'
+        session = 'xxxxxxxxxx'
+        accountId = 'xxx'
+        result = {}
+        result['state'] = flag
+        result['data'] = {}
+        result['data']['accountId'] = accountId
+        result['data']['session'] = session
+        return 1
+    except Exception as e:
+        # writelog todo
+        return e
+
+
 @app.route('/login',methods=["POST"])
 def login():
     request_info = request.form.to_dict()
