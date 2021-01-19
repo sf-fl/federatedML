@@ -153,7 +153,7 @@
         this.param = new window.FormData() // 创建form对象
         this.param.append('file', this.file) // 通过append向form对象添加数据
         console.log(this.param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
-        axios.post('http://127.0.0.1:5000/upload', this.param,{headers:{'Content-Type':'application/x-www-form-urlencoded'}}) // 请求头要为表单
+        axios.post('http://127.0.0.1:5000/upload', this.param, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}) // 请求头要为表单
           .then(response => {
             console.log(response.data)
           })
