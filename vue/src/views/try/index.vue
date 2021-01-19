@@ -33,7 +33,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="最后操作时间" prop="field129">
+          <el-form-item label="最后 操作时间" prop="field129">
             <el-input v-model="formData.field129" placeholder="最后操作" readonly :style="{width: '100%'}">
             </el-input>
           </el-form-item>
