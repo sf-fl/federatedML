@@ -5,6 +5,7 @@ import pymysql
 import configparser
 import datetime as dt
 
+
 # 注册新账号
 def Register(username,passwd,identity):
     databasename='sys'
