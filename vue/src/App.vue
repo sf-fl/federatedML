@@ -5,7 +5,8 @@
 </template>
 
 <script>
-	export default {name: 'app'
+	export default {
+		name: 'app'
 	}
 </script>
 
@@ -23,14 +24,14 @@
     left: 0;
   }
   .pop-out-enter-active {
-    perspective: None;
+    perspective: 1000;
     animation-name: popInLeft;
   }
   .pop-out-leave-active {
     animation-name: popOutRight;
   }
   .pop-in-enter-active {
-    perspective: None;
+    perspective: 1000;
     animation-name: popInRight;
   }
   .pop-in-leave-active {

@@ -255,7 +255,7 @@
     },
     watch: {
       '$route' () {
-        if (this.$route.name === 'login') {
+        if (this.$route.name == 'login') {
           this.render()
         }
       }
