@@ -287,6 +287,7 @@ def DataFetchPlsql(databasename,tablename):
     return dic
 
 
+
 key='phone_num'
 def get_data_key():
     data = pd.read_csv('%s/data_storage/data.csv' % os.getcwd())
