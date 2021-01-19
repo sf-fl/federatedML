@@ -7,7 +7,7 @@ mock.onPost('/user/login').reply(200, {
   state: 'success',
   data: {
     accoutId: 'xxx',
-    session: 'xxxxxxxxxxx'
+    session: '?'
   }
 })
 

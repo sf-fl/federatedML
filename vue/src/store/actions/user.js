@@ -6,6 +6,9 @@ import Vue from 'vue'
 import API from '../../api'
 import qs from 'qs'
 
+// let LoginPath = API.USER_LOGIN
+let LoginPath = 'http://127.0.0.1:5000/login'
+
 export const login = ({ commit }, form) => {
   // test for login
   // return new Promise((resolve, reject) => {
@@ -16,10 +19,12 @@ export const login = ({ commit }, form) => {
   //   }
   //   reject()
   // })
-  return Vue.http.post(API.USER_LOGIN, qs.stringify(form)).then(data => {
-    commit(SET_TOKEN, data.session)
-    return data
-  })
+  return Vue.http.post(LoginPath, qs.stringify(form))
+    .then(data => {
+      console.log(data)
+      commit(SET_TOKEN, data.session)
+      return data
+    })
 }
 
 export const logout = ({ commit }) => {
