@@ -42,18 +42,25 @@
         </div>
 <!--        <n3-button @click.native="clicks" type="primary" size="mini" >上传</n3-button>-->
       </n3-form-item>
+
       <n3-form-item
         label="对齐字段"
         need
         :label-col="3"
       >
+        <n3-input
+          :rules="[{type:'required'}]"
+          :custom-validate="tvValidate"
+          v-model="model.alian_feature"
+          width="320px"
+          class="fl"
+        >
+        </n3-input>
         <n3-select
           v-model="model.alian_feature"
           width="160px"
         >
-          <n3-option value="VLR">纵向逻辑回归</n3-option>
-          <n3-option value="VSB">纵向SecureBoost</n3-option>
-          <n3-option value="0">--敬请期待--</n3-option>
+          <n3-option value="">--敬请期待--</n3-option>
         </n3-select>
       </n3-form-item>
       <n3-form-item
@@ -150,7 +157,23 @@
           {{ loading ? '操作中' : '保存' }}
         </n3-button>
       </n3-form-item>
+<!--      <div>-->
+<!--        <el-row>-->
+<!--          <el-form>-->
+<!--            <el-col :span="11">-->
+<!--              <el-form-item label="下拉选择" prop="feature">-->
+<!--                <el-select v-model="model.feature" placeholder="请选择下拉选择" filterable clearable-->
+<!--                           :style="{width: '100%'}">-->
+<!--                  <el-option v-for="(item, index) in featureOptions" :key="index" :label="item.label"-->
+<!--                             :value="item.value" :disabled="item.disabled"></el-option>-->
+<!--                </el-select>-->
+<!--              </el-form-item>-->
+<!--            </el-col>-->
+<!--          </el-form>-->
+<!--        </el-row>-->
+<!--      </div>-->
     </n3-form>
+
   </section>
 </template>
 
@@ -178,10 +201,20 @@
           port: '',
           partnername: '',
           learningAlgorithm: '',
-          limitType: '1',
           cacheExpireTime: '24',
+          feature: '',
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         },
+        featureOptions: [{
+          "label": "选项一",
+          "value": 1
+        }, {
+          "label": "选项二",
+          "value": 2
+        }, {
+          "label": "",
+          "value": ""
+        }],
         loading: false,
         files: ''
       }
@@ -190,12 +223,12 @@
       reload () {
         // 重置表单
         this.model = {
-          username: '',
-          alian_feature: '0',
+          taskname: '',
+          alian_feature: '',
           ip: '',
           port: '',
+          feature: '',
           learningAlgorithm: 'VLR',
-          limitType: '1',
           cacheExpireTime: '24',
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         }
@@ -254,12 +287,12 @@
           .catch(error => {
             this.loading = false
             this.n3Alert({
-              content: error + '\n添加失败，请刷新重试~',
+              content: '添加失败，请检查表单重试或刷新~',
               type: 'danger',
               placement: 'top-right',
               duration: 5000,
               width: '240px' // 内容不确定，建议设置width
-            })
+              })
           })
       },
       submit () {

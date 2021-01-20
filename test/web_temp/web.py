@@ -2,15 +2,16 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS  #Flask的跨域问题
 import os
 import json
+import pandas as pd
 
 app = Flask(__name__)
 app.config['data'] = r"./data"
 CORS(app)                   #Flask的跨域问题
 
-def no_null(s):
+def no_null(s,svalue):
     #  非空校验
-    if s == '':
-        raise Exception('')
+    if svalue == '':
+        raise Exception(s+'不能为空')
 
 @app.route('/')
 
@@ -30,18 +31,20 @@ def upload():
             # 保存文件
             file_path = os.path.join(app.config['data'], "train_data.csv")
             file_obj.save(file_path)
+            with open(file_path,'r',encoding='utf-8') as f1:
+                feature = f1.readline().strip().split(',')
         else:
             file_path = '文件格式错误'
-    return file_path
+    return {'file_path':file_path,'feature':feature}
 
 
 @app.route('/add_traintask',methods=["POST"])
 def add_user():
     request_info = request.values.to_dict()
     try:
-        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm']
-        result = {}
-        
+        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
+        for s in checklist:
+            no_null(s,request_info[s])
 
         return 'success'
     except Exception as e:
