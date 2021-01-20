@@ -1,4 +1,4 @@
-from client.io import get_data
+from client.iAo import get_data
 from client.proxy import client_proxy
 from client.eAd import paillier
 from client.eAd import hash

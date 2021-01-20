@@ -125,13 +125,13 @@
             render: text => {
               return text || '127.0.0.1'
             }
-          }, 
+          },
           {
             title: '类型',
             dataIndex: 'queryType',
             width: '40px',
             render: (text) => {
-              if (text == 2) {
+              if (text === 2) {
                 return `<span>普通</span>`
               }
               return `<span style="color: red;">实时</span>`
@@ -190,13 +190,17 @@
         if (Object.keys(params).length < 2) {
           url = API.QUERY_LIST
         }
+        console.log(Object.keys(params))
         this.loading = true
+        console.log(params)
         this.$http.get(url, {
           params
         }).then(data => {
           console.log(data)
           this.source = data.result.data || []
+          console.log(this.source)
           this.pagination.total = data.result.total || 0
+          console.log(this.pagination.total)
           this.loading = false
         }).catch(error => {
           this.loading = false

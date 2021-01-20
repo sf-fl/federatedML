@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS  #Flask的跨域问题
+from client.federation import iAo
 import os
 import json
 import pandas as pd
@@ -45,7 +46,7 @@ def add_user():
         checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
         for s in checklist:
             no_null(s,request_info[s])
-
+        iAo.save_task(request_info)
         return 'success'
     except Exception as e:
         # writelog todo
