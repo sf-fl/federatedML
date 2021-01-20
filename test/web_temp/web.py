@@ -7,6 +7,10 @@ app = Flask(__name__)
 app.config['data'] = r"./data"
 CORS(app)                   #Flask的跨域问题
 
+def no_null(s):
+    #  非空校验
+    if s == '':
+        raise Exception('')
 
 @app.route('/')
 
@@ -35,17 +39,11 @@ def upload():
 def add_user():
     request_info = request.values.to_dict()
     try:
-        flag = 'fail'
-        if request_info['account'] == 'admin' and request_info['password'] == 'password':
-            flag = 'success'
-        session = 'xxxxxxxxxx'
-        accountId = 'xxx'
+        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm']
         result = {}
-        result['state'] = flag
-        result['data'] = {}
-        result['data']['accountId'] = accountId
-        result['data']['session'] = session
-        return 1
+        
+
+        return 'success'
     except Exception as e:
         # writelog todo
         return e

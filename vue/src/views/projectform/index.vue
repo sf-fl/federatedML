@@ -239,7 +239,7 @@
         }
       },
       portValidate (val) {
-        if (/^\d{1,5}$/.test(val)) {
+        if (/^\d{1,5}$/.test(val) && Number(val) > 0) {
           return {
             validStatus: 'success'
           }

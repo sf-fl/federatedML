@@ -11,7 +11,7 @@
       >
         <n3-input
           :rules="[{type:'required'}]"
-          v-model="model.username"
+          v-model="model.taskname"
           width="320px"
           :custom-validate="tasknameValidate"
         >
@@ -169,16 +169,14 @@
     data () {
       return {
         model: {
-          username: '',
+          taskname: '',
           modelname: '',
           alian_feature: '',
           trainratio: '',
-          password: '',
           phone: '',
           ip: '',
           port: '',
           partnername: '',
-          priority: 1,
           learningAlgorithm: '',
           limitType: '1',
           cacheExpireTime: '24',
@@ -193,12 +191,9 @@
         // 重置表单
         this.model = {
           username: '',
-          password: '',
           alian_feature: '0',
           ip: '',
           port: '',
-          phone: '',
-          priority: 1,
           learningAlgorithm: 'VLR',
           limitType: '1',
           cacheExpireTime: '24',
@@ -243,26 +238,26 @@
         let cond = Object.assign({}, this.model)
         // cond.expireDate = new Date(cond.expireDate).valueOf()
         this.loading = true
-        this.$http.post('http://127.0.0.1:5000/add_traintask', qs.stringify(cond))
+        axios.post('http://127.0.0.1:5000/add_traintask', qs.stringify(cond))
           .then(data => {
             this.loading = false
             this.n3Alert({
-              content: '添加成功~',
+              content: data + '\n添加成功~',
               type: 'success',
               placement: 'top-right',
-              duration: 2000,
+              duration: 5000,
               width: '240px' // 内容不确定，建议设置width
             })
-            this.$router.push('/table/')
+            this.$router.push('/overall/task')
           })
           // eslint-disable-next-line handle-callback-err
           .catch(error => {
             this.loading = false
             this.n3Alert({
-              content: '添加失败，请刷新重试~',
+              content: error + '\n添加失败，请刷新重试~',
               type: 'danger',
               placement: 'top-right',
-              duration: 2000,
+              duration: 5000,
               width: '240px' // 内容不确定，建议设置width
             })
           })
@@ -312,7 +307,7 @@
         }
       },
       portValidate (val) {
-        if (/^\d{1,5}$/.test(val)) {
+        if (/^\d{1,5}$/.test(val) && Number(val) > 0) {
           return {
             validStatus: 'success'
           }
