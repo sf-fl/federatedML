@@ -5,13 +5,14 @@ import pymysql
 import configparser
 import datetime as dt
 
-
+#%%
 # 注册新账号
 def Register(username,passwd,identity):
     databasename='sys'
     tablename='account'
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path=os.path.abspath('.')
+    config.read((path+'\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
@@ -48,13 +49,16 @@ def Register(username,passwd,identity):
         print(e)
     cur.close()
     conn.close()
-    return tag
+    return tag   # 注册成功返回1,否则返回0
+
+#%%
 # 用户登录
 def SignIn(username,passwd):
     databasename = 'sys'
     tablename = 'account'
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
@@ -70,22 +74,23 @@ def SignIn(username,passwd):
     cur = conn.cursor()
     # 读取当前表，判断用户密码是否正确
     try:
-        cur.execute('select * from %s.%s where user=%s' % (databasename, tablename,username))
+        cur.execute('''select * from %s.%s where user=\'%s\'''' % (databasename, tablename,username))
         if passwd==cur.fetchone()[2]:
             tag=1
     except Exception as e:
         print(e)
     cur.close()
     conn.close()
-    return tag
-
+    return tag   # 登录成功返回1,否则返回0
+SignIn('jc1','jc')
 #%%
 # 读取任务列表
 def TaskList():
     databasename = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
@@ -100,8 +105,10 @@ def TaskList():
         print(e)
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
+    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress 
+    not like \'%待%\''''% (databasename, tablename)
     try:
-        cur.execute('select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s' % (databasename, tablename))
+        cur.execute(sql)
         task_list = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
         print('查询成功！')
     except Exception as e:
@@ -109,13 +116,15 @@ def TaskList():
     cur.close()
     conn.close()
     return task_list
-
+TaskList()
+#%%
 # 训练任务列表
 def TrainTaskList():
     databasename = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
@@ -130,7 +139,7 @@ def TrainTaskList():
         print(e)
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
-    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress in ('待审核训练','待加入训练','训练中','训练完')''' % (databasename, tablename)
+    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress like \'%训练%\'''' % (databasename, tablename)
     try:
         cur.execute(sql)
         task_list = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
@@ -140,13 +149,15 @@ def TrainTaskList():
     cur.close()
     conn.close()
     return task_list
-
+TrainTaskList()
+#%%
 # 预测任务列表
 def PredictTaskList():
     databasename = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
@@ -161,7 +172,7 @@ def PredictTaskList():
         print(e)
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
-    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress in ('待审核预测','待加入预测','预测中','预测完')''' % (databasename, tablename)
+    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress like \'%预测%\'''' % (databasename, tablename)
     try:
         cur.execute(sql)
         task_list = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
@@ -171,13 +182,15 @@ def PredictTaskList():
     cur.close()
     conn.close()
     return task_list
-
+PredictTaskList()
+#%%
 # 任务详情
 def TaskDetails(task_id,task_name):
     databasename = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
@@ -192,7 +205,7 @@ def TaskDetails(task_id,task_name):
         print(e)
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
-    sql='''select * from %s.%s where task_id=%d and task_name=%s;''' % (databasename, tablename,task_id,task_name)
+    sql='''select * from %s.%s where task_id=%d and task_name=\'%s\';''' % (databasename, tablename,task_id,task_name)
     try:
         cur.execute(sql)
         task_details = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
@@ -202,14 +215,16 @@ def TaskDetails(task_id,task_name):
     cur.close()
     conn.close()
     return task_details
+TaskDetails(1,'test')
 
 #%%
-# 发起训练
-def InitiateTraining(task_name,mode_name,):
+# 发起任务
+def InitiateTask(task_details):
     databasename='sys'
     tablename='task'
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
@@ -223,34 +238,75 @@ def InitiateTraining(task_name,mode_name,):
         print(e)
     cur=conn.cursor()
     # 读取当前表，判断用户是否已注册，并确定用户ID
+    sql='''select count(*) from %s.%s'''%(databasename,tablename)
     try:
-        cur.execute('select * from %s.%s'%(databasename,tablename))
-        user_list=[acc[1] for acc in cur.fetchall()]
-        if user not in user_list:
-            accountid=len(user_list)+1
-        print('账户ID为：%d'%accountid)
+        cur.execute(sql)
+        task_id=cur.fetchone()[0]+1
+        print('任务ID为：%d'%task_id)
     except Exception as e:
         print(e)
-    # 执行插入和更新
-    create_time=dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    sql='insert into %s.%s (accountid,user,password,identity,create_time) values (%d,\'%s\',\'%s\',\'%s\',\'%s\');'%(databasename,tablename,accountid,user,password,identity,create_time)
+    create_time=operation_time=dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    task_id=task_details.get('task_id')
+    task_name=task_details.get('task_name')
+    project_name=task_details.get('project_name')
+    model_name=task_details.get('model_name')
+    ip=task_details.get('ip')
+    port=task_details.get('port')
+    if port==None:
+        port=0
+    protocol=task_details.get('protocol')
+    participant_name=task_details.get('participant_name')
+    participant_ip=task_details.get('participant_ip')
+    participant_port=task_details.get('participant_port')
+    if participant_port==None:
+        participant_port=0
+    participant_protocol=task_details.get('participant_protocol')
+    dataset_info=task_details.get('dataset_info')
+    learning_algorithm=task_details.get('learning_algorithm')
+    align=task_details.get('align')
+    pretreatment=task_details.get('pretreatment')
+    test_proportion=task_details.get('test_proportion')
+    features=task_details.get('features')
+    task_progress=task_details.get('task_progress')
+    display_location=task_details.get('display_location')
+    auc=task_details.get('auc')
+    if auc==None:
+        auc=0
+    ks=task_details.get('ks')
+    if ks==None:
+        ks=0
+    psi=task_details.get('psi')
+    if psi==None:
+        psi=0
+    result_file=task_details.get('result_file')
+    result_data=task_details.get('result_data')
+    sql='''insert into %s.%s (task_id,task_name,project_name,model_name,ip,port,protocol,participant_name,participant_ip,
+    participant_port,participant_protocol,dataset_info,learning_algorithm,align,pretreatment,test_proportion,features,
+    task_progress,display_location,auc,ks,psi,result_file,result_data,create_time,operation_time) values (%d,\'%s\',\'%s\',
+    \'%s\',\'%s\',%d,\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',%f,%f,%f,\'%s\',
+    \'%s\',\'%s\',\'%s\')'''%(databasename,tablename,task_id,task_name,project_name,model_name,ip,port,protocol,participant_name,
+    participant_ip,participant_port,participant_protocol,dataset_info,learning_algorithm,align,pretreatment,test_proportion,features,
+    task_progress,display_location,auc,ks,psi,result_file,result_data,create_time,operation_time)
     try:
         conn.begin()
         cur.execute(sql)
         conn.commit()
-        print('新账户信息写入成功！')
+        print('任务创建成功，任务ID：%s，任务名称：%s'%(task_id,task_name))
     except Exception as e:
-        conn.rollback()
         print(e)
     cur.close()
     conn.close()
-Register('jc1','jc','普通用户')
 
 
+task_details={'task_name':'test'}
+InitiateTask({'task_name':'test'})
 
+#%%
+# 从Mysql数据库取数
 def DataFetchMysql(databasename,tablename):
     config=configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid=config.get(databasename,'uid')
     pwd=config.get(databasename,'pwd')
     host=config.get(databasename,'ip')
@@ -266,17 +322,19 @@ def DataFetchMysql(databasename,tablename):
     conn.close()
     return dic
 
-
-
-def DataFetchPlsql(databasename,tablename):
+#%%
+#从oracle数据库取数
+def DataFetchOracle(databasename,tablename):
     config = configparser.ConfigParser()
-    config.read(r'D:\test\dbconfig.conf')
+    path = os.path.abspath('.')
+    config.read((path + '\\test\\config\\dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')
     port = config.get(databasename, 'port')
     service=config.get(databasename,'service')
-    conn = cx_Oracle.connect(uid,pwd,host+':'+port+'/'+service) #按照上面的连接格式改写，添加DSN
+    dsn=cx_Oracle.makedsn(host,port,service)
+    conn = cx_Oracle.connect(uid,pwd,dsn) #按照上面的连接格式改写，添加DSN
     cur = conn.cursor()
     dic = dict()
     for i in tablename:
