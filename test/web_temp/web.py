@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS  #Flask的跨域问题
 from client.federation import iAo
+from web_temp import temp_file
 import os
 import json
 import pandas as pd
@@ -15,6 +16,15 @@ def no_null(s,svalue):
         raise Exception(s+'不能为空')
 
 @app.route('/')
+
+
+@app.route('/tasklist',methods=['GET'])
+def tasklist():
+    params = request.args.to_dict()
+    returndict = {}
+    returndict['state'] = "success"
+    returndict['result'] = temp_file.gettasklist(int(params['page']))
+    return returndict
 
 
 @app.route('/upload',methods=["POST"]) # 方法要与前端一致
@@ -40,12 +50,16 @@ def upload():
 
 
 @app.route('/add_traintask',methods=["POST"])
-def add_user():
+def add_traintask():
     request_info = request.values.to_dict()
     try:
         checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
         for s in checklist:
             no_null(s,request_info[s])
+        with open("./data/train_data.csv", 'r', encoding='utf-8') as f1:
+            feature = f1.readline().strip().split(',')
+            if request_info['alian_feature'] not in feature:
+                raise Exception('对齐字段无法找到，请重新填写')
         iAo.save_task(request_info)
         return 'success'
     except Exception as e:
@@ -56,9 +70,7 @@ def add_user():
 @app.route('/login',methods=["POST"])
 def login():
     request_info = request.form.to_dict()
-    flag = 'fail'
-    if request_info['account'] == 'admin' and request_info['password'] == 'password':
-        flag = 'success'
+    flag = iAo.login(request_info['account'],request_info['password'])
     session = 'xxxxxxxxxx'
     accountId = 'xxx'
     result = {}
@@ -69,4 +81,4 @@ def login():
     return result
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

@@ -3,40 +3,40 @@
     <div class="search-bar">
       <div class="search-item">
         <div class="form-item">
-          <label for="">用&nbsp;户&nbsp;I&nbsp;D：</label>
-          <n3-input v-model="searchKey.userId" @change="searchChange"></n3-input>
+          <label for="">任&nbsp;务&nbsp;I&nbsp;D：</label>
+          <n3-input v-model="searchKey.taskId" @change="searchChange"></n3-input>
         </div>
         <div class="form-item">
-          <label for="">查询结果：</label>
-          <n3-select v-model="searchKey.queryResult" @change="searchChange">
+          <label for="">查询状态：</label>
+          <n3-select v-model="searchKey.taskState" @change="searchChange" width="150px">
             <n3-option value="">不限</n3-option>
-            <n3-option value="1">成功</n3-option>
-            <n3-option value="0">失败</n3-option>
+            <n3-option value="1">可训练</n3-option>
+            <n3-option value="0">训练中</n3-option>
           </n3-select>
         </div>
       </div>
-      <div class="search-item">
-        <div class="form-item">
-          <label for="">开始时间： </label>
-          <n3-datepicker
-            :rules="[{type:'required'}]"
-            v-model="searchKey.startDate"
-            format="yyyy-MM-dd"
-            @change="searchChange"
-          >
-          </n3-datepicker>
-        </div>
-        <div class="form-item">
-          <label for="">结束时间：</label>
-          <n3-datepicker
-            :rules="[{type:'required'}]"
-            v-model="searchKey.endDate"
-            format="yyyy-MM-dd"
-            @change="searchChange"
-          >
-          </n3-datepicker>
-        </div>
-      </div>
+<!--      <div class="search-item">-->
+<!--        <div class="form-item">-->
+<!--          <label for="">开始时间： </label>-->
+<!--          <n3-datepicker-->
+<!--            :rules="[{type:'required'}]"-->
+<!--            v-model="searchKey.startDate"-->
+<!--            format="yyyy-MM-dd"-->
+<!--            @change="searchChange"-->
+<!--          >-->
+<!--          </n3-datepicker>-->
+<!--        </div>-->
+<!--        <div class="form-item">-->
+<!--          <label for="">结束时间：</label>-->
+<!--          <n3-datepicker-->
+<!--            :rules="[{type:'required'}]"-->
+<!--            v-model="searchKey.endDate"-->
+<!--            format="yyyy-MM-dd"-->
+<!--            @change="searchChange"-->
+<!--          >-->
+<!--          </n3-datepicker>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="search-submit">
         <n3-button type="primary" block @click.native="searchRecord">搜索</n3-button>
       </div>
@@ -69,13 +69,13 @@
   import { dateFormat } from '../../utils'
 
   export default {
-    data() {
+    data () {
       return {
         loading: false,
         searchChanged: false,
         searchKey: {
-          userId: '',
-          queryResult: '',
+          taskId: '',
+          taskState: '',
           startDate: '',
           endDate: ''
         },
@@ -98,49 +98,55 @@
         columns: [
           {
             title: 'ID',
-            dataIndex: 'queryRecordId',
-            width: '100px',
-            render: text => Date.now()
-          }, {
-            title: '操作时间',
-            dataIndex: 'queryDate',
-            width: '160px',
-            render: (text, record, index) => {
-              return `<div>{{'${text}' | toDateTime}}</div>`
-            }
-          }, {
-            title: '操作用户',
-            dataIndex: 'userId',
+            dataIndex: 'taskID',
+            width: '50px',
+            render: text => text || '无'
+          },
+          {
+            title: '任务名',
+            dataIndex: 'taskName',
+            width: '200px',
+            render: text => text || '无'
+          },
+          {
+            title: '合作方',
+            dataIndex: 'partner',
             width: '120px',
+            render: text => text || '无'
+          },
+          {
+            title: '最后操作时间',
+            dataIndex: 'lastModifyTime',
+            width: '160px',
             render: (text, record, index) => {
-              text = '测试用户'
-              return `<router-link to="/user/${text}" target="_blank">
-                        ${text}
-                      </router-link>`
+              return `<div>{{'${text}'}}</div>`
             }
           }, {
-            title: 'IP',
-            dataIndex: 'ipAddress',
-            width: '160px',
-            render: text => {
-              return text || '127.0.0.1'
+            title: '算法类型',
+            dataIndex: 'learningType',
+            width: '120px',
+            render: (text) => {
+              if (text === 'VLR') {
+                return `纵向逻辑回归`
+              }
+              if (text === 'VSB') {
+                return '纵向SecureBoost'
+              }
+              return '未知'
             }
           },
           {
-            title: '类型',
-            dataIndex: 'queryType',
-            width: '40px',
+            title: '任务状态',
+            dataIndex: 'taskState',
+            width: '120px',
             render: (text) => {
               if (text === 2) {
-                return `<span>普通</span>`
+                return `<span style="color: #ff0000;">训练中</span>`
               }
-              return `<span style="color: red;">实时</span>`
+              return `<span style="color: green;">可训练</span>`
             }
-          }, {
-            title: '耗时(ms)',
-            dataIndex: 'timeConsuming',
-            width: '100px'
-          }, {
+          },
+          {
             title: '操作',
             dataIndex: 'queryRecordId',
             width: '120px',
@@ -190,6 +196,7 @@
         if (Object.keys(params).length < 2) {
           url = API.QUERY_LIST
         }
+        url = 'http://127.0.0.1:5000/tasklist'
         console.log(Object.keys(params))
         this.loading = true
         console.log(params)
@@ -220,7 +227,7 @@
     },
     watch: {
       '$route' () {
-        if (this.$route.name == 'normalTable') {
+        if (this.$route.name === 'taskTable') {
           this.reload()
         }
       }
