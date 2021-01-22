@@ -1,7 +1,7 @@
 from client.federation import iAo
 import copy
 
-tasklist =[
+tasklist1 =[
     {
   "taskID": "A17B13",
     "taskName":"京东联邦学习测试项目",
@@ -54,25 +54,32 @@ tasklist =[
 fenye = 6
 
 
-def update_tasklist():
-    tasklisk = []
-    for showtask in iAo.tasklist:
-        onetask = {}
-        onetask['taskID'] = showtask['']
-        onetask['taskName'] = showtask['']
-        onetask['partner'] = showtask['']
-        onetask['lastModifyTime'] = showtask['']
-        onetask['learningType'] = showtask['']
-        onetask['taskState'] = showtask['']
-        tasklisk.append(copy.deepcopy(onetask))
+def update_taskdf(type):
+    tasklist = iAo.show_task_list()
+    col = {'task_id':'taskID','task_name':'taskName', 'participant_name':'partner', 'learning_algorithm':'learningType',
+           'task_progress':'taskState', 'operation_time':'lastModifyTime'}
+    tasklist.rename(columns=col, inplace=True)
+    return tasklist
 
 
 def gettasklist(page):
-    update_tasklist()
-    total = len(tasklist)
+    update_taskdf()
+    total = len(tasklist1)
     start = (page-1)*fenye
     if page*fenye<total:
-        result_list = tasklist[start:page*fenye]
+        result_list = tasklist1[start:page*fenye]
     else:
-        result_list = tasklist[start:]
+        result_list = tasklist1[start:]
+    return {'data':result_list,'total':total}
+
+
+def getapplylist(page):
+    taskdf = update_taskdf('apply')
+    total = len(taskdf)
+    start = (page-1)*fenye
+    if page*fenye<total:
+        result_df = taskdf.iloc[start:page*fenye,:]
+    else:
+        result_df = taskdf.iloc[start:,:]
+    result_list = list(result_df.T.to_dict().values())
     return {'data':result_list,'total':total}

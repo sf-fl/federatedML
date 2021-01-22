@@ -50,7 +50,7 @@
       >
         <n3-input
           :rules="[{type:'required'}]"
-          :custom-validate="tvValidate"
+          :custom-validate="alianValidate"
           v-model="model.alian_feature"
           width="320px"
           class="fl"
@@ -317,6 +317,18 @@
       },
       tvValidate (val) {
         if (/^0.\d{1,3}$/.test(val)) {
+          return {
+            validStatus: 'success'
+          }
+        } else {
+          return {
+            validStatus: 'error',
+            tips: '请输入正确的训练集占比'
+          }
+        }
+      },
+      alianValidate (val) {
+        if (val) {
           return {
             validStatus: 'success'
           }

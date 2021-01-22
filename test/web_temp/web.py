@@ -3,6 +3,7 @@ from flask_cors import CORS  #Flask的跨域问题
 from client.federation import iAo
 from web_temp import temp_file
 import os
+import sys
 import json
 import pandas as pd
 
@@ -10,10 +11,12 @@ app = Flask(__name__)
 app.config['data'] = r"./data"
 CORS(app)                   #Flask的跨域问题
 
+
 def no_null(s,svalue):
     #  非空校验
     if svalue == '':
         raise Exception(s+'不能为空')
+
 
 @app.route('/')
 
@@ -24,6 +27,15 @@ def tasklist():
     returndict = {}
     returndict['state'] = "success"
     returndict['result'] = temp_file.gettasklist(int(params['page']))
+    return returndict
+
+
+@app.route('/applylist',methods=['GET'])
+def applylist():
+    params = request.args.to_dict()
+    returndict = {}
+    returndict['state'] = "success"
+    returndict['result'] = temp_file.getapplylist(int(params['page']))
     return returndict
 
 
@@ -40,7 +52,7 @@ def upload():
         # 判断文件格式
         if file_obj.filename[-4:] == '.csv':
             # 保存文件
-            file_path = os.path.join(app.config['data'], "train_data.csv")
+            file_path = os.path.join(r"./web_temp/data", "train_data.csv")
             file_obj.save(file_path)
             with open(file_path,'r',encoding='utf-8') as f1:
                 feature = f1.readline().strip().split(',')
@@ -56,7 +68,7 @@ def add_traintask():
         checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
         for s in checklist:
             no_null(s,request_info[s])
-        with open("./data/train_data.csv", 'r', encoding='utf-8') as f1:
+        with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8') as f1:
             feature = f1.readline().strip().split(',')
             if request_info['alian_feature'] not in feature:
                 raise Exception('对齐字段无法找到，请重新填写')
@@ -73,12 +85,12 @@ def login():
     flag = iAo.login(request_info['account'],request_info['password'])
     session = 'xxxxxxxxxx'
     accountId = 'xxx'
-    result = {}
-    result['state'] = flag
-    result['data'] = {}
+    result = {'state': flag, 'data': {}}
     result['data']['accountId'] = accountId
     result['data']['session'] = session
     return result
 
+
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(sys.path[0]))
     app.run(debug=False)
