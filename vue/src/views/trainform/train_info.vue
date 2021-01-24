@@ -106,13 +106,16 @@
   </div>
 </template>
 <script>
+
+import axios from 'axios'
+
 export default {
   components: {},
   props: [],
-  data() {
+  data () {
     return {
       formData: {
-        taskID: "",
+        taskID: '',
         taskname: "",
         projectname: "",
         modelname: "",
@@ -128,83 +131,7 @@ export default {
         dbloc: "",
         feature: "",
       },
-      rules: {
-        taskID: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        taskname: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        projectname: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        modelname: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        MLA: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        alianfeature: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        createtime: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        lastmodify: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        userIPPort: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        partnerIPPort: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        datainfo: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        trainratio: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        fileloc: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        dbloc: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        feature: [{
-          required: true,
-          message: '请选择下拉选择',
-          trigger: 'change'
-        }],
-      },
+      rules: {},
       featureOptions: [{
         "label": "选项一",
         "value": 1
@@ -212,25 +139,49 @@ export default {
         "label": "选项二",
         "value": 2
       }, {
-        "label": "",
-        "value": ""
-      }],
+        "label": '',
+        "value": ''
+      }]
     }
   },
   computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
+  mounted () {},
   methods: {
-    submitForm() {
+    reload () {
+      this.id = this.$route.params.id
+      console.log(this.id)
+      axios.post('http://127.0.0.1:5000/traininfo', this.id)
+        .then(response => {
+          console.log(response.data)
+          this.formData = response.data
+          return response
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    submitForm () {
       this.$refs['elForm'].validate(valid => {
-        if (!valid) return
+        if (!valid) return 0
         // TODO 提交表单
       })
     },
-    resetForm() {
+    resetForm () {
       this.$refs['elForm'].resetFields()
     },
+  },
+  watch: {
+    '$route' () {
+      if (['trainForm'].indexOf(this.$route.name) > -1) {
+        this.reload()
+      }
+      if (this.$route.params.id !== this.formData.id) {
+        this.reload()
+      }
+    }
+  },
+  created () {
+    this.reload()
   }
 }
 

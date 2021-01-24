@@ -2,13 +2,22 @@ import Login from '../views/login'
 import CommonLayout from '../layout'
 
 import NormalForm from '../views/form'
-import TrainForm from '../views/trainform'
-import TrainInfo from '../views/try'
-import ProjectForm from '../views/projectform'
 import NormalTable from '../views/table'
-import TaskTable from '../views/tasktable'
-import ApplyTable from '../views/applytable'
-import PredictInfo from '../views/predictinfo/traininfo'
+
+import TrainFormStart from '../views/trainform/train_start'
+import TrainFormAppend from '../views/trainform/train_receive'
+import TrainInfo from '../views/trainform/train_info'
+
+import ProjectFormStart from '../views/projectform/pro_start'
+import ProjectFormReceive from '../views/projectform/pro_receive'
+
+import PredictFormStart from '../views/predictform/pre_start'
+import PredictFormAppend from '../views/predictform/pre_receive'
+import PredictInfo from '../views/predictform/pre_info'
+
+import TaskTable from '../views/tasktable/task_table'
+import ApplyTable from '../views/applytable/apply_table'
+
 
 const routes = [
   // Login View
@@ -84,7 +93,7 @@ const routes = [
     children: [
       {
         path: '/project/start',
-        component: ProjectForm,
+        component: ProjectFormStart,
         name: 'startproject',
         meta: {
           label: '发起项目（禁用）'
@@ -104,10 +113,18 @@ const routes = [
     children: [
       {
         path: '/train/start',
-        component: TrainForm,
+        component: TrainFormStart,
         name: 'starttrain',
         meta: {
           label: '发起训练'
+        }
+      },
+      {
+        path: '/train/append',
+        component: TrainFormAppend,
+        name: 'appendtrain',
+        meta: {
+          label: '加入训练'
         }
       },
       {
@@ -121,7 +138,7 @@ const routes = [
     ]
   },
   {
-    path: '/form',
+    path: '/predictform',
     name: 'predictform',
     icon: 'bars',
     component: CommonLayout,
@@ -132,10 +149,18 @@ const routes = [
     children: [
       {
         path: '/predict/start',
-        component: NormalForm,
+        component: PredictFormStart,
         name: 'startpredict',
         meta: {
           label: '发起预测'
+        }
+      },
+      {
+        path: '/predict/append',
+        component: PredictFormAppend,
+        name: 'appendpredict',
+        meta: {
+          label: '加入预测'
         }
       },
       {

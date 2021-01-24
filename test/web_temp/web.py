@@ -26,7 +26,7 @@ def tasklist():
     params = request.args.to_dict()
     returndict = {}
     returndict['state'] = "success"
-    returndict['result'] = temp_file.gettasklist(int(params['page']))
+    returndict['result'] = temp_file.gettasklist(int(params['page']), 'execute')
     return returndict
 
 
@@ -35,7 +35,21 @@ def applylist():
     params = request.args.to_dict()
     returndict = {}
     returndict['state'] = "success"
-    returndict['result'] = temp_file.getapplylist(int(params['page']))
+    returndict['result'] = temp_file.gettasklist(int(params['page']), 'apply')
+    return returndict
+
+
+@app.route('/trainform',methods=['POST'])
+def trainform():
+    id = int(list(request.values.to_dict().keys())[0])
+    returndict = temp_file.get_append_task(id)[0]
+    return returndict
+
+
+@app.route('/traininfo',methods=['POST'])
+def traininfo():
+    id = int(list(request.values.to_dict().keys())[0])
+    returndict = temp_file.get_train_info(id)[0]
     return returndict
 
 
@@ -68,15 +82,43 @@ def add_traintask():
         checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
         for s in checklist:
             no_null(s,request_info[s])
-        with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8') as f1:
+        with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:
             feature = f1.readline().strip().split(',')
             if request_info['alian_feature'] not in feature:
                 raise Exception('对齐字段无法找到，请重新填写')
-        iAo.save_task(request_info)
+        iAo.save_task(request_info,'train')
         return 'success'
     except Exception as e:
         # writelog todo
         return e
+
+
+@app.route('/append_traintask', methods=['post'])
+def append_traintask():
+    pass
+
+
+@app.route('/add_predicttask',methods=["POST"])
+def add_predicttask():
+    request_info = request.values.to_dict()
+    try:
+        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
+        for s in checklist:
+            no_null(s,request_info[s])
+        with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:
+            feature = f1.readline().strip().split(',')
+            if request_info['alian_feature'] not in feature:
+                raise Exception('对齐字段无法找到，请重新填写')
+        iAo.save_task(request_info, 'predict')
+        return 'success'
+    except Exception as e:
+        # writelog todo
+        return e
+
+
+@app.route('/append_predicttask', methods=['post'])
+def append_predicttask():
+    pass
 
 
 @app.route('/login',methods=["POST"])

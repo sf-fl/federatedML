@@ -31,7 +31,7 @@ def signIn(username, passwd):
     cur = conn.cursor()
     # 读取当前表，判断用户密码是否正确
     try:
-        cur.execute('''select * from %s.%s where username=\'%s\'''' % (databasename, tablename,username))
+        cur.execute('select * from %s.%s where username=\'%s\'' % (databasename, tablename,username))
         if passwd==cur.fetchone()[2]:
             print('密码输入正确')
             tag=1
@@ -69,7 +69,8 @@ def taskList():
         return task_list
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
-    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress not like \'%%待%%\''''% (databasename, tablename)
+    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time 
+    from %s.%s where task_progress not like \'%%待%%\''''% (databasename, tablename)
     try:
         cur.execute(sql)
         task_list = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
@@ -107,7 +108,8 @@ def appendTaskList():
         return task_list
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
-    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress like \'%%加入%%\''''% (databasename, tablename)
+    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time 
+    from %s.%s where task_progress like \'%%加入%%\''''% (databasename, tablename)
     try:
         cur.execute(sql)
         task_list = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
@@ -145,7 +147,8 @@ def trainTaskList():
         return task_list
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
-    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress like \'%%训练%%\'''' % (databasename, tablename)
+    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time 
+    from %s.%s where task_progress like \'%%训练%%\'''' % (databasename, tablename)
     try:
         cur.execute(sql)
         task_list = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
@@ -181,7 +184,8 @@ def predictTaskList():
         return task_list
     cur = conn.cursor()
     # 读取任务表，并按照时间顺序进行排列
-    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time from %s.%s where task_progress like \'%%预测%%\'''' % (databasename, tablename)
+    sql='''select task_id,task_name,participant_name,learning_algorithm,task_progress,operation_time 
+    from %s.%s where task_progress like \'%%预测%%\'''' % (databasename, tablename)
     try:
         cur.execute(sql)
         task_list = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())
@@ -196,7 +200,7 @@ def predictTaskList():
 
 # %%
 # 任务详情
-def taskDetails(task_id, task_name):
+def taskDetails(task_id, task_name=None):
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
@@ -216,8 +220,11 @@ def taskDetails(task_id, task_name):
         print(e)
         return task_details
     cur = conn.cursor()
-    # 读取任务表，并按照时间顺序进行排列
-    sql='''select * from %s.%s where task_id=%d and task_name=\'%s\';''' % (databasename, tablename,task_id,task_name)
+    # 读取任务表，得到所需任务
+    if task_name is not None:
+        sql='select * from %s.%s where task_id=%d and task_name=\'%s\';' % (databasename, tablename,task_id,task_name)
+    else:
+        sql = 'select * from %s.%s where task_id=%d;' % (databasename, tablename, task_id)
     try:
         cur.execute(sql)
         task_details = pd.DataFrame(columns=[des[0] for des in cur.description], data=cur.fetchall())

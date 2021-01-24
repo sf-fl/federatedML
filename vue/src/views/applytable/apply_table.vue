@@ -140,24 +140,34 @@ export default {
           dataIndex: 'taskState',
           width: '120px',
           render: (text) => {
-            if (text === 2) {
-              return `<span style="color: #ff0000;">训练中</span>`
+            if (text === '待对方加入训练' || text === '待对方加入预测') {
+              return `<span style="color: red;">{{'${text}'}}</span>`
             }
-            return `<span style="color: green;">可训练</span>`
+            return `<span style="color: yellowgreen;">{{'${text}'}}</span>`
           }
         },
         {
           title: '操作',
-          dataIndex: 'queryRecordId',
+          dataIndex: 'taskState_ID',
           width: '120px',
-          render: (text, record, index) => {
-            let type = 'primary'
-            if (!record.queryResult) {
-              type = 'warning'
+          render: (text) => {
+            console.log('text =', text)
+            let state = text.split('__')[0]
+            let id = text.split('__')[1]
+            console.log(state,id)
+            if (state === '待我方加入训练') {
+              return `<button style="cursor: hand;background-color: transparent; border: 0;"
+                            @click = "toappendTrain('${id}')">
+                          <n3-label type="primary">加入</n3-label>
+                       </button>`
             }
-            return `<router-link to="/record/${text}" target="_blank">
-                        <n3-label type="${type}">详情</n3-label>
-                      </router-link>`
+            if (state === '待我方加入预测') {
+              return `<button style="cursor: hand;background-color: transparent; border: 0;"
+                          @click = "toappendPredict('${id}')">
+                          <n3-label type="primary">加入</n3-label>
+                       </button>`
+            }
+            return '请等待对方操作'
           }
         }
       ],
@@ -165,7 +175,17 @@ export default {
     }
   },
   methods: {
-    pageChange(page) {
+    toappendTrain (param) {
+      console.log('ppp:', param)
+      this.pa = {id: parseInt(param)}
+      this.$router.push({name: 'appendtrain', params: this.pa})
+    },
+    toappendPredict (param) {
+      console.log('ppp:',param)
+      this.pa = {id: parseInt(param)}
+      this.$router.push({pname: 'appendpredict', params: this.pa})
+    },
+    pageChange (page) {
       this.pagination.current = page
       this.searchRecord()
     },

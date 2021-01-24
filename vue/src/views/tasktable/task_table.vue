@@ -140,24 +140,38 @@
             dataIndex: 'taskState',
             width: '120px',
             render: (text) => {
-              if (text === 2) {
-                return `<span style="color: #ff0000;">训练中</span>`
+              if (text === '训练中' || text === '预测中') {
+                return `<span style="color: #ff0000;">{{'${text}'}}</span>`
               }
-              return `<span style="color: green;">可训练</span>`
+              return `<span style="color: green;">{{'${text}'}}</span>`
             }
           },
           {
             title: '操作',
-            dataIndex: 'queryRecordId',
+            dataIndex: 'taskState_ID',
             width: '120px',
-            render: (text, record, index) => {
-              let type = 'primary'
-              if (!record.queryResult) {
-                type = 'warning'
+            render: (text) => {
+              let state = text.split('__')[0]
+              let id = text.split('__')[1]
+              if (state === '预测完成' || state === '预测中') {
+                return `<button style="cursor: hand;background-color: transparent; border: 0;"
+                            @click = "toPredictInfo('${id}')">
+                          <n3-label type="primary">查看详情</n3-label>
+                       </button>`
               }
-              return `<router-link to="/record/${text}" target="_blank">
-                        <n3-label type="${type}">详情</n3-label>
-                      </router-link>`
+              if (state === '训练完成') {
+                return `<button style="cursor: hand;background-color: transparent; border: 0;"
+                            @click = "toPredictStart('${id}')">
+                          <n3-label type="primary">发起预测</n3-label>
+                       </button>`
+              }
+              if (state === '训练中') {
+                return `<button style="cursor: hand;background-color: transparent; border: 0;"
+                            @click = "toTrainInfo('${id}')">
+                          <n3-label type="primary">查看详情</n3-label>
+                       </button>`
+              }
+              return '无'
             }
           }
         ],
@@ -165,6 +179,21 @@
       }
     },
     methods: {
+      toPredictInfo (param) {
+        console.log('ppp:', param)
+        this.pa = {id: parseInt(param)}
+        this.$router.push({name: 'predictinfo', params: this.pa})
+      },
+      toPredictStart (param) {
+        console.log('ppp:', param)
+        this.pa = {id: parseInt(param)}
+        this.$router.push({name: 'startpredict', params: this.pa})
+      },
+      toTrainInfo (param) {
+        console.log('ppp:', param)
+        this.pa = {id: parseInt(param)}
+        this.$router.push({name: 'trainInfo', params: this.pa})
+      },
       pageChange(page) {
         this.pagination.current = page
         this.searchRecord()
