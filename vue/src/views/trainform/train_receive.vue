@@ -5,8 +5,20 @@
       validate
     >
       <n3-form-item
+        label="任务ID"
+        :label-col="3"
+      >
+        <n3-input
+          :rules="[{type:'required'}]"
+          v-model="model.id"
+          width="320px"
+          :custom-validate="taskidValidate"
+          readonly
+        >
+        </n3-input>
+      </n3-form-item>
+      <n3-form-item
         label="任务名"
-        need
         :label-col="3"
       >
         <n3-input
@@ -20,7 +32,6 @@
       </n3-form-item>
       <n3-form-item
         label="模型名"
-        need
         :label-col="3"
       >
         <n3-input
@@ -47,7 +58,6 @@
 
       <n3-form-item
         label="对齐字段"
-        need
         :label-col="3"
       >
         <n3-input
@@ -62,13 +72,13 @@
         <n3-select
           v-model="model.alian_feature"
           width="160px"
+          readonly
         >
           <n3-option value="">--敬请期待--</n3-option>
         </n3-select>
       </n3-form-item>
       <n3-form-item
         label="训练集比例"
-        need
         :label-col="3"
       >
         <n3-input
@@ -86,7 +96,6 @@
       </n3-form-item>
       <n3-form-item
         label="学习类型"
-        need
         :label-col="3"
       >
         <n3-select
@@ -101,7 +110,6 @@
       </n3-form-item>
       <n3-form-item
         label="目标IP"
-        need
         :label-col="3"
       >
         <n3-input
@@ -119,7 +127,6 @@
       </n3-form-item>
       <n3-form-item
         label="目标端口"
-        need
         :label-col="3"
       >
         <n3-input
@@ -137,7 +144,6 @@
       </n3-form-item>
       <n3-form-item
         label="参与方名称"
-        need
         :label-col="3"
       >
         <n3-input
@@ -407,6 +413,18 @@
           }
         }
       },
+      taskidValidate (val) {
+        if (/^\d{1,5}$/.test(val)) {
+          return {
+            validStatus: 'success'
+          }
+        } else {
+          return {
+            validStatus: 'error',
+            tips: '任务名长度为4-18位'
+          }
+        }
+      },
       usernameValidate (val) {
         if (val && val.length > 5 && val.length < 19) {
           return {
@@ -422,6 +440,9 @@
     },
     watch: {
       '$route' () {
+        if (this.$route.name === 'appendtrain') {
+          this.reload()
+        }
         if (['trainForm'].indexOf(this.$route.name) > -1) {
           this.reload()
         }

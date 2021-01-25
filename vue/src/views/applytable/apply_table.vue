@@ -4,11 +4,11 @@
       <div class="search-item">
         <div class="form-item">
           <label for="">任&nbsp;务&nbsp;I&nbsp;D：</label>
-          <n3-input v-model="searchKey.taskId" @change="searchChange"></n3-input>
+          <n3-input v-model="searchKey.taskId" @change="searchChange" readonly></n3-input>
         </div>
         <div class="form-item">
           <label for="">查询状态：</label>
-          <n3-select v-model="searchKey.taskState" @change="searchChange" width="150px">
+          <n3-select v-model="searchKey.taskState" @change="searchChange" width="150px" readonly>
             <n3-option value="">不限</n3-option>
             <n3-option value="1">可训练</n3-option>
             <n3-option value="0">训练中</n3-option>
@@ -93,7 +93,7 @@ export default {
       pagination: {
         current: 1,
         total: 0,
-        pagesize: 20
+        pagesize: 10
       },
       columns: [
         {
@@ -181,9 +181,9 @@ export default {
       this.$router.push({name: 'appendtrain', params: this.pa})
     },
     toappendPredict (param) {
-      console.log('ppp:',param)
+      console.log('ppp:', param)
       this.pa = {id: parseInt(param)}
-      this.$router.push({pname: 'appendpredict', params: this.pa})
+      this.$router.push({name: 'appendpredict', params: this.pa})
     },
     pageChange (page) {
       this.pagination.current = page
@@ -247,7 +247,7 @@ export default {
   },
   watch: {
     '$route' () {
-      if (this.$route.name === 'taskTable') {
+      if (this.$route.name === 'applyTable') {
         this.reload()
       }
     }

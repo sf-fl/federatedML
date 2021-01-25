@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="15">
-      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px" label-position="left">
         <el-col :span="10">
           <el-form-item label="任务ID" prop="taskID">
             <el-input v-model="formData.taskID" placeholder="任务ID" readonly :style="{width: '100%'}">
@@ -97,8 +97,10 @@
         </el-col>
         <el-col :span="24">
           <el-form-item size="large">
-            <el-button type="primary" @click="submitForm">提交</el-button>
-            <el-button @click="resetForm">重置</el-button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-button type="primary" @click="toPredict">发起预测</el-button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-button @click="backToTable">返回列表</el-button>
           </el-form-item>
         </el-col>
       </el-form>
@@ -160,14 +162,14 @@ export default {
           console.log(error)
         })
     },
-    submitForm () {
-      this.$refs['elForm'].validate(valid => {
-        if (!valid) return 0
-        // TODO 提交表单
-      })
+    toPredict () {
+      this.$router.push('/predict/start')
     },
     resetForm () {
       this.$refs['elForm'].resetFields()
+    },
+    backToTable () {
+      this.$router.push('/overall/task')
     },
   },
   watch: {

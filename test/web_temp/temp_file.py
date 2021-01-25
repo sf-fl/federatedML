@@ -1,7 +1,7 @@
 from client.federation import iAo
 import copy
 
-fenye = 6
+fenye = 10
 
 
 def update_taskdf(type):

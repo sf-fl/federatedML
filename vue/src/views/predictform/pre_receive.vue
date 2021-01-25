@@ -414,6 +414,9 @@
     },
     watch: {
       '$route' () {
+        if (this.$route.name === 'appendpredict') {
+          this.reload()
+        }
         if (['trainForm'].indexOf(this.$route.name) > -1) {
           this.reload()
         }

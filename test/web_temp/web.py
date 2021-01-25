@@ -92,6 +92,24 @@ def add_traintask():
         # writelog todo
         return e
 
+@app.route('/add_traintask',methods=["POST"])
+def append_traintask():
+    request_info = request.values.to_dict()
+    try:
+        checklist = ['taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'expireDate', 'modelname',
+                     'trainratio', 'partnername']
+        for s in checklist:
+            no_null(s, request_info[s])
+        with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:
+            feature = f1.readline().strip().split(',')
+            if request_info['alian_feature'] not in feature:
+                raise Exception('对齐字段无法找到，请重新填写')
+        iAo.save_task(request_info, 'train')
+        return 'success'
+    except Exception as e:
+        # writelog todo
+        return e
+
 
 @app.route('/append_traintask', methods=['post'])
 def append_traintask():

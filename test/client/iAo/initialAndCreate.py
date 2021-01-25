@@ -31,7 +31,7 @@ def CreateTable():
     # 建用户表 todo 主键，三者分离
     tablename='account'
     sql='''create table %s.%s(
-    accountid integer, -- 用户ID
+    accountid integer, -- 用户ID  
     username varchar(20), -- 账户名
     passwd varchar(20), -- 账户密码
     identity varchar(20), -- 账户身份

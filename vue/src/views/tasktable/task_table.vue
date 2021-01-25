@@ -4,11 +4,11 @@
       <div class="search-item">
         <div class="form-item">
           <label for="">任&nbsp;务&nbsp;I&nbsp;D：</label>
-          <n3-input v-model="searchKey.taskId" @change="searchChange"></n3-input>
+          <n3-input v-model="searchKey.taskId" @change="searchChange" readonly></n3-input>
         </div>
         <div class="form-item">
           <label for="">查询状态：</label>
-          <n3-select v-model="searchKey.taskState" @change="searchChange" width="150px">
+          <n3-select v-model="searchKey.taskState" @change="searchChange" width="150px" readonly>
             <n3-option value="">不限</n3-option>
             <n3-option value="1">可训练</n3-option>
             <n3-option value="0">训练中</n3-option>
@@ -93,7 +93,7 @@
         pagination: {
           current: 1,
           total: 0,
-          pagesize: 20
+          pagesize: 10
         },
         columns: [
           {
@@ -159,13 +159,7 @@
                           <n3-label type="primary">查看详情</n3-label>
                        </button>`
               }
-              if (state === '训练完成') {
-                return `<button style="cursor: hand;background-color: transparent; border: 0;"
-                            @click = "toPredictStart('${id}')">
-                          <n3-label type="primary">发起预测</n3-label>
-                       </button>`
-              }
-              if (state === '训练中') {
+              if (state === '训练中' || state === '训练完成') {
                 return `<button style="cursor: hand;background-color: transparent; border: 0;"
                             @click = "toTrainInfo('${id}')">
                           <n3-label type="primary">查看详情</n3-label>
