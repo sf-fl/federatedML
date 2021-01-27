@@ -7,6 +7,7 @@ from flask import redirect
 from flask import jsonify
 from server.federation import alignment
 from server.federation import train
+from client.federation import iAo
 
 import os
 os.chdir(os.path.pardir)
@@ -32,6 +33,20 @@ def test():
     except Exception as e:
         print(e)
         return '连接失败！错误情况：%s' % e
+
+
+@app.route('/addtask' , methods=['POST'])
+def addtask():
+    try:
+        a = request.get_data()
+        addtask = json.loads(a)
+        tag = addtask['tag']
+        result = iAo.save_task(addtask,tag,'receive')
+        return json.dumps(result)
+    except Exception as e:
+        print(e)
+        return '出现错误！错误情况：%s' % e
+
 
 
 @app.route('/align1' , methods=['POST'])

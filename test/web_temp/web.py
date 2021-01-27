@@ -79,24 +79,24 @@ def upload():
 def add_traintask():
     request_info = request.values.to_dict()
     try:
-        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
+        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm', 'modelname','trainratio','partnername']
         for s in checklist:
             no_null(s,request_info[s])
         with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:
             feature = f1.readline().strip().split(',')
             if request_info['alian_feature'] not in feature:
                 raise Exception('对齐字段无法找到，请重新填写')
-        iAo.save_task(request_info,'train')
+        iAo.save_task(request_info,'train', 'add')
         return 'success'
     except Exception as e:
         # writelog todo
         return e
 
-@app.route('/add_traintask',methods=["POST"])
+@app.route('/append_traintask',methods=["POST"])
 def append_traintask():
     request_info = request.values.to_dict()
     try:
-        checklist = ['taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'expireDate', 'modelname',
+        checklist = ['id','taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'modelname',
                      'trainratio', 'partnername']
         for s in checklist:
             no_null(s, request_info[s])
@@ -104,30 +104,25 @@ def append_traintask():
             feature = f1.readline().strip().split(',')
             if request_info['alian_feature'] not in feature:
                 raise Exception('对齐字段无法找到，请重新填写')
-        iAo.save_task(request_info, 'train')
+        iAo.save_task(request_info, 'train', 'append')
         return 'success'
     except Exception as e:
         # writelog todo
         return e
 
 
-@app.route('/append_traintask', methods=['post'])
-def append_traintask():
-    pass
-
-
 @app.route('/add_predicttask',methods=["POST"])
 def add_predicttask():
     request_info = request.values.to_dict()
     try:
-        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm','expireDate','modelname','trainratio','partnername']
+        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm', 'modelname','partnername']
         for s in checklist:
             no_null(s,request_info[s])
         with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:
             feature = f1.readline().strip().split(',')
             if request_info['alian_feature'] not in feature:
                 raise Exception('对齐字段无法找到，请重新填写')
-        iAo.save_task(request_info, 'predict')
+        iAo.save_task(request_info, 'predict', 'add')
         return 'success'
     except Exception as e:
         # writelog todo
@@ -136,7 +131,21 @@ def add_predicttask():
 
 @app.route('/append_predicttask', methods=['post'])
 def append_predicttask():
-    pass
+    request_info = request.values.to_dict()
+    try:
+        checklist = ['id','taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'modelname',
+                     'partnername']
+        for s in checklist:
+            no_null(s, request_info[s])
+        with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:
+            feature = f1.readline().strip().split(',')
+            if request_info['alian_feature'] not in feature:
+                raise Exception('对齐字段无法找到，请重新填写')
+        iAo.save_task(request_info, 'predict', 'append')
+        return 'success'
+    except Exception as e:
+        # writelog todo
+        return e
 
 
 @app.route('/login',methods=["POST"])

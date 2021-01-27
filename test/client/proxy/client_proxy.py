@@ -4,6 +4,15 @@ import requests
 import json
 
 
+def addTask(addtask,tag):
+    ip = addtask['participant_ip']
+    port = addtask['participant_port']
+    addtask['tag'] = tag
+    task_json = json.dumps(addtask)
+    r = requests.post('http://%s:%s/addtask'%(ip,port),task_json)
+    return r.text
+
+
 def test():
     r = requests.get('http://127.0.0.1:8081/test')
     return r.text
@@ -44,7 +53,3 @@ def predict(ub_list):
 
 def learn_3():
     pass
-
-
-data={ "opr": "add", "data": { "userName": "98997", "disc": "hudihiudhu", "expDate":"2", "ip": [ "10.10.11.1", "10.10.11.2", "10.10.11.3" ] } }
-data = json.dumps(data)

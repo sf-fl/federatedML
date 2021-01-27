@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="15">
-      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px" label-position="left">
         <el-col :span="10">
           <el-form-item label="任务ID" prop="taskID">
             <el-input v-model="formData.taskID" placeholder="任务ID" readonly :style="{width: '100%'}">
@@ -75,8 +75,20 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="文件地址" prop="fileloc">
-            <el-input v-model="formData.fileloc" placeholder="文件地址" readonly :style="{width: '100%'}">
+          <el-form-item label="KS" prop="fileloc">
+            <el-input v-model="formData.ks" placeholder="KS" readonly :style="{width: '100%'}">
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="AUC" prop="fileloc">
+            <el-input v-model="formData.auc" placeholder="AUC" readonly :style="{width: '100%'}">
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="文件结果地址" prop="fileloc">
+            <el-input v-model="formData.fileloc" placeholder="文件结果地址" readonly :style="{width: '100%'}">
             </el-input>
           </el-form-item>
         </el-col>
@@ -97,8 +109,10 @@
         </el-col>
         <el-col :span="24">
           <el-form-item size="large">
-            <el-button placeholder="formData.feature" type="primary" @click="submitForm">{{formData.feature}}</el-button>
-            <el-button @click="resetForm">返回</el-button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<!--            <el-button type="primary" @click="toPredict">发起预测</el-button>-->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-button @click="backToTable">返回列表</el-button>
           </el-form-item>
         </el-col>
       </el-form>
@@ -106,6 +120,9 @@
   </div>
 </template>
 <script>
+
+import axios from 'axios'
+
 export default {
   components: {},
   props: [],
@@ -113,124 +130,82 @@ export default {
     return {
       formData: {
         taskID: '',
-        taskname: '',
-        projectname: '',
-        modelname: '',
-        MLA: '',
-        alianfeature: '',
-        createtime: '',
-        lastmodify: '',
-        userIPPort: '',
-        partnerIPPort: '',
-        datainfo: '',
-        trainratio: '',
-        fileloc: '',
-        dbloc: '',
-        feature: ''
+        taskname: "",
+        projectname: "",
+        modelname: "",
+        MLA: "",
+        alianfeature: "",
+        createtime: "",
+        lastmodify: "",
+        userIPPort: "",
+        partnerIP: "",
+        partnerIPPort: "",
+        partnerPort: "",
+        datainfo: "",
+        trainratio: "",
+        fileloc: "",
+        ks: "",
+        auc: "",
+        dbloc: "",
+        feature: ""
       },
-      rules: {
-        taskID: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        taskname: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        projectname: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        modelname: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        MLA: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        alianfeature: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        createtime: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        lastmodify: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        userIPPort: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        partnerIPPort: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        datainfo: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        trainratio: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        fileloc: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        dbloc: [{
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        feature: [{
-          required: true,
-          message: '请选择下拉选择',
-          trigger: 'change'
-        }]
-      },
+      rules: {},
       featureOptions: [{
-        'label': '选项一',
-        'value': 1
+        "label": "选项一",
+        "value": 1
       }, {
-        'label': '选项二',
-        'value': 2
+        "label": "选项二",
+        "value": 2
       }, {
-        'label': '',
-        'value': ''
-      }],
+        "label": '',
+        "value": ''
+      }]
     }
   },
   computed: {},
-  watch: {},
-  created () {},
   mounted () {},
   methods: {
-    submitForm () {
-      this.$refs['elForm'].validate(valid => {
-        if (!valid) return
-        // TODO 提交表单
-      })
+    reload () {
+      this.id = this.$route.params.id
+      console.log(this.id)
+      axios.post('http://127.0.0.1:5000/traininfo', this.id)
+        .then(response => {
+          console.log(response.data)
+          this.formData = response.data
+          return response
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    toPredict () {
+      console.log('data =', this.formData)
+      this.$router.push({name: 'startpredict',
+        params: {model_name: this.formData.modelname,
+          MLA: this.formData.MLA,
+          ip: this.formData.partnerIP,
+          port: this.formData.partnerPort,
+          partnername: this.formData.partnername}})
     },
     resetForm () {
       this.$refs['elForm'].resetFields()
     },
+    backToTable () {
+      this.$router.push('/overall/task')
+    },
+  },
+  watch: {
+    '$route' () {
+      if (['trainForm'].indexOf(this.$route.name) > -1) {
+        this.reload()
+      }
+      if (this.$route.params.id !== this.formData.id) {
+        this.reload()
+      }
+    }
+  },
+  created () {
+    this.reload()
   }
 }
 

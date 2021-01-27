@@ -1,22 +1,46 @@
 from client.iAo import FetchAndQuery as FAQ
+from client.proxy import client_proxy as cp
 
 global tasklist
 tasklist = []
 
 
-def save_task(task_info,tag):
+def save_task(task_info, tag, tag2):
     add_task = {}
-    info_list = ['taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'modelname', 'trainratio', 'partnername']
-    add_list = ['task_name', 'align', 'participant_ip', 'participant_port', 'learning_algorithm', 'model_name', 'train_proportion','participant_name']
+    info_list = ['taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'modelname', 'partnername']
+    add_list = ['task_name', 'align', 'participant_ip', 'participant_port', 'learning_algorithm', 'model_name', 'participant_name']
+    if tag == 'train':
+        info_list.append('trainratio')
+        add_list.append('train_proportion')
+    if tag2 ==  'append':
+        info_list.append('id')
+        add_list.append('task_id')
     for x,y in zip(info_list,add_list):
         add_task[y] = task_info[x]
-    if tag == 'train':
-        add_task['task_progress'] = '待对方加入训练'
+    if tag2 == 'add':
+        if tag == 'train':
+            add_task['task_progress'] = '待对方加入训练'
+        else:
+            add_task['task_progress'] = '待对方加入预测'
+        id = FAQ.initiateTask(add_task)
+        task_send = FAQ.taskDetails(id)
+        cp.addTask(task_send,tag)
+    if tag2 == 'receive':
+        if tag == 'train':
+            add_task['task_progress'] = '待我方加入训练'
+        else:
+            add_task['task_progress'] = '待我方加入预测'
+        FAQ.changeTask(add_task)
     else:
-        add_task['task_progress'] = '待对方加入预测'
-    FAQ.initiateTask(add_task)
-    # 发到对面 todo
+        if tag == 'train':
+            add_task['task_progress'] = '训练中'
+        else:
+            add_task['task_progress'] = '预测中'
+        FAQ.changeTask(add_task)
+        cp.begintask(add_task,tag)
 
+
+    # 发到对面 todo
 
 def show_task_list(type):
     if type == 'apply':

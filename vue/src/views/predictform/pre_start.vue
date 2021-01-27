@@ -19,7 +19,6 @@
       </n3-form-item>
       <n3-form-item
         label="模型名"
-        need
         :label-col="3"
       >
         <n3-input
@@ -27,6 +26,7 @@
           v-model="model.modelname"
           width="320px"
           :custom-validate="modelnameValidate"
+          readonly
         >
         </n3-input>
       </n3-form-item>
@@ -64,30 +64,13 @@
         </n3-select>
       </n3-form-item>
       <n3-form-item
-        label="训练集比例"
-        need
-        :label-col="3"
-      >
-        <n3-input
-          :rules="[{type:'required'}]"
-          :custom-validate="tvValidate"
-          v-model="model.trainratio"
-          width="320px"
-          class="fl"
-        >
-        </n3-input>
-        <div class="i-tips">
-          训练集占比，形如：0.75
-        </div>
-      </n3-form-item>
-      <n3-form-item
         label="学习类型"
-        need
         :label-col="3"
       >
         <n3-select
           v-model="model.learningAlgorithm"
           width="160px"
+          readonly
         >
           <n3-option value="VLR">纵向逻辑回归</n3-option>
           <n3-option value="VSB">纵向SecureBoost</n3-option>
@@ -96,7 +79,6 @@
       </n3-form-item>
       <n3-form-item
         label="目标IP"
-        need
         :label-col="3"
       >
         <n3-input
@@ -105,6 +87,7 @@
           v-model="model.ip"
           width="320px"
           class="fl"
+          readonly
         >
         </n3-input>
         <div class="i-tips">
@@ -113,7 +96,6 @@
       </n3-form-item>
       <n3-form-item
         label="目标端口"
-        need
         :label-col="3"
       >
         <n3-input
@@ -122,6 +104,7 @@
           v-model="model.port"
           width="320px"
           class="fl"
+          readonly
         >
         </n3-input>
         <div class="i-tips">
@@ -130,7 +113,6 @@
       </n3-form-item>
       <n3-form-item
         label="参与方名称"
-        need
         :label-col="3"
       >
         <n3-input
@@ -139,6 +121,7 @@
           v-model="model.partnername"
           width="320px"
           class="fl"
+          readonly
         >
         </n3-input>
         <div class="i-tips">
@@ -195,7 +178,6 @@
           taskname: '',
           modelname: '',
           alian_feature: '',
-          trainratio: '',
           phone: '',
           ip: '',
           port: '',
@@ -221,14 +203,18 @@
     },
     methods: {
       reload () {
+        console.log(this.$route.params)
+        console.log(this.$route.params.model_name)
         // 重置表单
         this.model = {
           taskname: '',
+          modelname: this.$route.params.model_name || '',
           alian_feature: '',
-          ip: '',
-          port: '',
+          ip: this.$route.params.ip || '',
+          port: this.$route.params.port || '',
+          partnername: this.$route.params.partnername || '',
           feature: '',
-          learningAlgorithm: 'VLR',
+          learningAlgorithm: this.$route.params.MLA || 'VLR',
           cacheExpireTime: '24',
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         }
@@ -271,7 +257,7 @@
         let cond = Object.assign({}, this.model)
         // cond.expireDate = new Date(cond.expireDate).valueOf()
         this.loading = true
-        axios.post('http://127.0.0.1:5000/add_traintask', qs.stringify(cond))
+        axios.post('http://127.0.0.1:5000/add_predicttask', qs.stringify(cond))
           .then(data => {
             this.loading = false
             this.n3Alert({
@@ -281,7 +267,7 @@
               duration: 5000,
               width: '240px' // 内容不确定，建议设置width
             })
-            this.$router.push('/overall/task')
+            this.$router.push('/overall/apply')
           })
           // eslint-disable-next-line handle-callback-err
           .catch(error => {
@@ -414,6 +400,9 @@
     },
     watch: {
       '$route' () {
+        if (this.$route.name === 'startpredict') {
+          this.reload()
+        }
         if (['trainForm'].indexOf(this.$route.name) > -1) {
           this.reload()
         }

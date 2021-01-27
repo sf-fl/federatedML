@@ -75,8 +75,20 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="文件地址" prop="fileloc">
-            <el-input v-model="formData.fileloc" placeholder="文件地址" readonly :style="{width: '100%'}">
+          <el-form-item label="KS" prop="fileloc">
+            <el-input v-model="formData.ks" placeholder="KS" readonly :style="{width: '100%'}">
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="AUC" prop="fileloc">
+            <el-input v-model="formData.auc" placeholder="AUC" readonly :style="{width: '100%'}">
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="文件结果地址" prop="fileloc">
+            <el-input v-model="formData.fileloc" placeholder="文件结果地址" readonly :style="{width: '100%'}">
             </el-input>
           </el-form-item>
         </el-col>
@@ -97,7 +109,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item size="large">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <el-button type="primary" @click="toPredict">发起预测</el-button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <el-button @click="backToTable">返回列表</el-button>
@@ -126,12 +138,16 @@ export default {
         createtime: "",
         lastmodify: "",
         userIPPort: "",
+        partnerIP: "",
         partnerIPPort: "",
+        partnerPort: "",
         datainfo: "",
         trainratio: "",
         fileloc: "",
+        ks: "",
+        auc: "",
         dbloc: "",
-        feature: "",
+        feature: ""
       },
       rules: {},
       featureOptions: [{
@@ -163,7 +179,13 @@ export default {
         })
     },
     toPredict () {
-      this.$router.push('/predict/start')
+      console.log('data =', this.formData)
+      this.$router.push({name: 'startpredict',
+        params: {model_name: this.formData.modelname,
+          MLA: this.formData.MLA,
+          ip: this.formData.partnerIP,
+          port: this.formData.partnerPort,
+          partnername: this.formData.partnername}})
     },
     resetForm () {
       this.$refs['elForm'].resetFields()

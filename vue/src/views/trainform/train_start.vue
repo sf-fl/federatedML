@@ -281,7 +281,7 @@
               duration: 5000,
               width: '240px' // 内容不确定，建议设置width
             })
-            this.$router.push('/overall/task')
+            this.$router.push('/overall/apply')
           })
           // eslint-disable-next-line handle-callback-err
           .catch(error => {

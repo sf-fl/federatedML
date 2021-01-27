@@ -285,7 +285,7 @@
         let cond = Object.assign({}, this.model)
         // cond.expireDate = new Date(cond.expireDate).valueOf()
         this.loading = true
-        axios.post('http://127.0.0.1:5000/add_traintask', qs.stringify(cond))
+        axios.post('http://127.0.0.1:5000/append_traintask', qs.stringify(cond))
           .then(data => {
             this.loading = false
             this.n3Alert({
