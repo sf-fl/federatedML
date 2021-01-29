@@ -75,8 +75,8 @@ def CreateTable():
     psi double,
     result_file varchar(200), -- 结果文件保存位置
     result_data varchar(200), -- 数据库结果保存位置
-    create_time date, -- 任务创建时间
-    operation_time date -- 任务最后操作时间
+    create_time varchar(200), -- 任务创建时间
+    operation_time varchar(200) -- 任务最后操作时间
     );''' % (databasename, tablename)
     try:
         conn.begin()

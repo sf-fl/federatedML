@@ -23,14 +23,8 @@ def save_task(task_info, tag, tag2):
         else:
             add_task['task_progress'] = '待对方加入预测'
         id = FAQ.initiateTask(add_task)
-        task_send = FAQ.taskDetails(id)
+        task_send = FAQ.taskDetails(id).T.to_dict()[0]
         cp.addTask(task_send,tag)
-    if tag2 == 'receive':
-        if tag == 'train':
-            add_task['task_progress'] = '待我方加入训练'
-        else:
-            add_task['task_progress'] = '待我方加入预测'
-        FAQ.changeTask(add_task)
     else:
         if tag == 'train':
             add_task['task_progress'] = '训练中'
@@ -39,8 +33,14 @@ def save_task(task_info, tag, tag2):
         FAQ.changeTask(add_task)
         cp.begintask(add_task,tag)
 
-
     # 发到对面 todo
+
+def receive_task(task_info,tag):
+    if tag == 'train':
+        task_info['task_progress'] = '待我方加入训练'
+    else:
+        task_info['task_progress'] = '待我方加入预测'
+    FAQ.changeTask(task_info)
 
 def show_task_list(type):
     if type == 'apply':

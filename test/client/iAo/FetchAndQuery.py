@@ -253,13 +253,13 @@ def initiateTask(task_details):
     databasename = config.get(db_nickname, 'databasename')
     # service=config.get(databasename,'service')
     # 连接数据库
-    tag = 0
+    task_id = 0
     try:
         conn = pymysql.connect(host=host, port=int(port), user=uid, password=pwd, database=databasename, charset='utf8')
         print('连接数据库成功！')
     except Exception as e:
         print(e)
-        return tag
+        return task_id
     cur=conn.cursor()
     # 读取当前任务数，并计算任务编号，待优化
     sql='''select count(*) from %s.%s'''%(databasename,tablename)
@@ -269,7 +269,7 @@ def initiateTask(task_details):
         print('任务ID为：%d'%task_id)
     except Exception as e:
         print(e)
-        return tag
+        return task_id
     create_time=operation_time=dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     task_name=task_details.get('task_name')
     project_name=task_details.get('project_name')
@@ -305,14 +305,13 @@ def initiateTask(task_details):
         conn.begin()
         cur.execute(sql)
         conn.commit()
-        tag = 1
         print('任务创建成功，任务ID：%s，任务名称：%s'%(task_id,task_name))
     except Exception as e:
         print(e)
-        return tag
+        return task_id
     cur.close()
     conn.close()
-    return tag
+    return task_id
 
 
 # 发起任务
