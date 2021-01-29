@@ -31,7 +31,7 @@ def save_task(task_info, tag, tag2):
         else:
             add_task['task_progress'] = '预测中'
         FAQ.changeTask(add_task)
-        cp.begintask(add_task,tag)
+        cp.beginTask(add_task,tag)
 
     # 发到对面 todo
 

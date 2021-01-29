@@ -10,8 +10,8 @@ from server.federation import train
 from client.federation import iAo
 
 import os
-os.chdir(os.path.pardir)
-print(os.getcwd())
+
+
 app = Flask(__name__)
 
 
@@ -118,4 +118,6 @@ def predict():
 
 
 if __name__ =='__main__':
-    app.run(port='8081',debug=True)
+    import sys
+    os.chdir(os.path.dirname(os.path.dirname(sys.path[0])))
+    app.run(host='0.0.0.0',port='8081',debug=True)

@@ -12,6 +12,13 @@ def addTask(addtask,tag):
     r = requests.post('http://%s:%s/addtask'%(ip,port),task_json)
     return r.text
 
+def beginTask(addtask,tag):
+    ip = addtask['participant_ip']
+    port = addtask['participant_port']
+    tag_json = json.dumps({'tag':tag})
+    r = requests.post('http://%s:%s/beginTask' % (ip, port), tag_json)
+    return r.text
+
 
 def test():
     r = requests.get('http://127.0.0.1:8081/test')
