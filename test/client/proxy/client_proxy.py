@@ -1,5 +1,5 @@
 # coding=utf-8
-
+from client import start
 import requests
 import json
 
@@ -12,12 +12,13 @@ def addTask(addtask,tag):
     r = requests.post('http://%s:%s/addtask'%(ip,port),task_json)
     return r.text
 
-def beginTask(addtask,tag):
+def beginTask(addtask,tag,id):
     ip = addtask['participant_ip']
     port = addtask['participant_port']
+    key = addtask['align']
     tag_json = json.dumps({'tag':tag})
-    r = requests.post('http://%s:%s/beginTask' % (ip, port), tag_json)
-    return r.text
+    start.start(id,key)
+    return 0
 
 
 def test():
@@ -31,8 +32,8 @@ def align_1(public_key):
     return json.loads(r.text)
 
 
-def align_2(b_key):
-    sample_json = json.dumps(b_key.to_list())
+def align_2(b_key,id,key):
+    sample_json = json.dumps({'sample':b_key.to_list(),'id':id,'key':key})
     r = requests.post('http://127.0.0.1:8081/align2',sample_json)
     return json.loads(r.text)
 

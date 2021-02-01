@@ -3,8 +3,9 @@ from client.proxy import client_proxy
 from client.eAd import paillier
 from client.eAd import hash
 
+key = 'phone_num'
 
-def align():
+def align(id,key):
     # # 生成所需公钥、密钥
     # key = paillier.Paillier()
     #
@@ -16,11 +17,12 @@ def align():
     # x2_encriped = key.encipher(x2_encrip)
     # sample_encriped = key.encipher(sample_key)
 
-    sample, sample_key = get_data.get_data_key()
+    sample= get_data.get_data(id)
+    sample_key = sample[key]
     sample_hash = hash.ser2hash(sample_key)
 
     # 发送加密后样本key并接收对齐结果
-    num = client_proxy.align_2(sample_hash)
+    num = client_proxy.align_2(sample_hash,id,key)
     index = ['%d' % i for i in num]
     result_sample = sample.iloc[index]
     result_sample = result_sample.reset_index(drop=True)

@@ -218,6 +218,8 @@ export default {
         cacheExpireTime: '24',
         expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
       }
+      this.id = this.$route.params.id
+      console.log(this.id)
       axios.post('http://127.0.0.1:5000/trainform', this.id)
         .then(response => {
           console.log(response.data)
@@ -266,7 +268,7 @@ export default {
       let cond = Object.assign({}, this.model)
       // cond.expireDate = new Date(cond.expireDate).valueOf()
       this.loading = true
-      axios.post('http://127.0.0.1:5000/add_traintask', qs.stringify(cond))
+      axios.post('http://127.0.0.1:5000/append_predicttask', qs.stringify(cond))
         .then(data => {
           this.loading = false
           this.n3Alert({
@@ -409,7 +411,7 @@ export default {
   },
   watch: {
     '$route' () {
-      if (this.$route.name === 'startpredict') {
+      if (this.$route.name === 'appendpredict') {
         this.reload()
       }
       if (['trainForm'].indexOf(this.$route.name) > -1) {

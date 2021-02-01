@@ -148,7 +148,7 @@ def logistic_regression(X, y):
     # y = y.reshape(m, 1)
     # cost_record = []  # 记录代价函数的值
     alpha = 0.5  # 学习率
-    maxiters = 200 # 最大迭代次数
+    maxiters = 60 # 最大迭代次数
     theta = pd.Series(np.ones(n)*10)  # 设置权重参数的初始值
     # cost_val = cosst_function(theta, X, y)
     # cost_record.append(cost_val)
@@ -171,7 +171,7 @@ def logistic_regression(X, y):
         print('学习率：',alpha)
     end = time.time()
     print("cost time: %f s" % (end - start))
-    print('theta = ',theta)
+    print('theta = ', theta)
     return theta, iters
 
 

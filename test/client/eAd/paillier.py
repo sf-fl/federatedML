@@ -5,7 +5,7 @@ import binascii
 
 
 def get_prime(rs):
-    p = gmpy2.mpz_urandomb(rs,128)
+    p = gmpy2.mpz_urandomb(rs,32)
     while not gmpy2.is_prime(p):
         p = p + 1
     return p

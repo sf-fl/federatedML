@@ -67,7 +67,10 @@ def align2():
     try:
         a = request.get_data()
         dict1 = json.loads(a)
-        result = alignment.align2(dict1).to_list()
+        b_key = dict1['sample']
+        id = dict1['id']
+        key = dict1['key']
+        result = alignment.align2(b_key,id,key).to_list()
         return json.dumps(result)
     except Exception as e:
         return '连接失败！错误情况：%s' % e

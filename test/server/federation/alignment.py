@@ -17,12 +17,13 @@ def align1(public_key):
     return sample_encrypted_rand
 
 
-def align2(b_key):
+def align2(b_key,id,key):
     b_key_series = pd.Series(b_key)
     dict_b = {'num_b':b_key_series.index,'hash':b_key_series.values}
     df_b_key = pd.DataFrame(dict_b)
 
-    sample, a_key = get_data.get_data_key()
+    sample = get_data.get_data(id)
+    a_key = sample[key]
     a_key_series = hash.ser2hash(a_key)
     dict_a = {'num_a': a_key_series.index, 'hash': a_key_series.values}
     df_a_key = pd.DataFrame(dict_a)

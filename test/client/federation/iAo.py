@@ -1,5 +1,6 @@
 from client.iAo import FetchAndQuery as FAQ
 from client.proxy import client_proxy as cp
+import shutil
 
 global tasklist
 tasklist = []
@@ -23,6 +24,7 @@ def save_task(task_info, tag, tag2):
         else:
             add_task['task_progress'] = '待对方加入预测'
         id = FAQ.initiateTask(add_task)
+        shutil.move(r'./web_temp/data/train_data.csv', r'./server/data_storage/data_%s.csv' % id)
         task_send = FAQ.taskDetails(id).T.to_dict()[0]
         cp.addTask(task_send,tag)
     else:
@@ -30,8 +32,9 @@ def save_task(task_info, tag, tag2):
             add_task['task_progress'] = '训练中'
         else:
             add_task['task_progress'] = '预测中'
-        FAQ.changeTask(add_task)
-        cp.beginTask(add_task,tag)
+        id = FAQ.changeTask(add_task)
+        shutil.move(r'./web_temp/data/train_data.csv', r'./client/data_storage/data_%s.csv' % id)
+        cp.beginTask(add_task,tag,id)
 
     # 发到对面 todo
 
@@ -40,7 +43,7 @@ def receive_task(task_info,tag):
         task_info['task_progress'] = '待我方加入训练'
     else:
         task_info['task_progress'] = '待我方加入预测'
-    FAQ.changeTask(task_info)
+    FAQ.initiateTask(task_info)
 
 def show_task_list(type):
     if type == 'apply':
