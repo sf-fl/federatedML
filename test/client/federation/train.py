@@ -1,7 +1,7 @@
 from client.ml import lr
 
 
-def tarin(x,y):
+def tarin(x,y,ip,port):
 
-    theta, iters = lr.logistic_regression(x, y)
+    theta, iters = lr.logistic_regression(x, y,ip,port)
     return theta, iters

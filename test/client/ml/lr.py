@@ -69,7 +69,7 @@ def generate_random(n):
     return np.trunc(np.random.rand(n)*(scal**3)*10+(scal**3))# todo
 
 
-def update_grad(theta_b,x_b,y_b):
+def update_grad(theta_b,x_b,y_b,ip,port):
     # 生成 key_b 和 ubb 并发出
     theta = theta_b.apply(lambda x: int(x*scal))
     ppk_b, psk_b = paillier.gen_key()
@@ -89,7 +89,7 @@ def update_grad(theta_b,x_b,y_b):
         ub_list.append(ub_code)
     print('100%')
     print('ubb计算耗时：',time.time()-time_start)
-    gradA_pb, uaa_list, ppk_a = client_proxy.learn_1(ub_list,ppk_b)
+    gradA_pb, uaa_list, ppk_a = client_proxy.learn_1(ub_list,ppk_b,ip,port)
 
     # 计算gbra
     time_start = time.time()
@@ -122,7 +122,7 @@ def update_grad(theta_b,x_b,y_b):
         gradA_r.append(paillier.decipher(grad,ppk_b,psk_b))
     print('Gar解密耗时：',time.time()-time_start)
 
-    gradB_r = client_proxy.learn_2(gradB_pa,gradA_r)
+    gradB_r = client_proxy.learn_2(gradB_pa,gradA_r,ip,port)
 
     gradB = gradB_r - rb
 
@@ -134,7 +134,7 @@ def update_theta(grad, theta, alpha):
     return theta
 
 
-def logistic_regression(X, y):
+def logistic_regression(X, y,ip,port):
     """
     逻辑回归算法
     :param X: mxn矩阵
@@ -157,7 +157,7 @@ def logistic_regression(X, y):
         print('\n----------------------------------------------\n\n第%d轮：' % iters)
         if iters >= maxiters:
             break
-        grad = update_grad(theta, X, y)
+        grad = update_grad(theta, X, y,ip,port)
         print('当前梯度为',grad)
         # 权重参数更新
         new_theta = update_theta(grad, theta, alpha)
@@ -175,14 +175,14 @@ def logistic_regression(X, y):
     return theta, iters
 
 
-def predict(theta,x_b,y):
+def predict(theta,x_b,y,ip,port):
     print(x_b.shape[0])
     ub_list = []
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i]
         ub = np.dot(theta.T, xb)
         ub_list.append(ub)
-    pred = client_proxy.predict(ub_list)
+    pred = client_proxy.predict(ub_list,ip,port)
     for i, p in enumerate(pred):
         print('序号：%d，预测为1概率：%f，实际值：%d' % (i,p,y.iloc[i]))
     return pd.DataFrame([pred, y['marriage'].tolist()],index=['p','y']).T

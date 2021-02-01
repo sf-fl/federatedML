@@ -10,25 +10,25 @@ import sys
 
 
 
-def start(id,key):
+def start(id,ip,port,key):
 
     # 连接测试
     print(client_proxy.test())
 
     # 对齐模块
-    x_raw,y_raw = alignment.align(id,key)
+    x_raw,y_raw = alignment.align(id,key,ip,port)
 
     # 特征工程&预处理
-    x,y = feature_engineering.feating(x_raw,y_raw)
+    x,y = feature_engineering.feating(x_raw,y_raw,ip,port)
 
     # 训练
-    result = train.tarin(x,y)
+    result = train.tarin(x,y,ip,port)
 
     # 保存
-    model_save.save_model(result)
+    model_save.save_model(result,id)
 
     # 预测
-    pred = predict.predict(result[0],x,y)
+    pred = predict.predict(result[0],x,y,id,ip,port)
 
 
 

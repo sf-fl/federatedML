@@ -42,6 +42,11 @@ def addtask():
         addtask = json.loads(a)
         tag = addtask['tag']
         ip = request.remote_addr
+        port = 8081
+        addtask['ip'] = addtask['participant_ip']
+        addtask['port'] = addtask['participant_port']
+        addtask['participant_ip'] = ip
+        addtask['participant_port'] = port
         result = iAo.receive_task(addtask,tag)
         return json.dumps(result)
     except Exception as e:

@@ -5,7 +5,7 @@ from client.eAd import hash
 
 key = 'phone_num'
 
-def align(id,key):
+def align(id,key,ip,port):
     # # 生成所需公钥、密钥
     # key = paillier.Paillier()
     #
@@ -22,7 +22,7 @@ def align(id,key):
     sample_hash = hash.ser2hash(sample_key)
 
     # 发送加密后样本key并接收对齐结果
-    num = client_proxy.align_2(sample_hash,id,key)
+    num = client_proxy.align_2(sample_hash,id,key,ip,port)
     index = ['%d' % i for i in num]
     result_sample = sample.iloc[index]
     result_sample = result_sample.reset_index(drop=True)
