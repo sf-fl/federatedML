@@ -21,8 +21,8 @@ def beginTask(addtask,tag,id):
     return 0
 
 
-def test():
-    r = requests.get('http://127.0.0.1:8081/test')
+def test(ip,port):
+    r = requests.get('http://%s:%s/test' %(ip,port))
     return r.text
 
 

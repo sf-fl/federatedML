@@ -13,7 +13,7 @@ import sys
 def start(id,ip,port,key):
 
     # 连接测试
-    print(client_proxy.test())
+    print(client_proxy.test(ip,port))
 
     # 对齐模块
     x_raw,y_raw = alignment.align(id,key,ip,port)
