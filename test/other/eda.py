@@ -8,7 +8,7 @@ import sys
 
 os.chdir(os.path.dirname(sys.path[0]))
 
-train = pd.read_csv('./client/data_storage/data_18.csv')
+train = pd.read_csv('./client/data_storage/data_6.csv')
 train.drop('phone_num', axis=1, inplace=True)
 cols = [c for c in train.columns]   #返回数据的列名到列表里
 
