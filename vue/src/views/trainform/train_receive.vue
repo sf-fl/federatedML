@@ -47,9 +47,10 @@
         label="数据集"
         need
         :label-col="3"
+        id="upload"
       >
 <!--        <input type="file" @change="inputFileChange">-->
-        <input class="file" name="file" type="file"  accept=".csv" @change="update"/>
+        <input class="file" id="file" name="file" type="file" accept=".csv" @change="update"/>
         <div class="i-tips">
           文件目前只接受csv
         </div>
@@ -194,6 +195,7 @@
           taskname: '',
           modelname: '',
           alian_feature: '',
+          fileName: '',
           trainratio: '',
           id: '',
           ip: '',
@@ -221,10 +223,13 @@
     methods: {
       reload () {
         // 重置表单
+        document.getElementById("file").value = ""
         this.model = {
           taskid: '',
           taskname: '',
+          fileName: '',
           alian_feature: '',
+          file: '',
           ip: '',
           port: '',
           feature: '',
@@ -233,6 +238,7 @@
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         }
         this.test1234 = this.getTaskTrainForm()
+
         this.loading = false
       },
       getTaskTrainForm () {

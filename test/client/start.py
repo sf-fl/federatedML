@@ -5,6 +5,7 @@ from client.federation import feature_engineering
 from client.federation import train
 from client.federation import predict
 from client.federation import initial
+from client.iAo import FetchAndQuery as FAQ
 import os
 import sys
 
@@ -12,6 +13,7 @@ import sys
 
 def start(id,ip,port,key):
 
+    taskinfo = {'task_id':id, }
     # 连接测试
     print(client_proxy.test(ip,port))
 
@@ -23,6 +25,8 @@ def start(id,ip,port,key):
 
     # 训练
     result = train.tarin(x,y,ip,port)
+    taskinfo['task_progress'] = '训练完成'
+    FAQ.changeTask(taskinfo)
 
     # 保存
     model_save.save_model(result,id,ip,port)

@@ -8,14 +8,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-cancer = load_breast_cancer()
-x = pd.DataFrame(load_breast_cancer().data)
-y = pd.DataFrame(load_breast_cancer().target)
-x['tt'] = 1
-y['tt'] = 1
-data = pd.merge(x,y,on='tt')
-data.to_csv('data.csv')
-result = pd.read_csv('%s/result.csv' % os.path.dirname(os.getcwd()))
+
+result = pd.read_csv('%s/result.csv' % os.getcwd())
 y_pred = result['p'].tolist()
 y_true = result['y'].apply(lambda x : int(x)).to_list()
 

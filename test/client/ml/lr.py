@@ -148,8 +148,8 @@ def logistic_regression(X, y,ip,port):
     # y = y.reshape(m, 1)
     # cost_record = []  # 记录代价函数的值
     alpha = 0.5  # 学习率
-    maxiters = 10 # 最大迭代次数
-    theta = pd.Series(np.ones(n)*10)  # 设置权重参数的初始值
+    maxiters = 10  # 最大迭代次数
+    theta = pd.Series(np.ones(n)*1)  # 设置权重参数的初始值
     # cost_val = cosst_function(theta, X, y)
     # cost_record.append(cost_val)
     iters = 0

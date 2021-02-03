@@ -414,7 +414,7 @@
     },
     watch: {
       '$route' () {
-        if (['trainForm'].indexOf(this.$route.name) > -1) {
+        if (this.$route.name === 'starttrain') {
           this.reload()
         }
       }

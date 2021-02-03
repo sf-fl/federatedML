@@ -127,4 +127,4 @@ def predict():
 if __name__ =='__main__':
     import sys
     os.chdir(os.path.dirname(os.path.dirname(sys.path[0])))
-    app.run(host='0.0.0.0',port='8081',debug=True)
+    app.run(host='0.0.0.0',port='8081')

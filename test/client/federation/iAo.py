@@ -1,6 +1,7 @@
 from client.iAo import FetchAndQuery as FAQ
 from client.proxy import client_proxy as cp
 import shutil
+from multiprocessing import Process,Lock
 
 global tasklist
 tasklist = []
@@ -34,7 +35,9 @@ def save_task(task_info, tag, tag2):
             add_task['task_progress'] = '预测中'
         id = FAQ.changeTask(add_task)
         shutil.move(r'./web_temp/data/train_data.csv', r'./client/data_storage/data_%s.csv' % id)
-        cp.beginTask(add_task,tag,id)
+        p1 = Process(target=cp.beginTask,args=(add_task,tag,id))
+        p1.start()
+
 
     # 发到对面 todo
 
