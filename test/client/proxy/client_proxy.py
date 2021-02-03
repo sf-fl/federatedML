@@ -52,6 +52,11 @@ def learn_2(gradB_pa,gradA_r,ip,port):
     return json.loads(r.text)
 
 
+def save(id, ip, port):
+    r = requests.post('http://%s:%s/train3' % (ip, port),json.dumps({'id':id}))
+    return r
+
+
 def predict(ub_list,ip,port):
     # mid_u_json = json.dumps([key_b,ub])
     mid_u_string = json.dumps(ub_list)
@@ -59,5 +64,3 @@ def predict(ub_list,ip,port):
     return json.loads(r.text)
 
 
-def learn_3():
-    pass

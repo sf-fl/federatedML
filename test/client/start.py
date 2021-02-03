@@ -25,7 +25,7 @@ def start(id,ip,port,key):
     result = train.tarin(x,y,ip,port)
 
     # 保存
-    model_save.save_model(result,id)
+    model_save.save_model(result,id,ip,port)
 
     # 预测
     pred = predict.predict(result[0],x,y,id,ip,port)

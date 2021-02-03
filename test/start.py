@@ -23,8 +23,9 @@ if __name__ == '__main__':
     os.chdir(sys.path[0])
     lock=Lock()
     p1 = Process(target=work1)
-    p2 = Process(target=work2)
+
     p1.start()
+    p2 = Process(target=work2)
     p2.start()
 
 

@@ -154,9 +154,10 @@ def logistic_regression(X, y,ip,port):
     # cost_record.append(cost_val)
     iters = 0
     while True:
-        print('\n----------------------------------------------\n\n第%d轮：' % (iters+1))
+        print('\n----------------------------------------------\n\n')
         if iters >= maxiters:
             break
+        print('第%d轮：' % (iters+1))
         grad = update_grad(theta, X, y,ip,port)
         print('当前梯度为',grad)
         # 权重参数更新

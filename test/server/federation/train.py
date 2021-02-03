@@ -20,6 +20,9 @@ def predict(ub_list):
     result = lr.pre(ub_list)
     return result
 
+def save(id):
+    lr.save(id)
+    return {'result':'success'}
 
 
 def train3(grad):

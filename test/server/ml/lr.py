@@ -136,6 +136,12 @@ def sigmoid(x):
     # TODO: Implement sigmoid function
     return 1/(1 + np.exp(-x))
 
+
+def save(id):
+    model = theta_a
+    model.to_csv(r'./server/data_storage/model_%s.csv' % id)
+
+
 def pre(ub_list):
     x_a = alignment.x
     global theta_a
