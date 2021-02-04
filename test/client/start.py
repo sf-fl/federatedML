@@ -33,6 +33,10 @@ def start(id,ip,port,key):
 
     # 预测
     pred = predict.predict(result[0],x,y,id,ip,port)
+    auc,ks = predict.calculate(pred)
+    taskinfo['auc'] = auc
+    taskinfo['ks'] = ks
+    FAQ.changeTask(taskinfo)
 
 
 

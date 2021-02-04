@@ -9,3 +9,6 @@ def predict(theta,x,y,id,ip,port):
     result = lr.predict(theta,x,y,ip,port)
     result.to_csv('result.csv')
     return result
+
+def calculate(pred):
+    return 0,0
