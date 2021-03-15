@@ -18,8 +18,11 @@ import PredictInfo from '../views/predictform/pre_info'
 import TaskTable from '../views/tasktable/task_table'
 import ApplyTable from '../views/applytable/apply_table'
 
-
 const routes = [
+  {
+    path: '/',
+    redirect: '/login'
+  },
   // Login View
   {
     path: '/login',

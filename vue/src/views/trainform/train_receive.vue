@@ -244,6 +244,10 @@
       getTaskTrainForm () {
         this.id = this.$route.params.id
         console.log(this.id)
+        if (this.id === undefined) {
+          this.model.taskID = '暂时无法支持直接输入ID'
+          this.model.taskname = '请从任务列表选择进入'
+        }
         axios.post('http://127.0.0.1:5000/trainform', this.id)
           .then(response => {
             console.log(response.data)
