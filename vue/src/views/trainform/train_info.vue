@@ -119,8 +119,9 @@
     </el-row>
   </div>
 </template>
-<script>
 
+<script>
+import API from '../../api'
 import axios from 'axios'
 
 export default {
@@ -172,7 +173,7 @@ export default {
         this.formData.taskID = '暂时无法支持直接输入ID'
         this.formData.taskname = '请从任务列表选择进入'
       }
-      axios.post('http://127.0.0.1:5000/traininfo', this.id)
+      axios.post(API.TRAIN_INFO, this.id)
         .then(response => {
           console.log(response.data)
           this.formData = response.data

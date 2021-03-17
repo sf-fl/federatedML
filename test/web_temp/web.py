@@ -162,4 +162,4 @@ def login():
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(sys.path[0]))
-    app.run(debug=False)
+    app.run(host='0.0.0.0',debug=False)

@@ -216,7 +216,7 @@ export default {
       if (Object.keys(params).length < 2) {
         url = API.QUERY_LIST
       }
-      url = 'http://127.0.0.1:5000/applylist'
+      url = API.APPLY_LIST
       console.log(Object.keys(params))
       this.loading = true
       console.log(params)

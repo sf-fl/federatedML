@@ -6,8 +6,8 @@ import Vue from 'vue'
 import API from '../../api'
 import qs from 'qs'
 
-// let LoginPath = API.USER_LOGIN
-let LoginPath = 'http://127.0.0.1:5000/login'
+let LoginPath = API.USER_LOGIN
+// let LoginPath = 'http://10.116.3.81:5000/login'
 
 export const login = ({ commit }, form) => {
   // test for login

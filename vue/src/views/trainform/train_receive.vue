@@ -248,7 +248,7 @@
           this.model.taskID = '暂时无法支持直接输入ID'
           this.model.taskname = '请从任务列表选择进入'
         }
-        axios.post('http://127.0.0.1:5000/trainform', this.id)
+        axios.post(API.TRAIN_FORM, this.id)
           .then(response => {
             console.log(response.data)
             this.model = response.data
@@ -266,7 +266,7 @@
         this.param = new window.FormData() // 创建form对象
         this.param.append('file', this.file) // 通过append向form对象添加数据
         console.log(this.param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
-        axios.post('http://127.0.0.1:5000/upload', this.param, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}) // 请求头要为表单
+        axios.post(API.UPLOAD, this.param, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}) // 请求头要为表单
           .then(response => {
             console.log(response.data)
           })
@@ -295,7 +295,7 @@
         let cond = Object.assign({}, this.model)
         // cond.expireDate = new Date(cond.expireDate).valueOf()
         this.loading = true
-        axios.post('http://127.0.0.1:5000/append_traintask', qs.stringify(cond))
+        axios.post(API.APPEND_TRAINTASK, qs.stringify(cond))
           .then(data => {
             this.loading = false
             this.n3Alert({

@@ -1,6 +1,5 @@
 from server.ml import lr
 
-import rsa
 
 def train1(keyAndu):
     ppk_b = keyAndu[0]
