@@ -1,15 +1,9 @@
 import Login from '../views/login'
 import CommonLayout from '../layout'
 
-import NormalForm from '../views/form'
-import NormalTable from '../views/table'
-
 import TrainFormStart from '../views/trainform/train_start'
 import TrainFormAppend from '../views/trainform/train_receive'
 import TrainInfo from '../views/trainform/train_info'
-
-import ProjectFormStart from '../views/projectform/pro_start'
-import ProjectFormReceive from '../views/projectform/pro_receive'
 
 import PredictFormStart from '../views/predictform/pre_start'
 import PredictFormAppend from '../views/predictform/pre_receive'
@@ -59,7 +53,7 @@ const routes = [
     children: [
       {
         path: '/overall/',
-        component: NormalTable,
+        component: null,
         name: 'normalTable',
         meta: {
           label: '项目列表(禁用）'
@@ -96,7 +90,7 @@ const routes = [
     children: [
       {
         path: '/project/start',
-        component: ProjectFormStart,
+        component: null,
         name: 'startproject',
         meta: {
           label: '发起项目（禁用）'
@@ -178,7 +172,7 @@ const routes = [
   },
   {
     path: '*',
-    redirect: '/table/'
+    redirect: '/projecttable/'
   }
 ]
 

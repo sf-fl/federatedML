@@ -417,6 +417,9 @@
         if (this.$route.name === 'starttrain') {
           this.reload()
         }
+        if (['trainForm'].indexOf(this.$route.name) > -1) {
+          this.reload()
+        }
       }
     },
     created () {

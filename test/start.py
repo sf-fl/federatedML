@@ -9,14 +9,14 @@ def work1():
     # lock.acquire()
     time.sleep(1)
     print(1111)
-    # web.app.run(port=5000,debug=False)
+    web.app.run(host='0.0.0.0',port=5000,debug=False)
     # lock.release()
 
 def work2():
     time.sleep(2)
     print(2222)
     # lock.acquire()
-    # server_proxy.app.run(port=8081,debug=False)
+    server_proxy.app.run(host='0.0.0.0',port=8081,debug=False)
     # lock.release()
 
 if __name__ == '__main__':

@@ -238,7 +238,7 @@
               this.$router.replace(this.$route.query.back)
             } else {
               this.$router.replace({
-                name: 'table'
+                name: 'taskTable'
               })
             }
           })

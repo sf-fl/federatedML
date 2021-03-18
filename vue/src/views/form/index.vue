@@ -112,7 +112,7 @@
   import qs from 'qs'
   import { mapState } from 'vuex'
   import { randomPassword, dateFormat } from '../../utils'
-  
+
   export default {
     computed: {
       ...mapState(['user'])
@@ -163,7 +163,7 @@
               duration: 2000,
               width:'240px' // 内容不确定，建议设置width
             })
-            this.$router.push('/table/')
+            this.$router.push('/projecttable/')
           })
           .catch(error => {
             this.loading = false
