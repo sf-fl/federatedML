@@ -1,0 +1,2 @@
+webpackJsonp([0,1],{421:function(e,t,n){var s=n(4)(null,n(427),null,null);e.exports=s.exports},427:function(e,t){e.exports={render:function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("section",{staticClass:"test-page"},[e._v("\n  test page\n")])},staticRenderFns:[]}}});
+//# sourceMappingURL=0.560533f2bc7ea8e2ae00.js.map

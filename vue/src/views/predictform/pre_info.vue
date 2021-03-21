@@ -131,35 +131,35 @@ export default {
     return {
       formData: {
         taskID: '',
-        taskname: "",
-        projectname: "",
-        modelname: "",
-        MLA: "",
-        alianfeature: "",
-        createtime: "",
-        lastmodify: "",
-        userIPPort: "",
-        partnerIP: "",
-        partnerIPPort: "",
-        partnerPort: "",
-        datainfo: "",
-        trainratio: "",
-        fileloc: "",
-        ks: "",
-        auc: "",
-        dbloc: "",
-        feature: ""
+        taskname: '',
+        projectname: '',
+        modelname: '',
+        MLA: '',
+        alianfeature: '',
+        createtime: '',
+        lastmodify: '',
+        userIPPort: '',
+        partnerIP: '',
+        partnerIPPort: '',
+        partnerPort: '',
+        datainfo: '',
+        trainratio: '',
+        fileloc: '',
+        ks: '',
+        auc: '',
+        dbloc: '',
+        feature: ''
       },
       rules: {},
       featureOptions: [{
-        "label": "选项一",
-        "value": 1
+        'label': '选项一',
+        'value': 1
       }, {
-        "label": "选项二",
-        "value": 2
+        'label': '选项二',
+        'value': 2
       }, {
-        "label": '',
-        "value": ''
+        'label': '',
+        'value': ''
       }]
     }
   },

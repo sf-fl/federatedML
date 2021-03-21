@@ -1,4 +1,4 @@
-from client.ml import lr
+from client.ml import lr,show
 import pandas as pd
 
 def predict(theta,x,y,id,ip,port):
@@ -10,5 +10,6 @@ def predict(theta,x,y,id,ip,port):
     result.to_csv('result.csv')
     return result
 
-def calculate(pred):
-    return 0,0
+def calculate(pred,y):
+    auc,ks = show.evaluate(pred,y)
+    return auc,ks
