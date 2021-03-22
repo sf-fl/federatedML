@@ -29,6 +29,8 @@ def index():
 @app.route('/test' , methods=['GET'])
 def test():
     try:
+        id = request.args.get('id')
+        iAo.start_task(id,'train')
         return '连接成功！'
     except Exception as e:
         print(e)

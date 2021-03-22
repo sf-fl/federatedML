@@ -15,7 +15,7 @@ def start(id,ip,port,key):
 
     taskinfo = {'task_id':id, }
     # 连接测试
-    print(client_proxy.test(ip,port))
+    print(client_proxy.test(id,ip,port))
 
     # 对齐模块
     x_raw,y_raw = alignment.align(id,key,ip,port)
@@ -33,7 +33,8 @@ def start(id,ip,port,key):
 
     # 预测
     pred = predict.predict(result[0],x,y,id,ip,port)
-    auc,ks = predict.calculate(pred,y)
+    auc,ks = predict.calculate(y,pred)
+    print(auc,ks)
     taskinfo['auc'] = auc
     taskinfo['ks'] = ks
     FAQ.changeTask(taskinfo)

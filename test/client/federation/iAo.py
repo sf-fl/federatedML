@@ -39,7 +39,14 @@ def save_task(task_info, tag, tag2):
         p1.start()
 
 
-    # 发到对面 todo
+    # 发到对面
+def start_task(id,tag):
+    task_info = FAQ.taskDetails(id).T.to_dict()[0]
+    if tag == 'train':
+        task_info['task_progress'] = '训练中'
+    else:
+        task_info['task_progress'] = '预测中'
+    FAQ.changeTask(task_info)
 
 def receive_task(task_info,tag):
     if tag == 'train':

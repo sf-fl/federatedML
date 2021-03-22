@@ -10,6 +10,6 @@ def predict(theta,x,y,id,ip,port):
     result.to_csv('result.csv')
     return result
 
-def calculate(pred,y):
-    auc,ks = show.evaluate(pred,y)
+def calculate(y,pred):
+    auc,ks = show.evaluate(y,pred)
     return auc,ks

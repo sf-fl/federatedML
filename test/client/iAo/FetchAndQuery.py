@@ -13,7 +13,7 @@ def signIn(username, passwd):
     db_nickname = 'sys'
     tablename = 'account'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -51,7 +51,7 @@ def taskList():
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -91,7 +91,7 @@ def appendTaskList():
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -131,7 +131,7 @@ def trainTaskList():
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -169,7 +169,7 @@ def predictTaskList():
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -206,7 +206,7 @@ def taskDetails(task_id, task_name=None):
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -245,7 +245,7 @@ def initiateTask(task_details):
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -319,7 +319,7 @@ def changeTask(task_details):
     db_nickname = 'sys'
     tablename = 'task'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -400,7 +400,7 @@ def changeTask(task_details):
 # 从Mysql数据库取数
 def dataFetchMysql(databasename, tablename):
     config=configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid=config.get(databasename,'uid')
     pwd=config.get(databasename,'pwd')
     host=config.get(databasename,'ip')
@@ -421,7 +421,7 @@ def dataFetchMysql(databasename, tablename):
 # 从oracle数据库取数
 def dataFetchOracle(databasename, tablename):
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(databasename, 'uid')
     pwd = config.get(databasename, 'pwd')
     host = config.get(databasename, 'ip')

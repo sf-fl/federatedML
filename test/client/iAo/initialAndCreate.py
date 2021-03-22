@@ -12,7 +12,7 @@ import sys
 def CreateTable():
     db_nickname='sys'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(), 'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')
@@ -114,7 +114,7 @@ def Register(username,passwd,identity):
     db_nickname='sys'
     tablename='account'
     config = configparser.ConfigParser()
-    config.read('.\\config\\dbconfig.conf')
+    config.read(os.path.join(os.getcwd(),'config/dbconfig.conf'))
     uid = config.get(db_nickname, 'uid')
     pwd = config.get(db_nickname, 'pwd')
     host = config.get(db_nickname, 'ip')

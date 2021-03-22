@@ -56,7 +56,7 @@ const routes = [
         component: null,
         name: 'normalTable',
         meta: {
-          label: '项目列表(禁用）'
+          label: '项目列表（禁用）'
         }
       },
       {

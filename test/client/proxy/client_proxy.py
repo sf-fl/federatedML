@@ -21,8 +21,8 @@ def beginTask(addtask,tag,id):
     return 0
 
 
-def test(ip,port):
-    r = requests.get('http://%s:%s/test' %(ip,port))
+def test(id,ip,port):
+    r = requests.get('http://%s:%s/test?id=%s' %(ip,port,id))
     return r.text
 
 
