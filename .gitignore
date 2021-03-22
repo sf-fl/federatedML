@@ -1,9 +1,8 @@
-# common file patterns
+﻿# common file patterns
 .DS_STORE
 .idea
 *.iml
 *.pyc
-*.png
 __pycache__
 *.jar
 *.class
