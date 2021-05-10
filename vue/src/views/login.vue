@@ -208,7 +208,7 @@
         if (!this.account) {
           return this.n3Alert({
             content: '请输入账号',
-            type: 'success',
+            type: 'warning',
             placement: 'top-right',
             duration: 2000,
             width: '240px'
@@ -217,7 +217,7 @@
         if (!this.password) {
           return this.n3Alert({
             content: '请输入密码',
-            type: 'success',
+            type: 'warning',
             placement: 'top-right',
             duration: 2000,
             width: '240px'
@@ -232,26 +232,26 @@
           account: this.account,
           password: this.password
         })
-          .then(data => {
-            this.loading = false
-            if (this.$route.query.back) {
-              this.$router.replace(this.$route.query.back)
-            } else {
-              this.$router.replace({
-                name: 'taskTable'
-              })
-            }
-          })
-          .catch(error => {
-            this.loading = false
-            this.n3Alert({
-              content: error || '登录失败，请检查账号密码~',
-              type: 'success',
-              placement: 'top-right',
-              duration: 2000,
-              width: '240px'
+        .then(data => {
+          this.loading = false
+          if (this.$route.query.back) {
+            this.$router.replace(this.$route.query.back)
+          } else {
+            this.$router.replace({
+              name: 'taskTable'
             })
+          }
+        })
+        .catch(error => {
+          this.loading = false
+          return this.n3Alert({
+            content: '登录失败，请检查账号密码~',
+            type: 'danger',
+            placement: 'top-right',
+            duration: 2000,
+            width: '240px'
           })
+        })
       },
       render: render
     },

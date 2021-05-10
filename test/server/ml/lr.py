@@ -15,7 +15,7 @@ theta_a = None
 rsa_len = 1112
 ppk_a, psk_a = paillier.gen_key()
 scal = 1000
-alpha = 0.5
+alpha = 0.1
 
 def cal_ua(x,theta):
     temp1 = np.dot(theta.T, x)
@@ -73,16 +73,16 @@ def generate_random(n):
 
 
 def lr1(ubb_list,ppk_b):
-    lamb = 0.1
+    lamb = 0.5
     x_a = alignment.x
     n = alignment.x.shape[1]  # 特征个数
     global theta_a
     if theta_a is None:
-        theta_a = pd.Series(np.ones(n)*10)
+        theta_a = pd.Series(np.ones(n))
     theta = theta_a.apply(lambda x: int(x * scal))
     uaa_list = []
     # gradA_pb = theta.apply(lambda x : int(paillier.encipher((-lamb * 2 * (scal ** 2) * x),ppk_b)))
-    gradA_pb =  pd.Series(np.zeros(n)).apply(lambda x: int(paillier.encipher((-lamb * 2 * (scal ** 2) * x), ppk_b)))
+    gradA_pb = pd.Series(np.zeros(n)).apply(lambda x: int(paillier.encipher((-lamb * 2 * (scal ** 2) * x), ppk_b)))
     print(x_a.shape[0])
     time_start = time.time()
     for i in range(x_a.shape[0]):
@@ -112,6 +112,7 @@ def lr1(ubb_list,ppk_b):
     print('uaa和garb的计算耗时：',time.time()-time_start)
     return [gradA_pb, uaa_list,ppk_a]
 
+
 def lr2(gradB_pa, gradA_r):
     # 给B解密
     time_start = time.time()
@@ -127,13 +128,13 @@ def lr2(gradB_pa, gradA_r):
     print('当前梯度为',grad)
     global theta_a,alpha
     theta_a = theta_a - alpha * grad
-    alpha *= 0.97
+    # alpha *= 0.98
     print('学习率：', alpha)
     print('theta_a',theta_a)
     return gradB_r
 
+
 def sigmoid(x):
-    # TODO: Implement sigmoid function
     return 1/(1 + np.exp(-x))
 
 

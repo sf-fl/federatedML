@@ -8,8 +8,9 @@ def update_taskdf(type):
     tasklist = iAo.show_task_list(type)
 
     if type == 'apply':
-        col = {'task_id':'taskID','task_name':'taskName', 'participant_name':'partner', 'learning_algorithm':'learningType',
-               'task_progress':'taskState', 'operation_time':'lastModifyTime'}
+        col = {'task_id': 'taskID','task_name': 'taskName', 'participant_name': 'partner',
+               'learning_algorithm': 'learningType',
+               'task_progress': 'taskState', 'operation_time': 'lastModifyTime'}
         tasklist.rename(columns=col, inplace=True)
         tasklist['taskState_ID'] = tasklist['taskState']+'__'+tasklist['taskID'].map(str)
 
@@ -50,12 +51,12 @@ def get_train_info(id):
     taskinfo = iAo.show_task_info(id)
     result = taskinfo[['task_id','task_name','model_name','project_name','create_time',
                        'participant_ip','participant_port','ip','port_num','operation_time',
-                       'learning_algorithm','participant_name','align','train_proportion']]
+                       'learning_algorithm','participant_name','align','train_proportion','auc','ks']]
     col = {'task_id': 'taskID', 'task_name': 'taskname', 'participant_name': 'partnername',
            'learning_algorithm': 'MLA','participant_ip':'partnerIP','participant_port':'partnerPort',
            'ip': 'userIP', 'port_num': 'userPort','create_time': 'createtime', 'operation_time': 'lastmodify',
            'train_proportion': 'trainratio', 'align': 'alianfeature','model_name':'modelname',
-           'project_name':'projectname'}
+           'project_name':'projectname','ks': 'ks','auc': 'auc'}
     result.rename(columns=col, inplace=True)
     result['userIPPort'] = result['userIP'] + ':' + result['userPort']
     result['partnerIPPort'] = result['partnerIP'] + ':' + result['partnerPort']

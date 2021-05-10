@@ -150,14 +150,18 @@ def append_predicttask():
 
 @app.route('/login',methods=["POST"])
 def login():
-    request_info = request.form.to_dict()
-    flag = iAo.login(request_info['account'],request_info['password'])
-    session = 'xxxxxxxxxx'
-    accountId = 'xxx'
-    result = {'state': flag, 'data': {}}
-    result['data']['accountId'] = accountId
-    result['data']['session'] = session
-    return result
+    try:
+        request_info = request.form.to_dict()
+        flag = iAo.login(request_info['account'],request_info['password'])
+        session = request_info['session']
+        accountId = 'xxx'
+        result = {'state': flag, 'data': {}}
+        result['data']['accountId'] = accountId
+        result['data']['session'] = session
+        return result
+    except Exception as e:
+        # writelog todo
+        return e
 
 
 if __name__ == "__main__":

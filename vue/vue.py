@@ -29,7 +29,7 @@ if __name__ =='__main__':
     os.chdir((sys.path[0]))
     ip = get_host_ip()  # todo 存ip
     port = 5000   # todo 读配置
-    path_list = os.listdir('static/js')
+    path_list = os.listdir('docs/static/js')
     fl = ''
     for filename in path_list:
         if 'app.' in filename and 'map' not in filename:

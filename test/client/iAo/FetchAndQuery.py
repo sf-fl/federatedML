@@ -30,16 +30,15 @@ def signIn(username, passwd):
         return(tag)
     cur = conn.cursor()
     # 读取当前表，判断用户密码是否正确
-    try:
-        cur.execute('select * from %s.%s where username=\'%s\'' % (databasename, tablename,username))
-        if passwd==cur.fetchone()[2]:
-            print('密码输入正确')
-            tag=1
-        else:
-            print('密码错误')
-    except Exception as e:
-        print(e)
-        return(tag)
+    cur.execute('select * from %s.%s where username=\'%s\'' % (databasename, tablename,username))
+    temp = cur.fetchone()
+    if temp == ():
+        print('账号不存在')
+    elif passwd == temp[2]:
+        print('密码输入正确')
+        tag = 1
+    else:
+        print('密码错误')
     cur.close()
     conn.close()
     return tag   # 登录成功返回1,否则返回0
@@ -314,7 +313,7 @@ def initiateTask(task_details):
     return task_id
 
 
-# 发起任务
+# 更新任务
 def changeTask(task_details):
     db_nickname = 'sys'
     tablename = 'task'
@@ -387,7 +386,7 @@ def changeTask(task_details):
         conn.begin()
         cur.execute(sql)
         conn.commit()
-        print('任务创建成功，任务ID：%s，任务名称：%s'%(task_id,task_name))
+        print('任务更新成功，任务ID：%s，任务名称：%s'%(task_id,task_name))
     except Exception as e:
         print(e)
         return task_id

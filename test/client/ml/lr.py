@@ -6,8 +6,9 @@ import pandas as pd
 # import rsa.core
 from client.eAd import paillier
 from client.proxy import client_proxy
+from multiprocessing import Pool
 
-lamb = 0.1
+lamb = 0.5
 scal = 1000
 
 
@@ -66,7 +67,11 @@ def int2bytes(number: int, fill_size: int = 0) -> bytes:
 
 
 def generate_random(n):
-    return np.trunc(np.random.rand(n)*(scal**3)*10+(scal**3))# todo
+    return np.trunc(np.random.rand(n)*(scal**3)*10+(scal**3))  # todo
+
+
+def cal_gradB_pa(df, ppk_a):
+    return df.apply(lambda x: int(paillier.encipher(-lamb * 2 * (scal ** 2) * x, ppk_a)))
 
 
 def update_grad(theta_b,x_b,y_b,ip,port):
@@ -89,12 +94,19 @@ def update_grad(theta_b,x_b,y_b,ip,port):
         ub_list.append(ub_code)
     print('100%')
     print('ubb计算耗时：',time.time()-time_start)
-    gradA_pb, uaa_list, ppk_a = client_proxy.learn_1(ub_list,ppk_b,ip,port)
+    gradA_pb, uaa_list, ppk_a = client_proxy.learn_1(ub_list, ppk_b, ip, port)
 
     # 计算gbra
     time_start = time.time()
     # gradB_pa = theta.apply(lambda x: int(paillier.encipher(-lamb * 2 * (scal ** 2) * x, ppk_a)))
+
     gradB_pa = pd.Series(np.zeros(x_b.shape[1])).apply(lambda x: int(paillier.encipher(-lamb * 2 * (scal ** 2) * x, ppk_a)))
+    # gradB_pa = pd.Series(np.zeros(x_b.shape[1]))
+    # temp_parts = np.array_split(gradB_pa, 100)
+    # with Pool() as pool:
+    #     result_parts = pool.apply(cal_gradB_pa, (temp_parts, ppk_a))
+    # gradB_pa = pd.concat(result_parts)
+
     for i in range(x_b.shape[0]):
         xb = x_b.iloc[i].apply(lambda x: int(x*scal))
         yb = y_b.iloc[i].apply(lambda x: int(x*scal*scal))
@@ -147,9 +159,9 @@ def logistic_regression(X, y,ip,port):
     y = y.replace(0,-1)
     # y = y.reshape(m, 1)
     # cost_record = []  # 记录代价函数的值
-    alpha = 0.5  # 学习率
-    maxiters = 10  # 最大迭代次数
-    theta = pd.Series(np.ones(n)*1)  # 设置权重参数的初始值
+    alpha = 0.1  # 学习率
+    maxiters = 200  # 最大迭代次数
+    theta = pd.Series(np.ones(n))  # 设置权重参数的初始值
     # cost_val = cosst_function(theta, X, y)
     # cost_record.append(cost_val)
     iters = 0
@@ -168,7 +180,7 @@ def logistic_regression(X, y,ip,port):
         # cost_val = cost_update
         # cost_record.append(cost_val)
         iters += 1
-        alpha *= 0.97
+        # alpha *= 0.98
         print('学习率：',alpha)
     end = time.time()
     print("cost time: %f s" % (end - start))
