@@ -41,7 +41,7 @@ def save_task(task_info, tag, tag2):
 
     # 发到对面
 def start_task(id,tag):
-    task_info = FAQ.taskDetails(id).T.to_dict()[0]
+    task_info = FAQ.taskDetails(int(id)).T.to_dict()[0]
     if tag == 'train':
         task_info['task_progress'] = '训练中'
     else:

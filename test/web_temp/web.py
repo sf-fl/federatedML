@@ -163,6 +163,12 @@ def login():
         # writelog todo
         return e
 
+@app.route('/traindetail',methods=["GET"])
+def train_detail():
+    id = int(list(request.values.to_dict().keys())[0])
+    returndict = temp_file.get_train_detail(id)[0]
+    return returndict
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(sys.path[0]))

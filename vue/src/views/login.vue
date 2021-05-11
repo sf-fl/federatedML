@@ -245,7 +245,7 @@
         .catch(error => {
           this.loading = false
           return this.n3Alert({
-            content: '登录失败，请检查账号密码~',
+            content: '登录失败，请检查后端接口或账号密码~',
             type: 'danger',
             placement: 'top-right',
             duration: 2000,

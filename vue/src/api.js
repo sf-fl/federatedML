@@ -12,6 +12,7 @@ const API = {
   APPLY_LIST: '/flp/applylist',
   TRAIN_FORM: '/flp/trainform',
   TRAIN_INFO: '/flp/traininfo',
+  TRAIN_DETAIL: '/flp/traindetail',
   UPLOAD: '/flp/upload',
   ADD_TRAINTASK: '/flp/add_traintask',
   ADD_PREDICTTASK: '/flp/add_predicttask',

@@ -223,7 +223,7 @@ def taskDetails(task_id, task_name=None):
     cur = conn.cursor()
     # 读取任务表，得到所需任务
     if task_name is not None:
-        sql='select * from %s.%s where task_id=%d and task_name=\'%s\';' % (databasename, tablename,task_id,task_name)
+        sql = 'select * from %s.%s where task_id=%d and task_name=\'%s\';' % (databasename, tablename,task_id,task_name)
     else:
         sql = 'select * from %s.%s where task_id=%d;' % (databasename, tablename, task_id)
     try:

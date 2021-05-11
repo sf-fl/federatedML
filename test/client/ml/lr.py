@@ -6,6 +6,7 @@ import pandas as pd
 # import rsa.core
 from client.eAd import paillier
 from client.proxy import client_proxy
+from client.federation import tools
 from multiprocessing import Pool
 
 lamb = 0.5
@@ -146,7 +147,7 @@ def update_theta(grad, theta, alpha):
     return theta
 
 
-def logistic_regression(X, y,ip,port):
+def logistic_regression(X, y,ip,port,id):
     """
     逻辑回归算法
     :param X: mxn矩阵
@@ -166,15 +167,19 @@ def logistic_regression(X, y,ip,port):
     # cost_record.append(cost_val)
     iters = 0
     while True:
+        temp_detail = '\n----------------------------------------------\n\n'
         print('\n----------------------------------------------\n\n')
         if iters >= maxiters:
             break
+        temp_detail += '第%d轮：\n' % (iters+1)
         print('第%d轮：' % (iters+1))
         grad = update_grad(theta, X, y,ip,port)
+        temp_detail += '当前梯度为'+sum([i+'\n' for i in grad])+'\n'
         print('当前梯度为',grad)
         # 权重参数更新
         new_theta = update_theta(grad, theta, alpha)
         theta = new_theta
+        temp_detail += 'theta_B = ' + theta + '\n'
         print('theta_B = ',theta)
         # cost_update = cosst_function(new_theta, X, y)
         # cost_val = cost_update
@@ -182,6 +187,7 @@ def logistic_regression(X, y,ip,port):
         iters += 1
         # alpha *= 0.98
         print('学习率：',alpha)
+        tools.write_detail(id,temp_detail,'a+')
     end = time.time()
     print("cost time: %f s" % (end - start))
     print('theta = ', theta)

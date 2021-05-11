@@ -35,14 +35,11 @@
         need
         :label-col="3"
       >
-<!--        <input type="file" @change="inputFileChange">-->
         <input class="file" name="file" type="file"  accept=".csv" @change="update"/>
         <div class="i-tips">
           文件目前只接受csv
         </div>
-<!--        <n3-button @click.native="clicks" type="primary" size="mini" >上传</n3-button>-->
       </n3-form-item>
-
       <n3-form-item
         label="对齐字段"
         need
@@ -206,14 +203,14 @@
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         },
         featureOptions: [{
-          "label": "选项一",
-          "value": 1
+          'label': '选项一',
+          'value': 1
         }, {
-          "label": "选项二",
-          "value": 2
+          'label': '选项二',
+          'value': 2
         }, {
-          "label": "",
-          "value": ""
+          'label': '',
+          'value': ''
         }],
         loading: false,
         files: ''

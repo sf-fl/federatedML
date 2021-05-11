@@ -107,13 +107,46 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item size="large">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-button type="primary" @click="toPredict">发起预测</el-button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-button @click="backToTable">返回列表</el-button>
+
+        <el-col :span="22">
+          <el-row type="flex" justify="left" align="middle">
+            <el-col :span="22">
+              <el-form-item label="进度" :prop="formData.progress">
+                <el-slider :max='6' :step='1' v-model="formData.progress" :show-stops="true" :disabled='true'>
+                </el-slider>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-col>
+
+        <el-col :span="20">
+          <el-row type="flex" justify="center">
+            <el-steps :active="milepostActive">
+              <el-step v-for="(value, key) in milepost"
+                       :class="milepostActive== key+1 ? stepActive: allstep "
+                       :title="value.title"
+                       :description="value.description">
+              </el-step>
+            </el-steps>
+          </el-row>
+        </el-col>
+
+        <el-col :span="11">
+          <el-form-item label="详细进度" :prop="info">
+            <el-input v-model="info" type="textarea" placeholder="等待详细信息"
+                      :autosize="{minRows: 6, maxRows: 6}" :style="{width: '150%'}" readonly></el-input>
           </el-form-item>
+        </el-col>
+
+        <el-col :span="20">
+          <el-row type="flex" justify="center">
+            <el-form-item size="large">
+              <el-button type="primary" @click="toPredict">发起预测</el-button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <el-button @click="backToTable">返回列表</el-button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </el-form-item>
+          </el-row>
         </el-col>
       </el-form>
     </el-row>
@@ -123,6 +156,7 @@
 <script>
 import API from '../../api'
 import axios from 'axios'
+import {dateFormat} from "../../utils";
 
 export default {
   components: {},
@@ -131,40 +165,57 @@ export default {
     return {
       formData: {
         taskID: '',
-        taskname: "",
-        projectname: "",
-        modelname: "",
-        MLA: "",
-        alianfeature: "",
-        createtime: "",
-        lastmodify: "",
-        userIPPort: "",
-        partnerIP: "",
-        partnerIPPort: "",
-        partnerPort: "",
-        datainfo: "",
-        trainratio: "",
-        fileloc: "",
-        ks: "",
-        auc: "",
-        dbloc: "",
-        feature: ""
+        taskname: '',
+        projectname: '',
+        modelname: '',
+        MLA: '',
+        alianfeature: '',
+        createtime: '',
+        lastmodify: '',
+        userIPPort: '',
+        partnerIP: '',
+        partnerIPPort: '',
+        partnerPort: '',
+        datainfo: '',
+        trainratio: '',
+        fileloc: '',
+        ks: '',
+        auc: '',
+        dbloc: '',
+        feature: '',
+        progress: 3
       },
       rules: {},
       featureOptions: [{
-        "label": "选项一",
-        "value": 1
+        'label': '选项一',
+        'value': 1
       }, {
-        "label": "选项二",
-        "value": 2
+        'label': '选项二',
+        'value': 2
       }, {
-        "label": '',
-        "value": ''
-      }]
+        'label': '',
+        'value': ''
+      }],
+      info: '',
+      // 数组对象
+      milepost: [
+        // eslint-disable-next-line no-useless-escape
+        {title: '测试连接', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
+        {title: '对齐', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
+        {title: '预处理', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
+        {title: '训练', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
+        {title: '保存结果', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
+        {title: '验证', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
+        {title: '完成', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
+      ],
+      // 默认步骤数
+      milepostActive: 3,
+      // 动态添加类名
+      stepActive: 'stepActive',
+      allstep: 'allStep'
     }
   },
   computed: {},
-  mounted () {},
   methods: {
     reload () {
       this.id = this.$route.params.id
@@ -198,6 +249,18 @@ export default {
     backToTable () {
       this.$router.push('/overall/task')
     },
+    // updateInfo () {
+    //   console.log('data =', this.formData)
+    //   axios.get(API.TRAIN_DETAIL, this.id)
+    //   .then(data => {
+    //     console.log(data)
+    //     this.info = data.result.data || []
+    //     console.log(this.source)
+    //     this.pagination.total = data.result.total || 0
+    //     console.log(this.pagination.total)
+    //     this.loading = false
+    //   })
+    // },
   },
   watch: {
     '$route' () {
@@ -209,11 +272,53 @@ export default {
       }
     }
   },
+  mounted () {
+    // setInterval(() => {
+    //   this.updateInfo();
+    // }, 3000)
+  },
   created () {
     this.reload()
   }
 }
 
 </script>
-<style>
+
+<style lang="scss">
+.el-step.is-horizontal.stepActive{
+
+  .el-step__head.is-finish{
+    .el-step__line{
+      // 当前步骤数横线样式设置
+      .el-step__line-inner{
+        width: 100% !important;
+        border-width: 0 !important;
+
+      }
+      background: transparent;
+      border-top: 5px dotted;
+    }
+    // 当前步骤数圆圈样式设置
+    .el-step__icon.is-text{
+      background: #409eff;
+      color:#fff;
+    }
+  }
+}
+.allStep{
+  .el-step__head.is-finish{
+    .el-step__line{
+      // 当前步骤数横线样式设置
+      .el-step__line-inner{
+        width: 100% !important;
+        border-width: 1px !important;
+      }
+    }
+    // 当前步骤数圆圈样式设置
+    .el-step__icon.is-text{
+      background: #409eff;
+      color:#fff;
+    }
+  }
+}
 </style>
