@@ -174,12 +174,16 @@ def logistic_regression(X, y,ip,port,id):
         temp_detail += '第%d轮：\n' % (iters+1)
         print('第%d轮：' % (iters+1))
         grad = update_grad(theta, X, y,ip,port)
-        temp_detail += '当前梯度为'+sum([i+'\n' for i in grad])+'\n'
+        temp_detail += '当前梯度为' + '\n'
+        for temp in grad:
+            temp_detail += str(temp)+'\n'
         print('当前梯度为',grad)
         # 权重参数更新
         new_theta = update_theta(grad, theta, alpha)
         theta = new_theta
-        temp_detail += 'theta_B = ' + theta + '\n'
+        temp_detail += 'theta_B = \n'
+        for temp in theta:
+            temp_detail += str(temp)+'\n'
         print('theta_B = ',theta)
         # cost_update = cosst_function(new_theta, X, y)
         # cost_val = cost_update

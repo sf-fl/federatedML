@@ -132,9 +132,9 @@
         </el-col>
 
         <el-col :span="11">
-          <el-form-item label="详细进度" :prop="info">
-            <el-input v-model="info" type="textarea" placeholder="等待详细信息"
-                      :autosize="{minRows: 6, maxRows: 6}" :style="{width: '150%'}" readonly></el-input>
+          <el-form-item label="详细进度">
+            <el-input v-model="info" type="textarea" placeholder="等待详细信息" autofocus="autofocus"
+                      :autosize="{minRows: 10, maxRows:20}" :style="{width: '150%'}" ></el-input>
           </el-form-item>
         </el-col>
 
@@ -209,7 +209,7 @@ export default {
         {title: '完成', description: '\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003\u2003'},
       ],
       // 默认步骤数
-      milepostActive: 3,
+      milepostActive: 1,
       // 动态添加类名
       stepActive: 'stepActive',
       allstep: 'allStep'
@@ -249,33 +249,37 @@ export default {
     backToTable () {
       this.$router.push('/overall/task')
     },
-    // updateInfo () {
-    //   console.log('data =', this.formData)
-    //   axios.get(API.TRAIN_DETAIL, this.id)
-    //   .then(data => {
-    //     console.log(data)
-    //     this.info = data.result.data || []
-    //     console.log(this.source)
-    //     this.pagination.total = data.result.total || 0
-    //     console.log(this.pagination.total)
-    //     this.loading = false
-    //   })
-    // },
+    updateInfo () {
+      console.log('data =', this.formData)
+      // eslint-disable-next-line eqeqeq
+      if (this.formData.taskID !== undefined) {
+        axios.post(API.TRAIN_DETAIL, this.formData.taskID)
+          .then(data => {
+            console.log(data)
+            this.milepostActive = data.data.step
+            console.log(this.milepostActive)
+            this.info = data.data.detail
+            console.log(this.info)
+          })
+      }
+    }
   },
   watch: {
     '$route' () {
       if (['trainForm'].indexOf(this.$route.name) > -1) {
         this.reload()
+        this.updateInfo()
       }
       if (this.$route.params.id !== this.formData.id) {
         this.reload()
+        this.updateInfo()
       }
     }
   },
   mounted () {
     // setInterval(() => {
     //   this.updateInfo();
-    // }, 3000)
+    // }, 10000)
   },
   created () {
     this.reload()
