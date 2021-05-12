@@ -167,23 +167,19 @@ def logistic_regression(X, y,ip,port,id):
     # cost_record.append(cost_val)
     iters = 0
     while True:
-        temp_detail = '\n----------------------------------------------\n\n'
-        print('\n----------------------------------------------\n\n')
+        temp = time.time()
+        temp_detail = ''
+        print('----------------------------------------------\n')
         if iters >= maxiters:
             break
-        temp_detail += '第%d轮：\n' % (iters+1)
+        temp_detail += '第%d轮：' % (iters+1)
         print('第%d轮：' % (iters+1))
         grad = update_grad(theta, X, y,ip,port)
-        temp_detail += '当前梯度为' + '\n'
-        for temp in grad:
-            temp_detail += str(temp)+'\n'
+        temp_detail += '梯度为：' + str(list(grad)) + '\n'
         print('当前梯度为',grad)
         # 权重参数更新
         new_theta = update_theta(grad, theta, alpha)
         theta = new_theta
-        temp_detail += 'theta_B = \n'
-        for temp in theta:
-            temp_detail += str(temp)+'\n'
         print('theta_B = ',theta)
         # cost_update = cosst_function(new_theta, X, y)
         # cost_val = cost_update
@@ -191,7 +187,9 @@ def logistic_regression(X, y,ip,port,id):
         iters += 1
         # alpha *= 0.98
         print('学习率：',alpha)
-        tools.write_detail(id,temp_detail,'a+')
+        temp_detail += '耗时为：%d秒\n' % (time.time() - temp)
+        temp_detail += '----------------------------------------------\n'
+        tools.write_detail(id,temp_detail,'r+')
     end = time.time()
     print("cost time: %f s" % (end - start))
     print('theta = ', theta)

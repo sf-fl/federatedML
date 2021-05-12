@@ -98,29 +98,9 @@
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="19">
-          <el-form-item label="下拉选择" prop="feature">
-            <el-select v-model="formData.feature" placeholder="请选择下拉选择" filterable clearable
-                       :style="{width: '100%'}">
-              <el-option v-for="(item, index) in featureOptions" :key="index" :label="item.label"
-                         :value="item.value" :disabled="item.disabled"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="22">
-          <el-row type="flex" justify="left" align="middle">
-            <el-col :span="22">
-              <el-form-item label="进度" :prop="formData.progress">
-                <el-slider :max='6' :step='1' v-model="formData.progress" :show-stops="true" :disabled='true'>
-                </el-slider>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-col>
-
         <el-col :span="20">
-          <el-row type="flex" justify="center">
+          <el-row type="flex" justify="left" align="middle">
+            <el-form-item label="阶段进度"></el-form-item>
             <el-steps :active="milepostActive">
               <el-step v-for="(value, key) in milepost"
                        :class="milepostActive== key+1 ? stepActive: allstep "
@@ -130,14 +110,12 @@
             </el-steps>
           </el-row>
         </el-col>
-
         <el-col :span="11">
           <el-form-item label="详细进度">
             <el-input v-model="info" type="textarea" placeholder="等待详细信息" autofocus="autofocus"
-                      :autosize="{minRows: 10, maxRows:20}" :style="{width: '150%'}" ></el-input>
+                      :autosize="{minRows: 10, maxRows:15}" :style="{width: '150%'}" ></el-input>
           </el-form-item>
         </el-col>
-
         <el-col :span="20">
           <el-row type="flex" justify="center">
             <el-form-item size="large">

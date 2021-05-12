@@ -68,5 +68,4 @@ def get_train_detail(id):
         step = f1.read()
     with open(r'./client/data_storage/train_detail_%s.log' % id, 'r', encoding='UTF-8') as f2:
         detail = f2.read()
-        print(detail)
-    return {'step':step,'detail':detail}
+    return {'step': step, 'detail': detail}
