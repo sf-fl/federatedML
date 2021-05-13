@@ -35,12 +35,10 @@
         need
         :label-col="3"
       >
-        <!--        <input type="file" @change="inputFileChange">-->
-        <input class="file" name="file" type="file"  accept=".csv" @change="update"/>
+        <input class="file" name="file" type="file" id="file" accept=".csv" @change="update"/>
         <div class="i-tips">
           文件目前只接受csv
         </div>
-        <!--        <n3-button @click.native="clicks" type="primary" size="mini" >上传</n3-button>-->
       </n3-form-item>
 
       <n3-form-item
@@ -198,13 +196,12 @@ export default {
         "value": ""
       }],
       loading: false,
-      files: ''
+      file: ''
     }
   },
   methods: {
     reload () {
-      console.log(this.$route.params)
-      console.log(this.$route.params.model_name)
+      document.getElementById('file').value = ''
       // 重置表单
       this.model = {
         taskname: '',
@@ -218,6 +215,7 @@ export default {
         cacheExpireTime: '24',
         expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
       }
+      this.file = ''
       this.id = this.$route.params.id
       console.log(this.id)
       axios.post(API.TRAIN_FORM, this.id)
@@ -230,9 +228,6 @@ export default {
           console.log(error)
         })
       this.loading = false
-    },
-    inputFileChange (e) {
-      this.files = e.target.files[0]  // 当input中选择文件时触发一个事件并让data当中的files拿到所选择的文件
     },
     update (e) {
       this.file = e.target.files[0]
@@ -248,7 +243,7 @@ export default {
         })
     },
     clicks () {
-      if (!this.files) {
+      if (!this.file) {
         console.print('请选择文件')
       } else {
         //   return

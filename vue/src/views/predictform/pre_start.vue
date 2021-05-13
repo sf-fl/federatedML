@@ -36,7 +36,7 @@
         :label-col="3"
       >
 <!--        <input type="file" @change="inputFileChange">-->
-        <input class="file" name="file" type="file"  accept=".csv" @change="update"/>
+        <input class="file" name="file" type="file" id="file" accept=".csv" @change="update"/>
         <div class="i-tips">
           文件目前只接受csv
         </div>
@@ -206,6 +206,7 @@
         console.log(this.$route.params)
         console.log(this.$route.params.model_name)
         // 重置表单
+        document.getElementById('file').value = ''
         this.model = {
           taskname: '',
           modelname: this.$route.params.model_name || '',

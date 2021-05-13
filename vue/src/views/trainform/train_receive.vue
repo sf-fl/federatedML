@@ -50,7 +50,7 @@
         id="upload"
       >
 <!--        <input type="file" @change="inputFileChange">-->
-        <input class="file" id="file" name="file" type="file" accept=".csv" @change="update"/>
+        <input class="file" id="file" name="file" type="file" ref="clearFile" accept=".csv" @change="update"/>
         <div class="i-tips">
           文件目前只接受csv
         </div>
@@ -60,6 +60,7 @@
       <n3-form-item
         label="对齐字段"
         :label-col="3"
+        need
       >
         <n3-input
           :rules="[{type:'required'}]"
@@ -67,7 +68,6 @@
           v-model="model.alian_feature"
           width="320px"
           class="fl"
-          readonly
         >
         </n3-input>
         <n3-select
@@ -134,6 +134,7 @@
           :rules="[{type:'required'}]"
           :custom-validate="portValidate"
           v-model="model.port"
+          ref = "test"
           width="320px"
           class="fl"
           readonly
@@ -207,14 +208,14 @@
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         },
         featureOptions: [{
-          "label": "选项一",
-          "value": 1
+          'label': '选项一',
+          'value': 1
         }, {
-          "label": "选项二",
-          "value": 2
+          'label': '选项二',
+          'value': 2
         }, {
-          "label": "",
-          "value": ""
+          'label': '',
+          'value': ''
         }],
         loading: false,
         files: ''
@@ -223,7 +224,6 @@
     methods: {
       reload () {
         // 重置表单
-        document.getElementById("file").value = ""
         this.model = {
           taskid: '',
           taskname: '',
@@ -238,8 +238,9 @@
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         }
         this.test1234 = this.getTaskTrainForm()
-
         this.loading = false
+        console.log(this.$refs.test)
+        document.getElementById('file').value = ''
       },
       getTaskTrainForm () {
         this.id = this.$route.params.id
@@ -258,9 +259,6 @@
             console.log(error)
           })
       },
-      inputFileChange (e) {
-        this.files = e.target.files[0]  // 当input中选择文件时触发一个事件并让data当中的files拿到所选择的文件
-      },
       update (e) {
         this.file = e.target.files[0]
         this.param = new window.FormData() // 创建form对象
@@ -275,7 +273,7 @@
           })
       },
       clicks () {
-        if (!this.files) {
+        if (!this.file) {
           console.print('请选择文件')
         } else {
         //   return
@@ -326,18 +324,6 @@
           }
           return this.addTask()
         })
-      },
-      passwordValidate (val) {
-        if (val && val.length > 5 && val.length < 19) {
-          return {
-            validStatus: 'success'
-          }
-        } else {
-          return {
-            validStatus: 'error',
-            tips: '密码长度为6-18位'
-          }
-        }
       },
       tvValidate (val) {
         if (/^0.\d{1,3}$/.test(val)) {

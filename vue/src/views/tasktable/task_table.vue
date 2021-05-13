@@ -244,14 +244,19 @@
         })
       },
       reload () {
-        this.pagination.current = 1
         this.searchRecord()
+        this.pagination.current = 1
       }
     },
     watch: {
       '$route' () {
+        if (this.timer) { // 如果定时器还在运行 或者直接关闭，不用判断
+          clearInterval(this.timer) // 关闭
+        }
         if (this.$route.name === 'taskTable') {
-          this.reload()
+          this.timer = setInterval(() => {
+            this.reload()
+          }, 10000)
         }
       }
     },

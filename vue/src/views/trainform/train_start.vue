@@ -35,7 +35,7 @@
         need
         :label-col="3"
       >
-        <input class="file" name="file" type="file"  accept=".csv" @change="update"/>
+        <input class="file" id="file" name="file" type="file"  accept=".csv" @change="update"/>
         <div class="i-tips">
           文件目前只接受csv
         </div>
@@ -218,6 +218,7 @@
     },
     methods: {
       reload () {
+        document.getElementById('file').value = ''
         // 重置表单
         this.model = {
           taskname: '',
@@ -229,10 +230,8 @@
           cacheExpireTime: '24',
           expireDate: dateFormat(Date.now(), 'YYYY-MM-DD')
         }
+        this.files = ''
         this.loading = false
-      },
-      inputFileChange (e) {
-        this.files = e.target.files[0]  // 当input中选择文件时触发一个事件并让data当中的files拿到所选择的文件
       },
       update (e) {
         this.file = e.target.files[0]
@@ -260,10 +259,6 @@
         //   })
         }
       },
-      // Random Pass
-      randomPasswd () {
-        this.model.password = randomPassword(18)
-      },
       addTask () {
         let cond = Object.assign({}, this.model)
         // cond.expireDate = new Date(cond.expireDate).valueOf()
@@ -289,7 +284,7 @@
               placement: 'top-right',
               duration: 5000,
               width: '240px' // 内容不确定，建议设置width
-              })
+            })
           })
       },
       submit () {

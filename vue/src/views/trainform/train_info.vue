@@ -75,13 +75,13 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="KS" prop="fileloc">
+          <el-form-item label="KS" prop="ks">
             <el-input v-model="formData.ks" placeholder="KS" readonly :style="{width: '100%'}">
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="AUC" prop="fileloc">
+          <el-form-item label="AUC" prop="auc">
             <el-input v-model="formData.auc" placeholder="AUC" readonly :style="{width: '100%'}">
             </el-input>
           </el-form-item>
@@ -244,6 +244,9 @@ export default {
   },
   watch: {
     '$route' () {
+      if (this.timer) { // 如果定时器还在运行 或者直接关闭，不用判断
+        clearInterval(this.timer) // 关闭
+      }
       if (['trainForm'].indexOf(this.$route.name) > -1) {
         this.reload()
         this.updateInfo()
@@ -251,16 +254,23 @@ export default {
       if (this.$route.params.id !== this.formData.id) {
         this.reload()
         this.updateInfo()
+        this.timer = setInterval(() => {
+          this.updateInfo()
+        }, 10000)
       }
     }
   },
   mounted () {
     // setInterval(() => {
-    //   this.updateInfo();
+    //     this.updateInfo()
     // }, 10000)
   },
   created () {
     this.reload()
+    this.updateInfo()
+    this.timer = setInterval(() => {
+      this.updateInfo()
+    }, 10000)
   }
 }
 
