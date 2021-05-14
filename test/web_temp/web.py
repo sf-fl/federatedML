@@ -79,7 +79,8 @@ def upload():
 def add_traintask():
     request_info = request.values.to_dict()
     try:
-        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm', 'modelname','trainratio','partnername']
+        checklist = ['taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'modelname', 'trainratio',
+                     'partnername']
         for s in checklist:
             no_null(s,request_info[s])
         with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:
@@ -115,7 +116,7 @@ def append_traintask():
 def add_predicttask():
     request_info = request.values.to_dict()
     try:
-        checklist = ['taskname','alian_feature','ip','port','learningAlgorithm', 'modelname','partnername']
+        checklist = ['taskname', 'alian_feature', 'ip', 'port', 'learningAlgorithm', 'modelname', 'partnername']
         for s in checklist:
             no_null(s,request_info[s])
         with open("./web_temp/data/train_data.csv", 'r', encoding='utf-8-sig') as f1:

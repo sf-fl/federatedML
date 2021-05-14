@@ -33,7 +33,8 @@ def gettasklist(page,type):
     else:
         result_df = taskdf.iloc[start:,:]
     result_list = list(result_df.T.to_dict().values())
-    return {'data':result_list,'total':total}
+    return {'data': result_list, 'total': total}
+
 
 def get_append_task(id):
     taskinfo = iAo.show_task_info(id)
