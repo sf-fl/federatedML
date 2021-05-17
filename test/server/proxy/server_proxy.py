@@ -15,7 +15,7 @@ import os
 app = Flask(__name__)
 
 
-@app.route('/' , methods=['POST'])
+@app.route('/', methods=['POST'])
 def index():
     if request.method == 'POST':
         a = request.get_data()
@@ -26,38 +26,37 @@ def index():
         return '<h1>只接受post请求！</h1>'
 
 
-@app.route('/test' , methods=['GET'])
+@app.route('/test', methods=['GET'])
 def test():
     try:
         id = request.args.get('id')
-        iAo.start_task(id,'train')
+        iAo.start_task(id, 'train')
         return '连接成功！'
     except Exception as e:
         print(e)
         return '连接失败！错误情况：%s' % e
 
 
-@app.route('/addtask' , methods=['POST'])
+@app.route('/addtask', methods=['POST'])
 def addtask():
     try:
         a = request.get_data()
-        addtask = json.loads(a)
-        tag = addtask['tag']
+        add_task = json.loads(a)
+        tag = add_task['tag']
         ip = request.remote_addr
         port = 8081
-        addtask['ip'] = addtask['participant_ip']
-        addtask['port'] = addtask['participant_port']
-        addtask['participant_ip'] = ip
-        addtask['participant_port'] = port
-        result = iAo.receive_task(addtask,tag)
+        add_task['ip'] = add_task['participant_ip']
+        add_task['port'] = add_task['participant_port']
+        add_task['participant_ip'] = ip
+        add_task['participant_port'] = port
+        result = iAo.receive_task(add_task, tag)
         return json.dumps(result)
     except Exception as e:
         print(e)
         return '出现错误！错误情况：%s' % e
 
 
-
-@app.route('/align1' , methods=['POST'])
+@app.route('/align1', methods=['POST'])
 def align1():
     try:
         a = request.get_data()
@@ -69,7 +68,7 @@ def align1():
         return '出现错误！错误情况：%s' % e
 
 
-@app.route('/align2' , methods=['POST'])
+@app.route('/align2', methods=['POST'])
 def align2():
     try:
         a = request.get_data()
@@ -83,7 +82,7 @@ def align2():
         return '连接失败！错误情况：%s' % e
 
 
-@app.route('/learn1' , methods=['POST'])
+@app.route('/learn1', methods=['POST'])
 def learn1():
     try:
         a = request.get_data()
@@ -94,7 +93,7 @@ def learn1():
         return '连接失败！错误情况：%s' % e
 
 
-@app.route('/learn2' , methods=['POST'])
+@app.route('/learn2', methods=['POST'])
 def learn2():
     try:
         a = request.get_data()
@@ -105,7 +104,7 @@ def learn2():
         return '连接失败！错误情况：%s' % e
 
 
-@app.route('/learn3' , methods=['POST'])
+@app.route('/learn3', methods=['POST'])
 def learn3():
     try:
         id = json.loads(request.get_data())['id']
@@ -115,7 +114,7 @@ def learn3():
         return '连接失败！错误情况：%s' % e
 
 
-@app.route('/predict' , methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
     try:
         a = request.get_data()
@@ -126,7 +125,7 @@ def predict():
         return '连接失败！错误情况：%s' % e
 
 
-if __name__ =='__main__':
+if __name__ == '__main__':
     import sys
     os.chdir(os.path.dirname(os.path.dirname(sys.path[0])))
     app.run(host='0.0.0.0',port='8081')
