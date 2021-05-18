@@ -26,7 +26,7 @@ def align(id,key,ip,port):
     index = ['%d' % i for i in num]
     result_sample = sample.iloc[index]
     result_sample = result_sample.reset_index(drop=True)
-    x = result_sample.iloc[:,[1,-2]]
-    y = result_sample.iloc[:,[-1,]]
+    x = result_sample.iloc[:, [1, -2]]
+    y = result_sample.iloc[:, [-1, ]]
     return x,y
 

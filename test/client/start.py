@@ -32,7 +32,7 @@ def start(id,ip,port,key):
     write_step(id,3)
 
     # 特征工程&预处理
-    x,y = feature_engineering.feating(x_raw, y_raw, ip, port)
+    x,y = feature_engineering.feating(x_raw, y_raw, id, ip, port)
     write_step(id,4)
 
     # 训练

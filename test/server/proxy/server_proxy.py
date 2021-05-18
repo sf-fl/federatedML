@@ -5,6 +5,7 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from flask import jsonify
+from server.federation import pre_processing
 from server.federation import alignment
 from server.federation import train
 from client.federation import iAo
@@ -77,6 +78,21 @@ def align2():
         id = dict1['id']
         key = dict1['key']
         result = alignment.align2(b_key,id,key).to_list()
+        return json.dumps(result)
+    except Exception as e:
+        return '连接失败！错误情况：%s' % e
+
+
+@app.route('/woe1', methods=['POST'])
+def woe1():
+    try:
+        a = request.get_data()
+        dict1 = json.loads(a)
+        y_en = dict1['y']
+        y_r_en = dict1['1-y']
+        id = dict1['id']
+        pk = dict1['pk']
+        result = pre_processing.woe(y_en,y_r_en,id,pk).to_list()
         return json.dumps(result)
     except Exception as e:
         return '连接失败！错误情况：%s' % e

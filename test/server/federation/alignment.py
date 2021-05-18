@@ -17,7 +17,7 @@ def align1(public_key):
     return sample_encrypted_rand
 
 
-def align2(b_key,id,key):
+def align2(b_key, id, key):
     b_key_series = pd.Series(b_key)
     dict_b = {'num_b':b_key_series.index,'hash':b_key_series.values}
     df_b_key = pd.DataFrame(dict_b)
