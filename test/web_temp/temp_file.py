@@ -28,10 +28,10 @@ def gettasklist(page,type):
     taskdf = update_taskdf(type)
     total = len(taskdf)
     start = (page-1)*fenye
-    if page*fenye<total:
-        result_df = taskdf.iloc[start:page*fenye,:]
+    if page*fenye < total:
+        result_df = taskdf.iloc[start:page*fenye, :]
     else:
-        result_df = taskdf.iloc[start:,:]
+        result_df = taskdf.iloc[start:, :]
     result_list = list(result_df.T.to_dict().values())
     return {'data': result_list, 'total': total}
 
@@ -50,7 +50,7 @@ def get_append_task(id):
 
 def get_train_info(id):
     taskinfo = iAo.show_task_info(id)
-    result = taskinfo[['task_id','task_name','model_name','project_name','create_time',
+    result = taskinfo.loc[:,['task_id','task_name','model_name','project_name','create_time',
                        'participant_ip','participant_port','ip','port_num','operation_time',
                        'learning_algorithm','participant_name','align','train_proportion','auc','ks']]
     col = {'task_id': 'taskID', 'task_name': 'taskname', 'participant_name': 'partnername',
@@ -59,8 +59,8 @@ def get_train_info(id):
            'train_proportion': 'trainratio', 'align': 'alianfeature','model_name':'modelname',
            'project_name':'projectname','ks': 'ks','auc': 'auc'}
     result.rename(columns=col, inplace=True)
-    result['userIPPort'] = result['userIP'] + ':' + result['userPort']
-    result['partnerIPPort'] = result['partnerIP'] + ':' + result['partnerPort']
+    result.loc[:,'userIPPort'] = result.loc[:,'userIP'] + ':' + result.loc[:,'userPort']
+    result.loc[:,'partnerIPPort'] = result.loc[:,'partnerIP'] + ':' + result.loc[:,'partnerPort']
     resultlist = list(result.T.to_dict().values())
     return resultlist
 

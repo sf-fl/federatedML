@@ -63,9 +63,10 @@ def woe(x, y, method, id, ip, port):
         # 构建加密y和1-y
         # 生成key
         pk, sk = paillier.gen_key()
-        y_encrypt = y.apply(lambda tt: int(paillier.encipher(tt, pk)))
-        y_r_encrypt = y.apply(lambda tt: int(paillier.encipher(1-tt, pk)))
+        y_encrypt = y.iloc[:, 0].apply(lambda tt: int(paillier.encipher(tt, pk)))
+        y_r_encrypt = y.iloc[:, 0].apply(lambda tt: int(paillier.encipher(1-tt, pk)))
         result = client_proxy.woe_1(y_encrypt, y_r_encrypt, id, pk, ip, port)
+        print(result)
 
 
 
