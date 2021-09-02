@@ -164,6 +164,7 @@ def login():
         # writelog todo
         return e
 
+
 @app.route('/traindetail',methods=["POST"])
 def train_detail():
     id = int(list(request.values.to_dict().keys())[0])

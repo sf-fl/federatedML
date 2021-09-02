@@ -27,7 +27,7 @@ def binning(df, col, method, bins):
         step = (umax - umin) / bins
         fre_list = [umin + i * step for i in range(bins + 1)]
         return df[col].map(lambda x: ff(x, fre_list))
-        # 等频分箱
+    # 等频分箱
     elif method == 'frequency':
         fre_list = [np.percentile(df[col], 100 / bins * i) for i in range(bins + 1)]
         fre_list = sorted(list(set(fre_list)))
@@ -38,14 +38,5 @@ def woe(y_en, y_r_en, id, pk):
     x = alignment.x
     print(x)
     for col in x.columns:
-        data_temp = x.loc[:,[col]]
-        # 分箱：等距等频分箱
-        # 等距分箱
-        # bins=10 分箱数
-        data_temp['deposit_cur_balance_bins'] = binning(df=data_temp, col=col, method='distance',
-                                                        bins=10)
-        data_temp['deposit_year_total_balance_bins'] = binning(df=data_temp, col=col,
-                                                               method='frequency', bins=10)
-
-
+        x['%s_bins'] = binning(df=x, col=col, method='distance', bins=6)
     return {}
